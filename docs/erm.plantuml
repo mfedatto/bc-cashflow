@@ -1,0 +1,64 @@
+@startuml
+
+!include defaults.uml
+
+title Entity-Relationship Model
+
+entity "tbl_User" as user {
+    * UserId : INT <<PK>>
+    --
+    * Username : VARCHAR
+    * PasswordSalt : VARCHAR
+    * PasswordHash : VARCHAR
+    * CreatedAt : DATETIME
+}
+
+entity "tbl_AccountType" as accountType {
+    * AccountTypeId : INT <<PK>>
+    * AccountTypeName : VARCHAR
+    --
+    + BaseFee : DECIMAL
+    + PaymentDueDays : INT
+}
+
+entity "tbl_Account" as account {
+    * AccountId : INT <<PK>>
+    + UserId : INT <<FK>>
+    * AccountName : VARCHAR
+    * AccountTypeId : INT <<FK>>
+    --
+    * InitialBalance : DECIMAL
+    + CurrentBalance : DECIMAL
+    + BalanceUpdatedAt : DATETIME
+    * CreatedAt : DATETIME
+}
+
+entity "tbl_Transaction" as transaction {
+    * TransactionId : INT <<PK>>
+    * UserId : INT <<FK>>
+    * AccountId : INT <<FK>>
+    * TransactionType : INT
+    * Amount : DECIMAL
+    --
+    + Description : VARCHAR
+    * TransactionDate : DATETIME
+    + ProjectedRepaymentDate : DATETIME
+}
+
+entity "tbl_DailyReport" as dailyReport {
+    * ReportId : INT <<PK>>
+    + UserId : INT <<FK>>
+    * ReportDate : DATETIME
+    --
+    * TotalDebits : DECIMAL
+    * TotalCredits : DECIMAL
+    * Balance : DECIMAL
+}
+
+user ||--o{ transaction
+user ||--o{ account
+accountType ||--o{ account
+account ||--o{ transaction
+user ||--o{ dailyReport
+
+@enduml
