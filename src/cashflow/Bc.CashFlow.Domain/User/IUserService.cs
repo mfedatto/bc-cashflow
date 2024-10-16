@@ -3,8 +3,12 @@ namespace Bc.CashFlow.Domain.User;
 public interface IUserService
 {
 	Task<IEnumerable<IUser>> GetUsers(
-		CancellationToken cancellationToken,
-		string? username = null,
-		DateTime? createdSince = null,
-		DateTime? createdUntil = null);
+		string? username,
+		DateTime? createdSince,
+		DateTime? createdUntil,
+		CancellationToken cancellationToken);
+
+	Task<IUser> GetSingleUser(
+		int userId,
+		CancellationToken cancellationToken);
 }

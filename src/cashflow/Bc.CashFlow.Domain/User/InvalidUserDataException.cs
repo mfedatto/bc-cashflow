@@ -2,12 +2,12 @@ namespace Bc.CashFlow.Domain.User;
 
 public class InvalidUserDataException : Exception
 {
-	public InvalidUserDataException() : base("Invalid uer data.")
+	public InvalidUserDataException() : base("Invalid user data.")
 	{
 	}
 	
 	public InvalidUserDataException(
-		string details) : base($"Invalid uer data: {details}.")
+		string details) : base($"Invalid user data: {details}.")
 	{
 	}
 }

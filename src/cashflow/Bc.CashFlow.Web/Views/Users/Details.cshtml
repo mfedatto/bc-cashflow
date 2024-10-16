@@ -1,0 +1,13 @@
+@model Bc.CashFlow.Web.Models.User.UserDetailsViewModel
+@{
+    ViewData["Title"] = "Usuários";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Página de gestão de usuários</p>
+
+<dd>
+    <dl>ID: @Model.User.UserId</dl>
+    <dl>Username: @Model.User.Username</dl>
+    <dl>Created at: @Model.User.CreatedAt</dl>
+</dd>

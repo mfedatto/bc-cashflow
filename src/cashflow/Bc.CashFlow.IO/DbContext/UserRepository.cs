@@ -25,15 +25,15 @@ public class UserRepository : IUserRepository
 	}
 
 	public async Task<IEnumerable<IUser>> GetUsers(
-		CancellationToken cancellationToken,
-		string? username = null,
-		DateTime? createdSince = null,
-		DateTime? createdUntil = null)
+		string? username,
+		DateTime? createdSince,
+		DateTime? createdUntil,
+		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
-		
+
 		DynamicParameters parameters = new();
-		
+
 		parameters.Add("@Username", username, DbType.String);
 		parameters.Add("@CreatedSince", createdSince, DbType.DateTime);
 		parameters.Add("@CreatedUntil", createdUntil, DbType.DateTime);
@@ -43,6 +43,24 @@ public class UserRepository : IUserRepository
 			parameters,
 			commandType: CommandType.StoredProcedure,
 			transaction: _dbTransaction);
+	}
+
+	public async Task<IUser?> GetSingleUser(
+		int userId,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@UserId", userId, DbType.Int32);
+
+		return (await _dbConnection.QueryAsync<UserDto>(
+				"usp_SelectUser",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.SingleOrDefault();
 	}
 }
 

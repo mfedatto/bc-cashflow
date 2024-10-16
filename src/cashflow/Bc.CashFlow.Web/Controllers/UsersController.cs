@@ -19,17 +19,30 @@ public class UsersController : Controller
 
 	[HttpGet]
 	public async Task<IActionResult> Index(
-		CancellationToken cancellationToken,
-		[FromQuery(Name = "username")] string? username,
-		[FromQuery(Name = "created-since")] DateTime? createdSince = null,
-		[FromQuery(Name = "created-until")] DateTime? createdUntil = null)
+			[FromQuery(Name = "username")] string? username,
+		[FromQuery(Name = "created-since")] DateTime? createdSince,
+		[FromQuery(Name = "created-until")] DateTime? createdUntil,
+		CancellationToken cancellationToken)
 	{
 		UserIndexViewModel viewModel = new(
 			await _service.GetUsers(
-				cancellationToken,
 				username,
 				createdSince,
-				createdUntil));
+				createdUntil,
+				cancellationToken));
+
+		return View(viewModel);
+	}
+	
+	[HttpGet]
+	public async Task<IActionResult> Details(
+		[FromRoute(Name = "id")] int userId,
+		CancellationToken cancellationToken)
+	{
+		UserDetailsViewModel viewModel = new(
+			await _service.GetSingleUser(
+				userId,
+				cancellationToken));
 
 		return View(viewModel);
 	}

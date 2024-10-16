@@ -18,15 +18,28 @@ public class UserService : IUserService
 	}
 	
 	public async Task<IEnumerable<IUser>> GetUsers(
-		CancellationToken cancellationToken,
-		string? username = null,
-		DateTime? createdSince = null,
-		DateTime? createdUntil = null)
+		string? username,
+		DateTime? createdSince,
+		DateTime? createdUntil,
+		CancellationToken cancellationToken)
 	{
 		return await _uow.UserRepository.GetUsers(
-			cancellationToken,
 			username,
 			createdSince,
-			createdUntil);
+			createdUntil,
+			cancellationToken);
+	}
+	
+	public async Task<IUser> GetSingleUser(
+		int userId,
+		CancellationToken cancellationToken)
+	{
+		IUser? result = await _uow.UserRepository.GetSingleUser(
+			userId,
+			cancellationToken);
+
+		if (result is null) throw new UserNotFoundException();
+		
+		return result;
 	}
 }
