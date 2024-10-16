@@ -43,13 +43,32 @@ services:
     environment:
       CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
       LOCATIONS: /migrations
-      PLACEHOLDERS: bccf_db_username:usr_bccf;bccf_db_password:mushyC@mel63
+      PLACEHOLDERS: bccf_db_username:${CASHFLOW_DB_USERNAME};bccf_db_password:${CASHFLOW_DB_PASSWORD}
     volumes:
       - ./cashflow-db-create-user:/migrations
     networks:
       cashflow-db:
     depends_on:
+      - cashflow-db
       - cashflow-db-create-database
+
+  cashflow-db-migration:
+    extends:
+      file: docker-compose.db-migration.yaml
+      service: _db-migration
+    container_name: cashflow-db-migration
+    hostname: cashflow-db-migration
+    environment:
+      CONNECTION_STRING: Server=cashflow-db;Database=${CASHFLOW_DB_USERNAME};UID=sa;PWD=${CASHFLOW_DB_PASSWORD}
+      LOCATIONS: /migrations
+    volumes:
+      - ../db/migrations:/migrations
+    networks:
+      cashflow-db:
+    depends_on:
+      - cashflow-db
+      - cashflow-db-create-database
+      - cashflow-db-create-user
 
 networks:
   cashflow-db:
