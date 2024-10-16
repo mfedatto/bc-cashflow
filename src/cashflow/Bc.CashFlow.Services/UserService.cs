@@ -1,3 +1,4 @@
+using Bc.CashFlow.Domain.MainDbContext;
 using Bc.CashFlow.Domain.User;
 using Microsoft.Extensions.Logging;
 
@@ -6,14 +7,14 @@ namespace Bc.CashFlow.Services;
 public class UserService : IUserService
 {
 	private readonly ILogger<UserService> _logger;
-	private readonly IUserRepository _repository;
+	private readonly IUnitOfWork _uow;
 
 	public UserService(
 		ILogger<UserService> logger,
-		IUserRepository repository)
+		IUnitOfWork uow)
 	{
 		_logger = logger;
-		_repository = repository;
+		_uow = uow;
 	}
 	
 	public async Task<IEnumerable<IUser>> GetUsers(
@@ -22,7 +23,7 @@ public class UserService : IUserService
 		DateTime? createdSince = null,
 		DateTime? createdUntil = null)
 	{
-		return await _repository.GetUsers(
+		return await _uow.UserRepository.GetUsers(
 			cancellationToken,
 			username,
 			createdSince,
