@@ -1,5 +1,8 @@
+using Bc.CashFlow.Domain.User;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<UserFactory>();
 builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();

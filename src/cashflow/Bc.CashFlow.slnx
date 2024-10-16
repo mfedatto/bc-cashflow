@@ -1,3 +1,6 @@
 ﻿<Solution>
+  <Project Path="Bc.CashFlow.DomainTests\Bc.CashFlow.DomainTests.csproj" Type="Classic C#" />
+  <Project Path="Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" Type="Classic C#" />
+  <Project Path="Bc.CashFlow.Service\Bc.CashFlow.Service.csproj" Type="Classic C#" />
   <Project Path="Bc.CashFlow.Web\Bc.CashFlow.Web.csproj" Type="Classic C#" />
 </Solution>

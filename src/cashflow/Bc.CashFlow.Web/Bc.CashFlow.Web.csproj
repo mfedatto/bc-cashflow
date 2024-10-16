@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
