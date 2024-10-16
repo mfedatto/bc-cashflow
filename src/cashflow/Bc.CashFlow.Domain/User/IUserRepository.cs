@@ -1,6 +1,7 @@
 namespace Bc.CashFlow.Domain.User;
 
-public interface IUserService
+// ReSharper disable once InconsistentNaming
+public interface IUserRepository
 {
 	Task<IEnumerable<IUser>> GetUsers(
 		CancellationToken cancellationToken,

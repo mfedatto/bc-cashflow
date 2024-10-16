@@ -1,24 +1,8 @@
-using Bc.CashFlow.Domain.User;
-using Bc.CashFlow.Services;
+using Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
+using Bc.CashFlow.Web.Extensions;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddSingleton<UserFactory>();
-builder.Services.AddSingleton<IUserService, UserService>();
-builder.Services.AddControllersWithViews();
-
-WebApplication app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-}
-
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+WebApplication.CreateBuilder(args)
+    .AddCompositionRoot()
+    .Build()
+    .Configure()
+    .Run();
