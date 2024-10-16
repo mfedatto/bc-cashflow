@@ -1,5 +1,0 @@
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'BCCF')
-BEGIN
-    CREATE DATABASE [BCCF]
-END
-GO

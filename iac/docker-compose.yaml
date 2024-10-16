@@ -9,54 +9,47 @@ services:
     hostname: cashflow-db
     environment:
       ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: $MSSQL_SA_PASSWORD
+      MSSQL_SA_PASSWORD: $CASHFLOW_DB_SU_PWD
       MSSQL_PID: $MSSQL_PID
     volumes:
       - cashflow-db:/var/opt/mssql
+    ports:
+      - 1433:1433
     networks:
       cashflow-db:
 
-  cashflow-db-setup-migration:
+  cashflow-db-create-database:
     extends:
-      file: docker-compose.bccf.yaml
-      service: _service
-    image: mfedatto/evolve-db
-    container_name: cashflow-db-setup-migration
-    hostname: cashflow-db-setup-migration
-    restart: no
+      file: docker-compose.db-migration.yaml
+      service: _db-migration
+    container_name: cashflow-db-create-database
+    hostname: cashflow-db-create-database
     environment:
-      COMMAND: migrate
-      DBMS: $CASHFLOW_DB_SETUP_MIGRATION_DBMS
-      CONNECTION_STRING: ${CASHFLOW_DB_SETUP_MIGRATION_CONNECTION_STRING}$MSSQL_SA_PASSWORD
-      LOCATIONS: $CASHFLOW_DB_SETUP_MIGRATION_LOCATIONS
-      PLACEHOLDERS: $CASHFLOW_DB_SETUP_MIGRATION_PLACEHOLDERS
+      CONNECTION_STRING: Server=cashflow-db;Database=master;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
+      LOCATIONS: /migrations
     volumes:
-      - ./cashflow-db-setup-migration:/migrations
+      - ./cashflow-db-create-database:/migrations
     networks:
       cashflow-db:
     depends_on:
       - cashflow-db
 
-  cashflow-db-migration:
+  cashflow-db-create-user:
     extends:
-      file: docker-compose.bccf.yaml
-      service: _service
-    image: mfedatto/evolve-db
-    container_name: cashflow-db-setup-migration
-    hostname: cashflow-db-setup-migration
-    restart: no
+      file: docker-compose.db-migration.yaml
+      service: _db-migration
+    container_name: cashflow-db-create-user
+    hostname: cashflow-db-create-user
     environment:
-      COMMAND: migrate
-      DBMS: $CASHFLOW_DB_SETUP_MIGRATION_DBMS
-      CONNECTION_STRING: ${CASHFLOW_DB_SETUP_MIGRATION_CONNECTION_STRING}$MSSQL_SA_PASSWORD
-      LOCATIONS: $CASHFLOW_DB_SETUP_MIGRATION_LOCATIONS
-      PLACEHOLDERS: $CASHFLOW_DB_SETUP_MIGRATION_PLACEHOLDERS
+      CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
+      LOCATIONS: /migrations
+      PLACEHOLDERS: bccf_db_username:usr_bccf;bccf_db_password:mushyC@mel63
     volumes:
-      - ../db/migrations:/migrations
+      - ./cashflow-db-create-user:/migrations
     networks:
       cashflow-db:
     depends_on:
-      - cashflow-db-setup-migration
+      - cashflow-db-create-database
 
 networks:
   cashflow-db:
