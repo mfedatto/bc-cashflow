@@ -5,7 +5,7 @@ services:
       file: docker-compose.bccf.yaml
       service: _service
     image: mfedatto/evolve-db
-    restart: on-failure:3
+    restart: on-failure:5
     environment:
       COMMAND: migrate
       DBMS: $CASHFLOW_DB_DBMS

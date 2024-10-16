@@ -17,6 +17,7 @@ services:
       - 1433:1433
     networks:
       cashflow-db:
+      cashflow-db-migration:
 
   cashflow-db-create-database:
     extends:
@@ -30,7 +31,7 @@ services:
     volumes:
       - ./cashflow-db-create-database:/migrations
     networks:
-      cashflow-db:
+      cashflow-db-migration:
     depends_on:
       - cashflow-db
 
@@ -47,7 +48,7 @@ services:
     volumes:
       - ./cashflow-db-create-user:/migrations
     networks:
-      cashflow-db:
+      cashflow-db-migration:
     depends_on:
       - cashflow-db
       - cashflow-db-create-database
@@ -59,12 +60,12 @@ services:
     container_name: cashflow-db-migration
     hostname: cashflow-db-migration
     environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=${CASHFLOW_DB_USERNAME};UID=sa;PWD=${CASHFLOW_DB_PASSWORD}
+      CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=${CASHFLOW_DB_USERNAME};PWD=${CASHFLOW_DB_PASSWORD}
       LOCATIONS: /migrations
     volumes:
       - ../db/migrations:/migrations
     networks:
-      cashflow-db:
+      cashflow-db-migration:
     depends_on:
       - cashflow-db
       - cashflow-db-create-database
@@ -72,6 +73,8 @@ services:
 
 networks:
   cashflow-db:
+    driver: bridge
+  cashflow-db-migration:
     driver: bridge
 
 volumes:

@@ -11,3 +11,10 @@ END
 ALTER LOGIN [${bccf_db_username}] WITH PASSWORD = '${bccf_db_password}', CHECK_POLICY = OFF;
 
 GO;
+
+GRANT CREATE TABLE TO [${bccf_db_username}];
+GRANT CREATE VIEW TO [${bccf_db_username}];
+GRANT INSERT, UPDATE, DELETE, SELECT TO [${bccf_db_username}];
+GRANT ALTER TO [${bccf_db_username}];
+GRANT EXECUTE TO [${bccf_db_username}];
+GO;
