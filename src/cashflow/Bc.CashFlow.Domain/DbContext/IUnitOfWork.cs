@@ -1,7 +1,7 @@
 using System.Data.Common;
 using Bc.CashFlow.Domain.User;
 
-namespace Bc.CashFlow.Domain.MainDbContext;
+namespace Bc.CashFlow.Domain.DbContext;
 
 public interface IUnitOfWork : IDisposable
 {

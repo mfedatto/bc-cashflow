@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-using Bc.CashFlow.Domain.MainDbContext;
+using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.User;
 using Bc.CashFlow.IO.DbContext;
 using Microsoft.AspNetCore.Builder;

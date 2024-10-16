@@ -24,13 +24,13 @@ public class UsersController : Controller
 		[FromQuery(Name = "created-since")] DateTime? createdSince = null,
 		[FromQuery(Name = "created-until")] DateTime? createdUntil = null)
 	{
-		UserIndexModel model = new(
+		UserIndexViewModel viewModel = new(
 			await _service.GetUsers(
 				cancellationToken,
 				username,
 				createdSince,
 				createdUntil));
 
-		return View(model);
+		return View(viewModel);
 	}
 }

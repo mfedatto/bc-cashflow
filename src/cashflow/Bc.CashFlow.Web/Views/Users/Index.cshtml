@@ -1,6 +1,15 @@
+@using Bc.CashFlow.Domain.User
+@model Bc.CashFlow.Web.Models.User.UserIndexViewModel
 @{
-    ViewData["Title"] = "User";
+    ViewData["Title"] = "Usuários";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<p>Página de gestão de usuários</p>
+
+<ul>
+    @foreach (IUser user in Model.UsersList)
+    {
+        <li>@user.UserId:@user.Username</li>
+    }
+</ul>

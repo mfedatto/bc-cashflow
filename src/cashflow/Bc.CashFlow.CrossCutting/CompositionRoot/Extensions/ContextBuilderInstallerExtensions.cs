@@ -45,7 +45,7 @@ public static class ContextBuilderInstallerExtensions
                 false,
                 true)
             .AddJsonFile(
-                $"appsettings{builder.Environment.EnvironmentName}.json",
+                $"appsettings.{builder.Environment.EnvironmentName}.json",
                 true,
                 true)
             .AddEnvironmentVariables()

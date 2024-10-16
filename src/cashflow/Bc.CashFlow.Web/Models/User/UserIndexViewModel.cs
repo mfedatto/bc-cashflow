@@ -2,9 +2,9 @@ using Bc.CashFlow.Domain.User;
 
 namespace Bc.CashFlow.Web.Models.User;
 
-public class UserIndexModel
+public class UserIndexViewModel
 {
-	public UserIndexModel(
+	public UserIndexViewModel(
 		IEnumerable<IUser> usersList)
 	{
 		UsersList = usersList;

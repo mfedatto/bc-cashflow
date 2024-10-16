@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.AppSettings;
 using Bc.CashFlow.Domain.DbContext;
-using Bc.CashFlow.Domain.MainDbContext;
 using Bc.CashFlow.Domain.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
