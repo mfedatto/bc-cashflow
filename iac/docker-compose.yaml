@@ -1,0 +1,66 @@
+services:
+
+  cashflow-db:
+    extends:
+      file: docker-compose.bccf.yaml
+      service: _service
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: cashflow-db
+    hostname: cashflow-db
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: $MSSQL_SA_PASSWORD
+      MSSQL_PID: $MSSQL_PID
+    volumes:
+      - cashflow-db:/var/opt/mssql
+    networks:
+      cashflow-db:
+
+  cashflow-db-setup-migration:
+    extends:
+      file: docker-compose.bccf.yaml
+      service: _service
+    image: mfedatto/evolve-db
+    container_name: cashflow-db-setup-migration
+    hostname: cashflow-db-setup-migration
+    restart: no
+    environment:
+      COMMAND: migrate
+      DBMS: $CASHFLOW_DB_SETUP_MIGRATION_DBMS
+      CONNECTION_STRING: ${CASHFLOW_DB_SETUP_MIGRATION_CONNECTION_STRING}$MSSQL_SA_PASSWORD
+      LOCATIONS: $CASHFLOW_DB_SETUP_MIGRATION_LOCATIONS
+      PLACEHOLDERS: $CASHFLOW_DB_SETUP_MIGRATION_PLACEHOLDERS
+    volumes:
+      - ./cashflow-db-setup-migration:/migrations
+    networks:
+      cashflow-db:
+    depends_on:
+      - cashflow-db
+
+  cashflow-db-migration:
+    extends:
+      file: docker-compose.bccf.yaml
+      service: _service
+    image: mfedatto/evolve-db
+    container_name: cashflow-db-setup-migration
+    hostname: cashflow-db-setup-migration
+    restart: no
+    environment:
+      COMMAND: migrate
+      DBMS: $CASHFLOW_DB_SETUP_MIGRATION_DBMS
+      CONNECTION_STRING: ${CASHFLOW_DB_SETUP_MIGRATION_CONNECTION_STRING}$MSSQL_SA_PASSWORD
+      LOCATIONS: $CASHFLOW_DB_SETUP_MIGRATION_LOCATIONS
+      PLACEHOLDERS: $CASHFLOW_DB_SETUP_MIGRATION_PLACEHOLDERS
+    volumes:
+      - ../db/migrations:/migrations
+    networks:
+      cashflow-db:
+    depends_on:
+      - cashflow-db-setup-migration
+
+networks:
+  cashflow-db:
+    driver: bridge
+
+volumes:
+  cashflow-db:
