@@ -17,33 +17,25 @@ AS
 BEGIN
 
     SELECT
-        acc.AccountId,
-        acc.AccountName,
-        acc.InitialBalance,
-        acc.CurrentBalance,
-        acc.BalanceUpdatedAt,
-        acc.CreatedAt,
-        usr.Username,
-        acct.AccountTypeName
+        AccountId,
+        AccountName,
+        InitialBalance,
+        CurrentBalance,
+        BalanceUpdatedAt,
+        CreatedAt
     FROM
-        tbl_Account acc
-        INNER JOIN
-        tbl_User usr
-            ON acc.UserId = usr.UserId
-        INNER JOIN
-        tbl_AccountType acct
-            ON acc.AccountTypeId = acct.AccountTypeId
+        tbl_Account
     WHERE
-        (@AccountName IS NULL OR acc.AccountName LIKE '%' + @AccountName + '%') AND
-        (@UserId IS NULL OR acc.UserId = @UserId) AND
-        (@AccountTypeId IS NULL OR acc.AccountTypeId = @AccountTypeId) AND
-        (@InitialBalanceFrom IS NULL OR acc.InitialBalance >= @InitialBalanceFrom) AND
-        (@InitialBalanceTo IS NULL OR acc.InitialBalance <= @InitialBalanceTo) AND
-        (@CurrentBalanceFrom IS NULL OR acc.CurrentBalance >= @CurrentBalanceFrom) AND
-        (@CurrentBalanceTo IS NULL OR acc.CurrentBalance <= @CurrentBalanceTo) AND
-        (@BalanceUpdatedSince IS NULL OR acc.BalanceUpdatedAt >= @BalanceUpdatedSince) AND
-        (@BalanceUpdatedUntil IS NULL OR acc.BalanceUpdatedAt <= @BalanceUpdatedUntil) AND
-        (@CreatedSince IS NULL OR acc.CreatedAt >= @CreatedSince) AND
-        (@CreatedUntil IS NULL OR acc.CreatedAt <= @CreatedUntil);
+        (@AccountName IS NULL OR AccountName LIKE '%' + @AccountName + '%') AND
+        (@UserId IS NULL OR UserId = @UserId) AND
+        (@AccountTypeId IS NULL OR AccountTypeId = @AccountTypeId) AND
+        (@InitialBalanceFrom IS NULL OR InitialBalance >= @InitialBalanceFrom) AND
+        (@InitialBalanceTo IS NULL OR InitialBalance <= @InitialBalanceTo) AND
+        (@CurrentBalanceFrom IS NULL OR CurrentBalance >= @CurrentBalanceFrom) AND
+        (@CurrentBalanceTo IS NULL OR CurrentBalance <= @CurrentBalanceTo) AND
+        (@BalanceUpdatedSince IS NULL OR BalanceUpdatedAt >= @BalanceUpdatedSince) AND
+        (@BalanceUpdatedUntil IS NULL OR BalanceUpdatedAt <= @BalanceUpdatedUntil) AND
+        (@CreatedSince IS NULL OR CreatedAt >= @CreatedSince) AND
+        (@CreatedUntil IS NULL OR CreatedAt <= @CreatedUntil);
 
 END

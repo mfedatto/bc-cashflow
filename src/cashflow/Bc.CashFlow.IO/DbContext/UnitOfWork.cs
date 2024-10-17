@@ -6,6 +6,7 @@ using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.AppSettings;
 using Bc.CashFlow.Domain.DbContext;
+using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,7 @@ public sealed class UnitOfWork : IUnitOfWork
 	public IUserRepository UserRepository => _serviceProvider.GetService<IUserRepository>()!;
 	public IAccountTypeRepository AccountTypeRepository => _serviceProvider.GetService<IAccountTypeRepository>()!;
 	public IAccountRepository AccountRepository => _serviceProvider.GetService<IAccountRepository>()!;
+	public ITransactionRepository TransactionRepository => _serviceProvider.GetService<ITransactionRepository>()!;
 
 	public async Task BeginTransactionAsync()
 	{

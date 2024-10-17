@@ -1,5 +1,6 @@
 ﻿using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
+using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 using Bc.CashFlow.Services;
 using Microsoft.AspNetCore.Builder;
@@ -14,5 +15,6 @@ public class ServiceContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IUserService, UserService>();
 		builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
 		builder.Services.AddScoped<IAccountService, AccountService>();
+		builder.Services.AddScoped<ITransactionService, TransactionService>();
 	}
 }

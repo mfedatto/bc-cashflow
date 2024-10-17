@@ -2,6 +2,7 @@
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.DbContext;
+using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 using Bc.CashFlow.IO.DbContext;
 using Microsoft.AspNetCore.Builder;
@@ -20,5 +21,6 @@ public class IOContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IUserRepository, UserRepository>();
 		builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
 		builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+		builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 	}
 }

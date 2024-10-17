@@ -4,7 +4,7 @@
 
 title Entity-Relationship Model
 
-entity "tbl_User" as user {
+entity "tbl_User" as tblUser {
     * UserId : INT <<PK>>
     --
     * Username : VARCHAR
@@ -13,7 +13,7 @@ entity "tbl_User" as user {
     * CreatedAt : DATETIME
 }
 
-entity "tbl_AccountType" as accountType {
+entity "tbl_AccountType" as tblAccountType {
     * AccountTypeId : INT <<PK>>
     * AccountTypeName : VARCHAR
     --
@@ -21,7 +21,7 @@ entity "tbl_AccountType" as accountType {
     + PaymentDueDays : INT
 }
 
-entity "tbl_Account" as account {
+entity "tbl_Account" as tblAccount {
     * AccountId : INT <<PK>>
     + UserId : INT <<FK>>
     * AccountName : VARCHAR
@@ -33,19 +33,20 @@ entity "tbl_Account" as account {
     * CreatedAt : DATETIME
 }
 
-entity "tbl_Transaction" as transaction {
+entity "tbl_Transaction" as tblTransaction {
     * TransactionId : INT <<PK>>
     * UserId : INT <<FK>>
     * AccountId : INT <<FK>>
-    * TransactionType : INT
+    * TransactionType : BIT
     * Amount : DECIMAL
     --
     + Description : VARCHAR
     * TransactionDate : DATETIME
+    + TransactionFee : Decimal
     + ProjectedRepaymentDate : DATETIME
 }
 
-entity "tbl_DailyReport" as dailyReport {
+entity "tbl_DailyReport" as tblDailyReport {
     * ReportId : INT <<PK>>
     + UserId : INT <<FK>>
     * ReportDate : DATETIME
@@ -55,10 +56,17 @@ entity "tbl_DailyReport" as dailyReport {
     * Balance : DECIMAL
 }
 
-user ||--o{ transaction
-user ||--o{ account
-accountType ||--o{ account
-account ||--o{ transaction
-user ||--o{ dailyReport
+entity "vw_TransactionType" as vwTransactionType {
+    * TransactionType : BIT <<FK>>
+    --
+    + TransactionTypeDescription : VARCHAR
+}
+
+tblUser ||--o{ tblTransaction
+tblUser ||--o{ tblAccount
+tblAccountType ||--o{ tblAccount
+tblAccount ||--o{ tblTransaction
+tblUser ||--o{ tblDailyReport
+tblTransaction ||-- vwTransactionType
 
 @enduml
