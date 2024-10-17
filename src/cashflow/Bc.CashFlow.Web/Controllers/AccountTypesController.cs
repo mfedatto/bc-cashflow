@@ -27,14 +27,15 @@ public class AccountTypesController : Controller
 		int? paymentDueDaysTo,
 		CancellationToken cancellationToken)
 	{
-		AccountTypeIndexViewModel viewModel = new(
+		IEnumerable<IAccountType> accountTypes =
 			await _service.GetAccountTypes(
 				name,
 				baseFeeFrom,
 				baseFeeTo,
 				paymentDueDaysFrom,
 				paymentDueDaysTo,
-				cancellationToken));
+				cancellationToken);
+		AccountTypeIndexViewModel viewModel = new(accountTypes);
 
 		return View(viewModel);
 	}

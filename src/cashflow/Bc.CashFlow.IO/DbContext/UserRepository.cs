@@ -6,22 +6,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Bc.CashFlow.IO.DbContext;
 
-// ReSharper disable once InconsistentNaming
 public class UserRepository : IUserRepository
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UserRepository> _logger;
 	private readonly DbConnection _dbConnection;
 	private readonly DbTransaction _dbTransaction;
+	private readonly UserFactory _factory;
 
 	public UserRepository(
 		ILogger<UserRepository> logger,
 		DbConnection dbConnection,
-		DbTransaction dbTransaction)
+		DbTransaction dbTransaction,
+		UserFactory factory)
 	{
 		_logger = logger;
 		_dbConnection = dbConnection;
 		_dbTransaction = dbTransaction;
+		_factory = factory;
 	}
 
 	public async Task<IEnumerable<IUser>> GetUsers(
@@ -38,11 +40,18 @@ public class UserRepository : IUserRepository
 		parameters.Add("@CreatedSince", createdSince, DbType.DateTime);
 		parameters.Add("@CreatedUntil", createdUntil, DbType.DateTime);
 
-		return await _dbConnection.QueryAsync<UserDto>(
-			"usp_SelectUsers",
-			parameters,
-			commandType: CommandType.StoredProcedure,
-			transaction: _dbTransaction);
+		return (await _dbConnection.QueryAsync<UserDto>(
+				"usp_SelectUsers",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.UserId,
+						row.Username,
+						row.CreatedAt
+					));
 	}
 
 	public async Task<IUser?> GetSingleUser(
@@ -60,16 +69,22 @@ public class UserRepository : IUserRepository
 				parameters,
 				commandType: CommandType.StoredProcedure,
 				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.UserId,
+						row.Username,
+						row.CreatedAt
+					))
 			.SingleOrDefault();
 	}
 }
 
-file record UserDto : IUser
+file record UserDto
 {
-	public int Id => UserId;
-	public int UserId { get; init; }
+	public required int UserId { get; init; }
 	public required string Username { get; init; }
 	public required string PasswordSalt { get; init; }
 	public required string PasswordHash { get; init; }
-	public DateTime CreatedAt { get; init; }
+	public required DateTime CreatedAt { get; init; }
 }

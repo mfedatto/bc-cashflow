@@ -2,15 +2,16 @@ namespace Bc.CashFlow.Domain.AccountType;
 
 public class AccountTypeFactory
 {
+	// ReSharper disable once MemberCanBeMadeStatic.Global
 	public IAccountType Create(
-		int accountTypeId,
-		string accountTypeName,
+		int id,
+		string name,
 		decimal baseFee,
 		int paymentDueDays)
 	{
 		return new AccountTypeVo(
-			Id: accountTypeId,
-			Name: accountTypeName,
+			Id: id,
+			Name: name,
 			BaseFee: baseFee,
 			PaymentDueDays: paymentDueDays
 		);

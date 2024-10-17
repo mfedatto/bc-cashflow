@@ -1,14 +1,18 @@
 CREATE OR ALTER PROCEDURE usp_EnsureUser
     @Username VARCHAR(32),
     @Password NVARCHAR(128),
-    @CreatedAt DATETIME = NULL
+    @CreatedAt DATETIME = NULL,
+    @Id INT OUTPUT
 AS
 BEGIN
 
     DECLARE @PasswordSalt VARCHAR(16);
     DECLARE @PasswordHash VARCHAR(64);
 
-    IF NOT EXISTS (SELECT 1 FROM tbl_User WHERE Username = @Username)
+    IF NOT EXISTS (
+       SELECT 1
+       FROM tbl_User
+       WHERE Username = @Username)
     BEGIN
 
         SET @PasswordSalt = LEFT(CONVERT(VARCHAR(36), NEWID()), 16);
@@ -29,6 +33,20 @@ BEGIN
             @PasswordSalt,
             @PasswordHash,
             @CreatedAt);
+
+        SELECT @Id = SCOPE_IDENTITY();
+
+    END
+    ELSE
+    BEGIN
+
+        SELECT
+            TOP 1
+            @Id = UserId
+        FROM
+            tbl_User
+        WHERE
+            Username = @Username
 
     END
 

@@ -49,8 +49,6 @@ public class Tests
 		IUser actual = given.Create(
 			userId,
 			username,
-			passwordSalt,
-			passwordHash,
 			createdAt);
 
 		// Assert
@@ -59,8 +57,6 @@ public class Tests
 			{
 				Assert.That(actual.Id, Is.EqualTo(userId));
 				Assert.That(actual.Username, Is.EqualTo(username));
-				Assert.That(actual.PasswordSalt, Is.EqualTo(passwordSalt));
-				Assert.That(actual.PasswordHash, Is.EqualTo(passwordHash));
 				Assert.That(actual.CreatedAt, Is.EqualTo(createdAt));
 			});
 	}
@@ -84,8 +80,6 @@ public class Tests
 				IUser actual = given.Create(
 					userId,
 					username,
-					passwordSalt,
-					passwordHash,
 					createdAt);
 			});
 	}

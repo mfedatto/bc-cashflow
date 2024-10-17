@@ -12,15 +12,18 @@ public class AccountTypeRepository : IAccountTypeRepository
 	private readonly ILogger<AccountTypeRepository> _logger;
 	private readonly DbConnection _dbConnection;
 	private readonly DbTransaction _dbTransaction;
+	private readonly AccountTypeFactory _factory;
 
 	public AccountTypeRepository(
 		ILogger<AccountTypeRepository> logger,
 		DbConnection dbConnection,
-		DbTransaction dbTransaction)
+		DbTransaction dbTransaction,
+		AccountTypeFactory factory)
 	{
 		_logger = logger;
 		_dbConnection = dbConnection;
 		_dbTransaction = dbTransaction;
+		_factory = factory;
 	}
 
 	public async Task<IEnumerable<IAccountType>> GetAccountTypes(
@@ -41,20 +44,26 @@ public class AccountTypeRepository : IAccountTypeRepository
 		parameters.Add("@PaymentDueDaysFrom", paymentDueDaysFrom, DbType.Int32);
 		parameters.Add("@PaymentDueDaysTo", paymentDueDaysTo, DbType.Int32);
 
-		return await _dbConnection.QueryAsync<AccountTypeDto>(
-			"usp_SelectAccountTypes",
-			parameters,
-			commandType: CommandType.StoredProcedure,
-			transaction: _dbTransaction);
+		return (await _dbConnection.QueryAsync<AccountTypeDto>(
+				"usp_SelectAccountTypes",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.AccountTypeId,
+						row.AccountTypeName,
+						row.BaseFee,
+						row.PaymentDueDays
+					));
 	}
 }
 
-file record AccountTypeDto : IAccountType
+file record AccountTypeDto
 {
-	public int AccountTypeId { get; init; }
-	public int Id => AccountTypeId;
-	public string AccountTypeName { get; init; }
-	public string Name => AccountTypeName;
-	public decimal BaseFee { get; init; }
-	public int PaymentDueDays { get; init; }
+	public required int AccountTypeId { get; init; }
+	public required string AccountTypeName { get; init; }
+	public required decimal BaseFee { get; init; }
+	public required int PaymentDueDays { get; init; }
 }

@@ -1,4 +1,5 @@
 using System.Data.Common;
+using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.User;
 
@@ -10,6 +11,7 @@ public interface IUnitOfWork : IDisposable
 	DbTransaction? Transaction { get; }
 	IUserRepository UserRepository { get; }
 	IAccountTypeRepository AccountTypeRepository { get; }
+	IAccountRepository AccountRepository { get; }
 
 	Task BeginTransactionAsync();
 	Task CommitAsync();

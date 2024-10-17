@@ -1,4 +1,7 @@
-CREATE OR ALTER PROCEDURE usp_GetAccount
+DROP PROCEDURE IF EXISTS usp_GetAccount;
+GO;
+
+CREATE OR ALTER PROCEDURE usp_SelectAccount
     @AccountId INT
 AS
 BEGIN

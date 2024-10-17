@@ -1,0 +1,36 @@
+@using Bc.CashFlow.Domain.Account
+@model Bc.CashFlow.Web.Models.Account.AccountIndexViewModel
+@{
+    ViewData["Title"] = "Contas";
+}
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<p>Página de gestão de contas</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col" class="text-end">Current balance</th>
+            <th scope="col" class="text-end">Initial balance</th>
+            <th scope="col" class="text-end">Balance updated at</th>
+            <th scope="col" class="text-end">Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (IAccount account in Model.AccountsList)
+        {
+            <tr>
+                <td>@account.Id</td>
+                <td>@account.Name</td>
+                <td class="text-end font-monospace">$ @($"{account.CurrentBalance:F2}")</td>
+                <td class="text-end font-monospace">$ @($"{account.InitialBalance:F2}")</td>
+                <td class="text-end font-monospace">$ @($"{account.BalanceUpdatedAt:yyyy-MM-dd HH:mm:ss}")</td>
+                <td class="text-end font-monospace">$ @($"{account.CreatedAt:yyyy-MM-dd HH:mm:ss}")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

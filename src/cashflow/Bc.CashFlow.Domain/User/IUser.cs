@@ -4,7 +4,5 @@ public interface IUser
 {
 	int Id { get; }
 	string Username { get; }
-	string PasswordSalt { get; }
-	string PasswordHash { get; }
 	DateTime CreatedAt { get; }
 }

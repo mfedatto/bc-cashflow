@@ -6,6 +6,7 @@ namespace Bc.CashFlow.Web.Controllers;
 
 public class UsersController : Controller
 {
+	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UsersController> _logger;
 	private readonly IUserService _service;
 
@@ -24,12 +25,13 @@ public class UsersController : Controller
 		[FromQuery(Name = "created-until")] DateTime? createdUntil,
 		CancellationToken cancellationToken)
 	{
-		UserIndexViewModel viewModel = new(
+		IEnumerable<IUser> usersList =
 			await _service.GetUsers(
 				username,
 				createdSince,
 				createdUntil,
-				cancellationToken));
+				cancellationToken);
+		UserIndexViewModel viewModel = new(usersList);
 
 		return View(viewModel);
 	}
@@ -39,10 +41,11 @@ public class UsersController : Controller
 		[FromRoute(Name = "id")] int userId,
 		CancellationToken cancellationToken)
 	{
-		UserDetailsViewModel viewModel = new(
+		IUser user =
 			await _service.GetSingleUser(
 				userId,
-				cancellationToken));
+				cancellationToken);
+		UserDetailsViewModel viewModel = new(user);
 
 		return View(viewModel);
 	}

@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.User;
@@ -18,5 +19,6 @@ public class IOContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<DbTransaction>(sp => sp.GetRequiredService<IUnitOfWork>().Transaction!);
 		builder.Services.AddScoped<IUserRepository, UserRepository>();
 		builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
+		builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 	}
 }
