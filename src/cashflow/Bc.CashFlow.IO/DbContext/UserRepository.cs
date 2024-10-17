@@ -46,14 +46,14 @@ public class UserRepository : IUserRepository
 	}
 
 	public async Task<IUser?> GetSingleUser(
-		int userId,
+		int id,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
 		DynamicParameters parameters = new();
 
-		parameters.Add("@UserId", userId, DbType.Int32);
+		parameters.Add("@UserId", id, DbType.Int32);
 
 		return (await _dbConnection.QueryAsync<UserDto>(
 				"usp_SelectUser",
@@ -64,9 +64,12 @@ public class UserRepository : IUserRepository
 	}
 }
 
-file record UserDto(
-	int UserId,
-	string Username,
-	string PasswordSalt,
-	string PasswordHash,
-	DateTime CreatedAt) : IUser;
+file record UserDto : IUser
+{
+	public int Id => UserId;
+	public int UserId { get; init; }
+	public required string Username { get; init; }
+	public required string PasswordSalt { get; init; }
+	public required string PasswordHash { get; init; }
+	public DateTime CreatedAt { get; init; }
+}

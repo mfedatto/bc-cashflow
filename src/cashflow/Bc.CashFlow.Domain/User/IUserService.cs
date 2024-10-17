@@ -9,6 +9,6 @@ public interface IUserService
 		CancellationToken cancellationToken);
 
 	Task<IUser> GetSingleUser(
-		int userId,
+		int id,
 		CancellationToken cancellationToken);
 }

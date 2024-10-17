@@ -19,7 +19,7 @@ public class UserFactory
 		if (createdAt == DateTime.MinValue) throw new InvalidUserDataException("create at cannot be MinDate");
 
 		return new UserVo(
-			UserId: userId,
+			Id: userId,
 			Username: username,
 			PasswordSalt: passwordSalt,
 			PasswordHash: passwordHash,
@@ -29,7 +29,7 @@ public class UserFactory
 }
 
 file record UserVo(
-	int UserId,
+	int Id,
 	string Username,
 	string PasswordSalt,
 	string PasswordHash,
