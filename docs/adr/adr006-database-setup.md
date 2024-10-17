@@ -1,4 +1,4 @@
-# Architecure Decision Record 006 - Database Setup
+# Architecture Decision Record 006 - Database Setup
 
 Devido a desafios apresentados pelo controle de transação do DB Migration, serão utilizadas 3 etapas de migration.
 
