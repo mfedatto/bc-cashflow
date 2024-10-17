@@ -50,7 +50,6 @@ services:
     networks:
       cashflow-db-migration:
     depends_on:
-      - cashflow-db
       - cashflow-db-create-database
 
   cashflow-db-migration:
@@ -67,8 +66,6 @@ services:
     networks:
       cashflow-db-migration:
     depends_on:
-      - cashflow-db
-      - cashflow-db-create-database
       - cashflow-db-create-user
 
 networks:
