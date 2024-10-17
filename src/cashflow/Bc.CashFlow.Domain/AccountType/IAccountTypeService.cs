@@ -3,7 +3,7 @@ namespace Bc.CashFlow.Domain.AccountType;
 public interface IAccountTypeService
 {
 	Task<IEnumerable<IAccountType>> GetAccountTypes(
-		string? accountTypeName,
+		string? name,
 		decimal? baseFeeFrom,
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,

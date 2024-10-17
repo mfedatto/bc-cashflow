@@ -6,6 +6,7 @@ namespace Bc.CashFlow.Services;
 
 public class AccountTypeService : IAccountTypeService
 {
+	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<AccountTypeService> _logger;
 	private readonly IUnitOfWork _uow;
 
@@ -18,7 +19,7 @@ public class AccountTypeService : IAccountTypeService
 	}
 
 	public async Task<IEnumerable<IAccountType>> GetAccountTypes(
-		string? accountTypeName,
+		string? name,
 		decimal? baseFeeFrom,
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
@@ -26,7 +27,7 @@ public class AccountTypeService : IAccountTypeService
 		CancellationToken cancellationToken)
 	{
 		return await _uow.AccountTypeRepository.GetAccountTypes(
-			accountTypeName,
+			name,
 			baseFeeFrom,
 			baseFeeTo,
 			paymentDueDaysFrom,

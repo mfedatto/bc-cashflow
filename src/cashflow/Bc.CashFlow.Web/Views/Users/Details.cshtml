@@ -6,8 +6,19 @@
 
 <p>Página de gestão de usuários</p>
 
-<dd>
-    <dl>ID: @Model.User.UserId</dl>
-    <dl>Username: @Model.User.Username</dl>
-    <dl>Created at: @Model.User.CreatedAt</dl>
-</dd>
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.User.UserId</dd>
+
+            <dt class="col-sm-3">Username</dt>
+            <dd class="col-sm-9">@Model.User.Username</dd>
+
+            <dt class="col-sm-3">Created at</dt>
+            <dd class="col-sm-9">@Model.User.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+
+        <a href="/Users/Index" class="btn btn-secondary mt-4">Lista de usuários</a>
+    </div>
+</div>

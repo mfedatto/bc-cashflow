@@ -24,7 +24,7 @@ public class AccountTypeRepository : IAccountTypeRepository
 	}
 
 	public async Task<IEnumerable<IAccountType>> GetAccountTypes(
-		string? accountTypeName,
+		string? name,
 		decimal? baseFeeFrom,
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
@@ -35,7 +35,7 @@ public class AccountTypeRepository : IAccountTypeRepository
 
 		DynamicParameters parameters = new();
 
-		parameters.Add("@AccountTypeName", accountTypeName, DbType.String);
+		parameters.Add("@AccountTypeName", name, DbType.String);
 		parameters.Add("@BaseFeeFrom", baseFeeFrom, DbType.Decimal);
 		parameters.Add("@BaseFeeTo", baseFeeTo, DbType.Decimal);
 		parameters.Add("@PaymentDueDaysFrom", paymentDueDaysFrom, DbType.Int32);
@@ -49,9 +49,12 @@ public class AccountTypeRepository : IAccountTypeRepository
 	}
 }
 
-file record AccountTypeDto(
-	int AccountTypeId,
-	string AccountTypeName,
-	decimal BaseFee,
-	int PaymentDueDays
-) : IAccountType;
+file record AccountTypeDto : IAccountType
+{
+	public int AccountTypeId { get; init; }
+	public int Id => AccountTypeId;
+	public string AccountTypeName { get; init; }
+	public string Name => AccountTypeName;
+	public decimal BaseFee { get; init; }
+	public int PaymentDueDays { get; init; }
+}

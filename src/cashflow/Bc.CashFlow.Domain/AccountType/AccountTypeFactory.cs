@@ -9,8 +9,8 @@ public class AccountTypeFactory
 		int paymentDueDays)
 	{
 		return new AccountTypeVo(
-			AccountTypeId: accountTypeId,
-			AccountTypeName: accountTypeName,
+			Id: accountTypeId,
+			Name: accountTypeName,
 			BaseFee: baseFee,
 			PaymentDueDays: paymentDueDays
 		);
@@ -18,8 +18,8 @@ public class AccountTypeFactory
 }
 
 file record AccountTypeVo(
-	int AccountTypeId,
-	string AccountTypeName,
+	int Id,
+	string Name,
 	decimal BaseFee,
 	int PaymentDueDays
 ) : IAccountType;
