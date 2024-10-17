@@ -19,6 +19,24 @@ public class AccountService : IAccountService
 	}
 
 	public async Task<IEnumerable<IAccount>> GetAccounts(
+		CancellationToken cancellationToken)
+	{
+		return await GetAccounts(
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			cancellationToken);
+	}
+
+	public async Task<IEnumerable<IAccount>> GetAccounts(
 		int? userId,
 		int? accountTypeId,
 		string? name,

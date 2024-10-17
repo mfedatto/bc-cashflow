@@ -32,6 +32,6 @@ BEGIN
         @BalanceUpdatedAt,
         @CreatedAt);
     
-    SELECT SCOPE_IDENTITY() AS AccountId;
+    SELECT SCOPE_IDENTITY() AS Id;
 
 END

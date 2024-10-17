@@ -1,3 +1,5 @@
+using Bc.CashFlow.Domain.DbContext;
+
 namespace Bc.CashFlow.Domain.Transaction;
 
 public interface ITransactionRepository
@@ -12,5 +14,16 @@ public interface ITransactionRepository
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		CancellationToken cancellationToken);
+
+	Task<Identity<int>?> CreateTransaction(
+		int? userId,
+		int accountId,
+		TransactionType transactionType,
+		decimal amount,
+		string? description,
+		DateTime transactionDate,
+		decimal? transactionFee,
+		DateTime? projectedRepaymentDate,
 		CancellationToken cancellationToken);
 }

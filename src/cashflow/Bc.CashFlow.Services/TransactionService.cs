@@ -42,4 +42,27 @@ public class TransactionService : ITransactionService
 			projectedRepaymentDateUntil,
 			cancellationToken);
 	}
+
+	public async Task<Identity<int>?> CreateTransaction(
+		int? userId,
+		int accountId,
+		TransactionType transactionType,
+		decimal amount,
+		string? description,
+		DateTime transactionDate,
+		decimal? transactionFee,
+		DateTime? projectedRepaymentDate,
+		CancellationToken cancellationToken)
+	{
+		return await _uow.TransactionRepository.CreateTransaction(
+			userId,
+			accountId,
+			transactionType,
+			amount,
+			description,
+			transactionDate,
+			transactionFee,
+			projectedRepaymentDate,
+			cancellationToken);
+	}
 }

@@ -14,6 +14,6 @@ BEGIN
         @BaseFee,
         @PaymentDueDays);
 
-    SELECT SCOPE_IDENTITY() AS AccountTypeId;
+    SELECT SCOPE_IDENTITY() AS Id;
 
 END

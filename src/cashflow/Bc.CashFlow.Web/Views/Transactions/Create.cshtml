@@ -1,0 +1,62 @@
+@model Bc.CashFlow.Web.Models.Transaction.TransactionCreateViewModel
+@{
+    ViewData["Title"] = "Criar Transação";
+}
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<p>Página para criação de nova transação</p>
+
+<form asp-action="Create">
+    <div class="mb-3">
+        <label asp-for="AccountId" class="form-label">Conta</label>
+        <select asp-for="AccountId" class="form-select" asp-items="Model.AccountsList">
+            <option value="">Selecione uma conta</option>
+        </select>
+        <span asp-validation-for="AccountId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TransactionType" class="form-label">Tipo de Transação</label>
+        <select asp-for="TransactionType" class="form-select">
+            <option value="1">Crédito</option>
+            <option value="0">Débito</option>
+        </select>
+        <span asp-validation-for="TransactionType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Amount" class="form-label">Valor</label>
+        <input asp-for="Amount" class="form-control" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TransactionFee" class="form-label">Taxa</label>
+        <input asp-for="TransactionFee" class="form-control" />
+        <span asp-validation-for="TransactionFee" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TransactionDate" class="form-label">Data da Transação</label>
+        <input asp-for="TransactionDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="TransactionDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProjectedRepaymentDate" class="form-label">Data de Reembolso Prevista</label>
+        <input asp-for="ProjectedRepaymentDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="ProjectedRepaymentDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Descrição</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

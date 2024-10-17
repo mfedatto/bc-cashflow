@@ -2,6 +2,8 @@ namespace Bc.CashFlow.Domain.Account;
 
 public interface IAccountService
 {
+	Task<IEnumerable<IAccount>> GetAccounts(CancellationToken cancellationToken);
+	
 	Task<IEnumerable<IAccount>> GetAccounts(
 		int? userId,
 		int? accountTypeId,

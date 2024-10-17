@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -70,6 +71,38 @@ public class TransactionRepository : ITransactionRepository
 						row.TransactionFee,
 						row.ProjectedRepaymentDate
 					));
+	}
+
+	public async Task<Identity<int>?> CreateTransaction(
+		int? userId,
+		int accountId,
+		TransactionType transactionType,
+		decimal amount,
+		string? description,
+		DateTime transactionDate,
+		decimal? transactionFee,
+		DateTime? projectedRepaymentDate,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@UserId", userId, DbType.Int32);
+		parameters.Add("@AccountId", accountId, DbType.Int32);
+		parameters.Add("@TransactionType", transactionType, DbType.Boolean);
+		parameters.Add("@Amount", amount, DbType.Decimal);
+		parameters.Add("@Description", description, DbType.String);
+		parameters.Add("@TransactionDate", transactionDate, DbType.DateTime);
+		parameters.Add("@TransactionFee", transactionFee, DbType.Decimal);
+		parameters.Add("@ProjectedRepaymentDate", projectedRepaymentDate, DbType.DateTime);
+
+		return (await _dbConnection.QueryAsync<Identity<int>>(
+				"usp_InsertTransaction",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.SingleOrDefault();
 	}
 }
 
