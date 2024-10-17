@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.AppSettings;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.User;
@@ -34,6 +35,7 @@ public sealed class UnitOfWork : IUnitOfWork
 	public DbTransaction? Transaction => _dbTransaction;
 
 	public IUserRepository UserRepository => _serviceProvider.GetService<IUserRepository>()!;
+	public IAccountTypeRepository AccountTypeRepository => _serviceProvider.GetService<IAccountTypeRepository>()!;
 
 	public async Task BeginTransactionAsync()
 	{

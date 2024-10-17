@@ -1,4 +1,5 @@
 ﻿using Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
+using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.AppSettings;
 using Bc.CashFlow.Domain.User;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
     public void Install(WebApplicationBuilder builder)
     {
         builder.Services.AddSingleton<UserFactory>();
+        builder.Services.AddSingleton<AccountTypeFactory>();
     }
 
     public void BindConfig(
