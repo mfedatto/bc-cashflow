@@ -80,12 +80,30 @@ services:
     networks:
       cashflow-cache:
 
+  cashflow-queue:
+    extends:
+      file: docker-compose.bccf.yaml
+      service: _service
+    image: rabbitmq:management
+    container_name: cashflow-queue
+    hostname: cashflow-queue
+    environment:
+      RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
+      RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      cashflow-queue:
+
 networks:
   cashflow-db:
     driver: bridge
   cashflow-db-migration:
     driver: bridge
   cashflow-cache:
+    driver: bridge
+  cashflow-queue:
     driver: bridge
 
 volumes:
