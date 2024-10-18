@@ -1,21 +1,20 @@
-using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.User;
 using Microsoft.Extensions.Logging;
 
-namespace Bc.CashFlow.Services;
+namespace Bc.CashFlow.Business;
 
-public class UserService : IUserService
+public class UserBusiness : IUserBusiness
 {
 	// ReSharper disable once NotAccessedField.Local
-	private readonly ILogger<UserService> _logger;
-	private readonly IUnitOfWork _uow;
+	private readonly ILogger<UserBusiness> _logger;
+	private readonly IUserService _userService;
 
-	public UserService(
-		ILogger<UserService> logger,
-		IUnitOfWork uow)
+	public UserBusiness(
+		ILogger<UserBusiness> logger,
+		IUserService userService)
 	{
 		_logger = logger;
-		_uow = uow;
+		_userService = userService;
 	}
 	
 	public async Task<IEnumerable<IUser>> GetUsers(
@@ -24,7 +23,7 @@ public class UserService : IUserService
 		DateTime? createdUntil,
 		CancellationToken cancellationToken)
 	{
-		return await _uow.UserRepository.GetUsers(
+		return await _userService.GetUsers(
 			username,
 			createdSince,
 			createdUntil,
@@ -35,7 +34,7 @@ public class UserService : IUserService
 		int id,
 		CancellationToken cancellationToken)
 	{
-		IUser? result = await _uow.UserRepository.GetSingleUser(
+		IUser? result = await _userService.GetSingleUser(
 			id,
 			cancellationToken);
 

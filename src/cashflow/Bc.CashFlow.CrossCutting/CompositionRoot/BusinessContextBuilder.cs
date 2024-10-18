@@ -13,7 +13,7 @@ public class BusinessContextBuilder : IContextBuilderInstaller
 {
 	public void Install(WebApplicationBuilder builder)
 	{
-//		builder.Services.AddScoped<IUserBusiness, UserBusiness>();
+		builder.Services.AddScoped<IUserBusiness, UserBusiness>();
 //		builder.Services.AddScoped<IAccountTypeBusiness, AccountTypeBusiness>();
 //		builder.Services.AddScoped<IAccountBusiness, AccountBusiness>();
 		builder.Services.AddScoped<ITransactionBusiness, TransactionBusiness>();

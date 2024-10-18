@@ -8,14 +8,14 @@ public class UsersController : Controller
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UsersController> _logger;
-	private readonly IUserService _service;
+	private readonly IUserBusiness _business;
 
 	public UsersController(
 		ILogger<UsersController> logger,
-		IUserService service)
+		IUserBusiness business)
 	{
 		_logger = logger;
-		_service = service;
+		_business = business;
 	}
 
 	[HttpGet]
@@ -26,7 +26,7 @@ public class UsersController : Controller
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<IUser> usersList =
-			await _service.GetUsers(
+			await _business.GetUsers(
 				username,
 				createdSince,
 				createdUntil,
@@ -42,7 +42,7 @@ public class UsersController : Controller
 		CancellationToken cancellationToken)
 	{
 		IUser user =
-			await _service.GetSingleUser(
+			await _business.GetSingleUser(
 				userId,
 				cancellationToken);
 		UserDetailsViewModel viewModel = new(user);
