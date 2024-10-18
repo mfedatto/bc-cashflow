@@ -1,5 +1,6 @@
 ﻿using Bc.CashFlow.Domain.QueueContext;
 using Bc.CashFlow.IO.CacheContext;
+using Bc.CashFlow.IO.QueueContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,5 +19,6 @@ public class IOQueueContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IConnection>(
 			sp =>
 				sp.GetRequiredService<IQueueConnectionFactory>().CreateConnection());
+		builder.Services.AddScoped<IQueuePublisher, QueuePublisher>();
 	}
 }
