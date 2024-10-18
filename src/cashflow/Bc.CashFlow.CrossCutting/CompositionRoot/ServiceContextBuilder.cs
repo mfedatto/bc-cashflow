@@ -13,7 +13,7 @@ public class ServiceContextBuilder : IContextBuilderInstaller
 {
 	public void Install(
 		WebApplicationBuilder builder,
-		IConfiguration configuration = null)
+		IConfiguration? configuration = null)
 	{
 		builder.Services.AddScoped<IUserService, UserService>();
 		builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();

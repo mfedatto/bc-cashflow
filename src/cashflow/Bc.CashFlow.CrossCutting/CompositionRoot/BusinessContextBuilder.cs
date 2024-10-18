@@ -3,7 +3,6 @@ using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
-using Bc.CashFlow.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ public class BusinessContextBuilder : IContextBuilderInstaller
 {
 	public void Install(
 		WebApplicationBuilder builder,
-		IConfiguration configuration = null)
+		IConfiguration? configuration = null)
 	{
 		builder.Services.AddScoped<IUserBusiness, UserBusiness>();
 		builder.Services.AddScoped<IAccountTypeBusiness, AccountTypeBusiness>();

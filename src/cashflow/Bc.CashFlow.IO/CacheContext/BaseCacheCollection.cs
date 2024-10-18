@@ -1,5 +1,4 @@
 using Bc.CashFlow.Domain.CacheContext;
-using Bc.CashFlow.Domain.User;
 using StackExchange.Redis;
 
 namespace Bc.CashFlow.IO.CacheContext;

@@ -7,5 +7,5 @@ public interface IContextBuilderInstaller
 {
     void Install(
         WebApplicationBuilder builder,
-        IConfiguration configuration = null);
+        IConfiguration? configuration = null);
 }

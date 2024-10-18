@@ -14,7 +14,7 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
 {
     public void Install(
         WebApplicationBuilder builder,
-        IConfiguration configuration = null)
+        IConfiguration? configuration = null)
     {
         builder.Services.AddSingleton<UserFactory>();
         builder.Services.AddSingleton<AccountTypeFactory>();

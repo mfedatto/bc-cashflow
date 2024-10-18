@@ -9,7 +9,7 @@ public class WebApiContextBuilder : IContextBuilderInstaller, IContextBuilderApp
 {
 	public void Install(
 		WebApplicationBuilder builder,
-		IConfiguration configuration = null)
+		IConfiguration? configuration = null)
 	{
 		builder.Services.AddControllersWithViews();
 	}
