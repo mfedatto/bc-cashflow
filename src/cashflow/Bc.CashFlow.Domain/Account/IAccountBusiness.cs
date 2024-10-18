@@ -1,6 +1,6 @@
 namespace Bc.CashFlow.Domain.Account;
 
-public interface IAccountService
+public interface IAccountBusiness
 {
 	Task<IEnumerable<IAccount>> GetAccounts(
 		CancellationToken cancellationToken);

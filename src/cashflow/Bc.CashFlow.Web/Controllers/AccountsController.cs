@@ -8,14 +8,14 @@ public class AccountsController : Controller
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<AccountsController> _logger;
-	private readonly IAccountService _service;
+	private readonly IAccountBusiness _business;
 
 	public AccountsController(
 		ILogger<AccountsController> logger,
-		IAccountService service)
+		IAccountBusiness business)
 	{
 		_logger = logger;
-		_service = service;
+		_business = business;
 	}
 
 	[HttpGet]
@@ -33,7 +33,7 @@ public class AccountsController : Controller
 		[FromQuery(Name = "created-at-until")] DateTime? createdAtUntil,
 		CancellationToken cancellationToken)
 	{
-		IEnumerable<IAccount> accounts = await _service.GetAccounts(
+		IEnumerable<IAccount> accounts = await _business.GetAccounts(
 			userId,
 			accountTypeId,
 			name,

@@ -15,7 +15,7 @@ public class BusinessContextBuilder : IContextBuilderInstaller
 	{
 		builder.Services.AddScoped<IUserBusiness, UserBusiness>();
 //		builder.Services.AddScoped<IAccountTypeBusiness, AccountTypeBusiness>();
-//		builder.Services.AddScoped<IAccountBusiness, AccountBusiness>();
+		builder.Services.AddScoped<IAccountBusiness, AccountBusiness>();
 		builder.Services.AddScoped<ITransactionBusiness, TransactionBusiness>();
 	}
 }
