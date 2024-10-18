@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 // ReSharper disable once InconsistentNaming
-public class DbContextBuilder : IContextBuilderInstaller
+public class IODbContextBuilder : IContextBuilderInstaller
 {
 	public void Install(
 		WebApplicationBuilder builder,

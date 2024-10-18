@@ -12,7 +12,7 @@ public class IOContextBuilder : IContextBuilderInstaller
 		IConfiguration? configuration = null)
 	{
 		builder
-			.BuildContext<DbContextBuilder>(configuration!)
-			.BuildContext<CacheContextBuilder>(configuration!);
+			.BuildContext<IODbContextBuilder>(configuration!)
+			.BuildContext<IOCacheContextBuilder>(configuration!);
 	}
 }

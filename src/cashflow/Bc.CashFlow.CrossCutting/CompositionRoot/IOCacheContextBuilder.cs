@@ -11,7 +11,7 @@ using StackExchange.Redis;
 namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 // ReSharper disable once InconsistentNaming
-public class CacheContextBuilder : IContextBuilderInstaller
+public class IOCacheContextBuilder : IContextBuilderInstaller
 {
 	public void Install(
 		WebApplicationBuilder builder,
