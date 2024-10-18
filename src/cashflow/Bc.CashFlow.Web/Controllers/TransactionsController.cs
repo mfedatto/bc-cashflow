@@ -70,7 +70,7 @@ public class TransactionsController : Controller
 	{
 		if (ModelState.IsValid)
 		{
-			Identity<int>? transactionId = await _business.CreateTransaction(
+			Identity<int> transactionId = await _business.CreateTransaction(
 				viewModel.UserId,
 				viewModel.AccountId,
 				viewModel.TransactionType,
