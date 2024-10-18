@@ -12,7 +12,9 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderConfigBinder
 {
-    public void Install(WebApplicationBuilder builder)
+    public void Install(
+        WebApplicationBuilder builder,
+        IConfiguration configuration = null)
     {
         builder.Services.AddSingleton<UserFactory>();
         builder.Services.AddSingleton<AccountTypeFactory>();

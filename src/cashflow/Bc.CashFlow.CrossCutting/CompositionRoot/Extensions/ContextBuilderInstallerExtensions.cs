@@ -21,7 +21,7 @@ public static class ContextBuilderInstallerExtensions
         return builder;
     }
 
-    private static WebApplicationBuilder BuildContext<T>(
+    public static WebApplicationBuilder BuildContext<T>(
         this WebApplicationBuilder builder,
         IConfiguration configuration)
         where T : IContextBuilderInstaller, new()
@@ -30,10 +30,14 @@ public static class ContextBuilderInstallerExtensions
 
         if (installer is IContextBuilderConfigBinder configurator)
         {
-            configurator.BindConfig(builder, configuration);
+            configurator.BindConfig(
+                builder,
+                configuration);
         }
 
-        installer.Install(builder);
+        installer.Install(
+            builder,
+            configuration);
 
         return builder;
     }

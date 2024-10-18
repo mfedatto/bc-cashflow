@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.CacheContext;
@@ -16,14 +15,22 @@ using StackExchange.Redis;
 namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 // ReSharper disable once InconsistentNaming
-public class IOContextBuilder : IContextBuilderInstaller
+public class DbContextBuilder : IContextBuilderInstaller
 {
 	public void Install(
 		WebApplicationBuilder builder,
 		IConfiguration configuration = null)
 	{
-		builder
-			.BuildContext<DbContextBuilder>(configuration)
-			.BuildContext<CacheContextBuilder>(configuration);
+		builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+		builder.Services.AddScoped<DbConnection>(
+			sp =>
+				sp.GetRequiredService<IUnitOfWork>().Connection);
+		builder.Services.AddScoped<DbTransaction>(
+			sp =>
+				sp.GetRequiredService<IUnitOfWork>().Transaction!);
+		builder.Services.AddScoped<IUserRepository, UserRepository>();
+		builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
+		builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+		builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 	}
 }
