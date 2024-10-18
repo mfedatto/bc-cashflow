@@ -20,5 +20,6 @@ public class IOQueueContextBuilder : IContextBuilderInstaller
 			sp =>
 				sp.GetRequiredService<IQueueConnectionFactory>().CreateConnection());
 		builder.Services.AddScoped<IQueuePublisher, QueuePublisher>();
+		builder.Services.AddScoped<IQueueContext, QueueContext>();
 	}
 }

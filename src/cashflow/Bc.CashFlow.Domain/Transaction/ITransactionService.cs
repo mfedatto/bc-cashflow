@@ -26,4 +26,8 @@ public interface ITransactionService
 		decimal? transactionFee,
 		DateTime? projectedRepaymentDate,
 		CancellationToken cancellationToken);
+
+	Task PublishNewTransactionToBalance(
+		int id,
+		CancellationToken cancellationToken);
 }

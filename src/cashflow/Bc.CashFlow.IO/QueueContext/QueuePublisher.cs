@@ -22,34 +22,39 @@ public class QueuePublisher : IQueuePublisher
 		_connection = connection;
 		_config = config;
 	}
-	
+
 	public async Task PublishMessage(
 		string message,
-		string queue)
+		string queue,
+		CancellationToken cancellationToken)
 	{
-		await Task.Run(() =>
-		{
-			// ReSharper disable once ConvertToUsingDeclaration
-			using (IModel? channel = _connection.CreateModel())
+		cancellationToken.ThrowIfCancellationRequested();
+
+		await Task.Run(
+			() =>
 			{
-				channel.QueueDeclare(
-					queue,
-					false,
-					false,
-					false,
-					null);
+				// ReSharper disable once ConvertToUsingDeclaration
+				using (IModel? channel = _connection.CreateModel())
+				{
+					channel.QueueDeclare(
+						queue,
+						false,
+						false,
+						false,
+						null);
 
-				byte[] body = Encoding.UTF8.GetBytes(message);
-				IBasicProperties basicProperties = channel.CreateBasicProperties();
-				
-				basicProperties.Persistent = true;
+					byte[] body = Encoding.UTF8.GetBytes(message);
+					IBasicProperties basicProperties = channel.CreateBasicProperties();
 
-				channel.BasicPublish(
-					_config.Exchange,
-					queue,
-					basicProperties,
-					body);
-			}
-		});
+					basicProperties.Persistent = true;
+
+					channel.BasicPublish(
+						_config.Exchange,
+						queue,
+						basicProperties,
+						body);
+				}
+			},
+			cancellationToken);
 	}
 }

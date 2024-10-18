@@ -4,5 +4,6 @@ public interface IQueuePublisher
 {
 	Task PublishMessage(
 		string message,
-		string queue);
+		string queue,
+		CancellationToken cancellationToken);
 }

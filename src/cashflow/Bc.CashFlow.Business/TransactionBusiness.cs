@@ -88,6 +88,10 @@ public class TransactionBusiness : ITransactionBusiness
 			transactionDate,
 			cancellationToken);
 
+		await _transactionService.PublishNewTransactionToBalance(
+			result.Value,
+			cancellationToken);
+
 		return result;
 	}
 
