@@ -8,14 +8,14 @@ public class AccountTypesController : Controller
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UsersController> _logger;
-	private readonly IAccountTypeService _service;
+	private readonly IAccountTypeBusiness _business;
 
 	public AccountTypesController(
 		ILogger<UsersController> logger,
-		IAccountTypeService service)
+		IAccountTypeBusiness business)
 	{
 		_logger = logger;
-		_service = service;
+		_business = business;
 	}
 
 	[HttpGet]
@@ -28,7 +28,7 @@ public class AccountTypesController : Controller
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<IAccountType> accountTypes =
-			await _service.GetAccountTypes(
+			await _business.GetAccountTypes(
 				name,
 				baseFeeFrom,
 				baseFeeTo,
