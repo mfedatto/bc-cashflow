@@ -2,6 +2,7 @@
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.AppSettings;
+using Bc.CashFlow.Domain.DailyReport;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,7 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
         builder.Services.AddSingleton<AccountTypeFactory>();
         builder.Services.AddSingleton<AccountFactory>();
         builder.Services.AddSingleton<TransactionFactory>();
+        builder.Services.AddSingleton<DailyReportFactory>();
     }
 
     public void BindConfig(
