@@ -12,10 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="CompositionRoot\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\Bc.CashFlow.Business\Bc.CashFlow.Business.csproj" />
       <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" />
       <ProjectReference Include="..\Bc.CashFlow.IO\Bc.CashFlow.IO.csproj" />
       <ProjectReference Include="..\Bc.CashFlow.Services\Bc.CashFlow.Services.csproj" />

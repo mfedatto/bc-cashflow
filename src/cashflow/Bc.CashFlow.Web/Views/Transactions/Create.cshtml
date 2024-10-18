@@ -18,7 +18,7 @@
     <div class="mb-3">
         <label asp-for="TransactionType" class="form-label">Tipo de Transação</label>
         <select asp-for="TransactionType" class="form-select">
-            <option value="1">Crédito</option>
+            <option value="1" selected="selected">Crédito</option>
             <option value="0">Débito</option>
         </select>
         <span asp-validation-for="TransactionType" class="text-danger"></span>

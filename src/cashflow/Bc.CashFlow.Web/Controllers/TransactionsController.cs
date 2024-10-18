@@ -11,17 +11,14 @@ public class TransactionsController : Controller
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<TransactionsController> _logger;
-	private readonly ITransactionService _service;
-	private readonly IAccountService _accountService;
+	private readonly ITransactionBusiness _business;
 
 	public TransactionsController(
 		ILogger<TransactionsController> logger,
-		ITransactionService service,
-		IAccountService accountService)
+		ITransactionBusiness business)
 	{
 		_logger = logger;
-		_service = service;
-		_accountService = accountService;
+		_business = business;
 	}
 
 	[HttpGet]
@@ -37,7 +34,7 @@ public class TransactionsController : Controller
 		DateTime? projectedRepaymentDateUntil,
 		CancellationToken cancellationToken)
 	{
-		IEnumerable<ITransaction> transactionsList = await _service.GetTransactions(
+		IEnumerable<ITransaction> transactionsList = await _business.GetTransactions(
 			userId,
 			accountId,
 			transactionType,
@@ -73,7 +70,7 @@ public class TransactionsController : Controller
 	{
 		if (ModelState.IsValid)
 		{
-			Identity<int>? transactionId = await _service.CreateTransaction(
+			Identity<int>? transactionId = await _business.CreateTransaction(
 				viewModel.UserId,
 				viewModel.AccountId,
 				viewModel.TransactionType,
@@ -93,7 +90,7 @@ public class TransactionsController : Controller
 	private async Task<IEnumerable<SelectListItem>> GetAccountsSelectList(
 		CancellationToken cancellationToken)
 	{
-		return (await _accountService.GetAccounts(cancellationToken))
+		return (await _business.GetAccounts(cancellationToken))
 			.Select(
 				account => new SelectListItem(
 					account.Name,

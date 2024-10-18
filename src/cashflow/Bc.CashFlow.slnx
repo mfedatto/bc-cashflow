@@ -1,4 +1,5 @@
 ﻿<Solution>
+  <Project Path="Bc.CashFlow.Business\Bc.CashFlow.Business.csproj" Type="Classic C#" />
   <Project Path="Bc.CashFlow.CrossCutting\Bc.CashFlow.CrossCutting.csproj" Type="Classic C#" />
   <Project Path="Bc.CashFlow.DomainTests\Bc.CashFlow.DomainTests.csproj" Type="Classic C#" />
   <Project Path="Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" Type="Classic C#" />

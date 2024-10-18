@@ -14,6 +14,7 @@ public static class ContextBuilderInstallerExtensions
             .BuildContext<DomainContextBuilder>(configuration)
             .BuildContext<IOContextBuilder>(configuration)
             .BuildContext<ServiceContextBuilder>(configuration)
+            .BuildContext<BusinessContextBuilder>(configuration)
             .BuildContext<WebApiContextBuilder>(configuration);
 
         return builder;
