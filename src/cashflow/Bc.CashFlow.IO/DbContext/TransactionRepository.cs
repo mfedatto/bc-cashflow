@@ -97,13 +97,24 @@ public class TransactionRepository : ITransactionRepository
 		parameters.Add("@TransactionFee", transactionFee, DbType.Decimal);
 		parameters.Add("@ProjectedRepaymentDate", projectedRepaymentDate, DbType.DateTime);
 
-		return (await _dbConnection.QueryAsync<Identity<int>>(
+		return (await _dbConnection.QueryAsync<TransactionIdDto>(
 				"usp_InsertTransaction",
 				parameters,
 				commandType: CommandType.StoredProcedure,
 				transaction: _dbTransaction))
+			.Select(
+				row =>
+					new Identity<int>
+					{
+						Value = row.Id
+					})
 			.SingleOrDefault();
 	}
+}
+
+file record TransactionIdDto
+{
+	public int Id { get; init; }
 }
 
 file record TransactionDto
