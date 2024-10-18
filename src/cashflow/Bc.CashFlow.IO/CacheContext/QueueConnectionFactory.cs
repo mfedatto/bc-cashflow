@@ -25,7 +25,9 @@ public class QueueConnectionFactory : IQueueConnectionFactory
 		
 		ConnectionFactory connectionFactory = new()
 		{
-			HostName = _config.HostName
+			HostName = _config.HostName,
+			UserName = _config.UserName,
+			Password = _config.Password
 		};
 
 		return connectionFactory.CreateConnection();
