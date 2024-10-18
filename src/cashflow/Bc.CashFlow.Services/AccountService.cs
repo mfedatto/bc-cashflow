@@ -64,4 +64,13 @@ public class AccountService : IAccountService
 			createdAtUntil,
 			cancellationToken);
 	}
+
+	public async Task<IAccount?> GetAccount(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		return await _uow.AccountRepository.GetAccount(
+			id,
+			cancellationToken);
+	}
 }

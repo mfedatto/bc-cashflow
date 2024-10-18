@@ -74,6 +74,36 @@ public class AccountRepository : IAccountRepository
 						row.CreatedAt
 					));
 	}
+
+	public async Task<IAccount?> GetAccount(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@AccountId", id, DbType.Int32);
+
+		return (await _dbConnection.QueryAsync<AccountDto>(
+				"usp_SelectAccount",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.AccountId,
+						row.UserId,
+						row.AccountTypeId,
+						row.AccountName,
+						row.InitialBalance,
+						row.CurrentBalance,
+						row.BalanceUpdatedAt,
+						row.CreatedAt
+					))
+			.SingleOrDefault();
+	}
 }
 
 file record AccountDto

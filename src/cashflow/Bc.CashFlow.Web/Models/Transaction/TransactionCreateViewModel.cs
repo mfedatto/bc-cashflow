@@ -12,7 +12,4 @@ public class TransactionCreateViewModel
 	public TransactionType TransactionType { get; init; }
 	public decimal Amount { get; init; }
 	public string? Description { get; init; }
-	public DateTime TransactionDate { get; init; }
-	public decimal? TransactionFee { get; init; }
-	public DateTime? ProjectedRepaymentDate { get; init; }
 }

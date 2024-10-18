@@ -79,9 +79,7 @@ public class TransactionsController : Controller
 				viewModel.TransactionType,
 				viewModel.Amount,
 				viewModel.Description,
-				viewModel.TransactionDate,
-				viewModel.TransactionFee,
-				viewModel.ProjectedRepaymentDate,
+				DateTime.Now,
 				cancellationToken);
 
 			return RedirectToAction(nameof(Index));

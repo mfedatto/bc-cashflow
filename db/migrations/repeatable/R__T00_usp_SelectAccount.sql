@@ -8,6 +8,8 @@ BEGIN
 
     SELECT
         AccountId,
+        UserId,
+        AccountTypeId,
         AccountName,
         InitialBalance,
         CurrentBalance,

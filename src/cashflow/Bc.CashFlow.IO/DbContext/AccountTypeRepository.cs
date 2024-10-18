@@ -58,6 +58,32 @@ public class AccountTypeRepository : IAccountTypeRepository
 						row.PaymentDueDays
 					));
 	}
+
+	public async Task<IAccountType?> GetAccountType(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@AccountTypeId", id, DbType.Int32);
+
+		return (await _dbConnection.QueryAsync<AccountTypeDto>(
+				"usp_SelectAccountType",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.AccountTypeId,
+						row.AccountTypeName,
+						row.BaseFee,
+						row.PaymentDueDays
+					))
+			.SingleOrDefault();
+	}
 }
 
 file record AccountTypeDto

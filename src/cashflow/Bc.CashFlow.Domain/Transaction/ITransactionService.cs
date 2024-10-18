@@ -23,7 +23,5 @@ public interface ITransactionService
 		decimal amount,
 		string? description,
 		DateTime transactionDate,
-		decimal? transactionFee,
-		DateTime? projectedRepaymentDate,
 		CancellationToken cancellationToken);
 }

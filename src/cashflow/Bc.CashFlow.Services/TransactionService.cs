@@ -1,5 +1,8 @@
+using Bc.CashFlow.Domain.Account;
+using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
+using Bc.CashFlow.Domain.User;
 using Microsoft.Extensions.Logging;
 
 namespace Bc.CashFlow.Services;
@@ -50,19 +53,38 @@ public class TransactionService : ITransactionService
 		decimal amount,
 		string? description,
 		DateTime transactionDate,
-		decimal? transactionFee,
-		DateTime? projectedRepaymentDate,
 		CancellationToken cancellationToken)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		IAccount? account = await _uow.AccountRepository.GetAccount(
+			accountId,
+			cancellationToken);
+
+		if (account is null) throw new AccountNotFoundException();
+
+		cancellationToken.ThrowIfCancellationRequested();
+
+		IAccountType? accountType = await _uow.AccountTypeRepository.GetAccountType(
+			account.AccountTypeId,
+			cancellationToken);
+
+		if (accountType is null) throw new AccountTypeNotFoundException();
+
 		return await _uow.TransactionRepository.CreateTransaction(
 			userId,
 			accountId,
 			transactionType,
-			amount,
+			amount * transactionType
+				switch
+				{
+					TransactionType.Debit => -1,
+					_ => 1
+				},
 			description,
 			transactionDate,
-			transactionFee,
-			projectedRepaymentDate,
+			amount * accountType.BaseFee,
+			transactionDate.AddDays(accountType.PaymentDueDays),
 			cancellationToken);
 	}
 }

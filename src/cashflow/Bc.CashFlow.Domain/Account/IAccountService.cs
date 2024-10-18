@@ -17,4 +17,8 @@ public interface IAccountService
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
 		CancellationToken cancellationToken);
+
+	Task<IAccount?> GetAccount(
+		int id,
+		CancellationToken cancellationToken);
 }
