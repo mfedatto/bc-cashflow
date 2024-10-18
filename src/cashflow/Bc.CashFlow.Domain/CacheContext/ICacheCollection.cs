@@ -10,7 +10,7 @@ public interface ICacheCollection<TContext>
 		TContext value,
 		CancellationToken cancellationToken);
 
-	Task<TContext?> GetVale(
+	Task<TContext?> GetValue(
 		string key,
 		CancellationToken cancellationToken);
 }

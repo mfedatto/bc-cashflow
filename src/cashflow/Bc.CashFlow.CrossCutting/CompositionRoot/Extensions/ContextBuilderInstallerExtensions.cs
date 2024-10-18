@@ -5,8 +5,9 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
 
 public static class ContextBuilderInstallerExtensions
 {
-    public static WebApplicationBuilder AddCompositionRoot(
+    public static WebApplicationBuilder AddCompositionRoot<TStartupContextBuilder>(
         this WebApplicationBuilder builder)
+        where TStartupContextBuilder : IContextBuilderInstaller, new()
     {
         IConfiguration configuration = builder.BuildConfiguration();
 
@@ -15,7 +16,7 @@ public static class ContextBuilderInstallerExtensions
             .BuildContext<IOContextBuilder>(configuration)
             .BuildContext<ServiceContextBuilder>(configuration)
             .BuildContext<BusinessContextBuilder>(configuration)
-            .BuildContext<WebApiContextBuilder>(configuration);
+            .BuildContext<TStartupContextBuilder>(configuration);
 
         return builder;
     }

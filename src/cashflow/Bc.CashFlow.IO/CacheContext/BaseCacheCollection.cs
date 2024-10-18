@@ -4,8 +4,9 @@ using StackExchange.Redis;
 
 namespace Bc.CashFlow.IO.CacheContext;
 
-public abstract class BaseCacheCollection<TValue> : ICacheCollection<TValue>
-	where TValue : class
+public abstract class BaseCacheCollection<TInterface, TConcrete> : ICacheCollection<TInterface>
+	where TInterface : class
+	where TConcrete : class, TInterface
 {
 	public string KeyPrefix { get; init; }
 
@@ -21,7 +22,7 @@ public abstract class BaseCacheCollection<TValue> : ICacheCollection<TValue>
 
 	public async Task SetVale(
 		string key,
-		TValue value,
+		TInterface value,
 		CancellationToken cancellationToken)
 	{
 		await _db.SetValue(
@@ -31,11 +32,11 @@ public abstract class BaseCacheCollection<TValue> : ICacheCollection<TValue>
 			cancellationToken);
 	}
 
-	public async Task<TValue?> GetVale(
+	public async Task<TInterface?> GetValue(
 		string key,
 		CancellationToken cancellationToken)
 	{
-		return await _db.GetValue<TValue>(
+		return await _db.GetValue<TConcrete>(
 			KeyPrefix,
 			key,
 			cancellationToken);

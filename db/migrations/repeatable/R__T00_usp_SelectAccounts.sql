@@ -17,12 +17,7 @@ AS
 BEGIN
 
     SELECT
-        AccountId,
-        AccountName,
-        InitialBalance,
-        CurrentBalance,
-        BalanceUpdatedAt,
-        CreatedAt
+        AccountId
     FROM
         tbl_Account
     WHERE

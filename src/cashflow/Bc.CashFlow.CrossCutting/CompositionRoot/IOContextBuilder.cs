@@ -46,6 +46,7 @@ public class IOContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IDatabase>(
 			sp =>
 				sp.GetRequiredService<IConnectionMultiplexer>().GetDatabase());
+		builder.Services.AddScoped<ICacheContext, CacheContext>();
 		builder.Services.AddScoped<ICacheCollection<IUser>, UserCacheCollection>();
 		builder.Services.AddScoped<ICacheCollection<IAccountType>, AccountTypeCacheCollection>();
 		builder.Services.AddScoped<ICacheCollection<IAccount>, AccountCacheCollection>();

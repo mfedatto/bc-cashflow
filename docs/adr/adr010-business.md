@@ -1,4 +1,4 @@
-# Architecture Decision Record 010- Business
+# Architecture Decision Record 010 - Business
 
 Adotando nova camada `Bc.CashFlow.Business` para ser um gateway para os `Controllers`, de forma cada controller fazer
 uso de uma única implementação em `Business` e esta implementação lidar com quaisquer atores no sistema, como a

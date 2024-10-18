@@ -3,11 +3,18 @@ using StackExchange.Redis;
 
 namespace Bc.CashFlow.IO.CacheContext;
 
-public class UserCacheCollection : BaseCacheCollection<IUser>
+public class UserCacheCollection : BaseCacheCollection<IUser, UserCacheCollection.UserDto>
 {
 	public UserCacheCollection(
 		IDatabase db)
 		: base("user", db)
 	{
+	}
+
+	public record UserDto : IUser
+	{
+		public required int Id { get; init; }
+		public required string Username { get; init; }
+		public required DateTime CreatedAt { get; init; }
 	}
 }

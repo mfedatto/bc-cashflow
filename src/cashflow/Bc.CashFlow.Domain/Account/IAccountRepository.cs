@@ -1,8 +1,10 @@
+using Bc.CashFlow.Domain.DbContext;
+
 namespace Bc.CashFlow.Domain.Account;
 
 public interface IAccountRepository
 {
-	Task<IEnumerable<IAccount>> GetAccounts(
+	Task<IEnumerable<Identity<int>>> GetAccountsId(
 		int? userId,
 		int? accountTypeId,
 		string? name,

@@ -16,8 +16,12 @@ public static class IDatabaseExtensionMethods
 		cancellationToken.ThrowIfCancellationRequested();
 
 		string jsonValue = JsonSerializer.Serialize(value);
+		TimeSpan ttl = TimeSpan.FromMinutes(10);
 
-		await db.StringSetAsync($"{prefix}:{key}", jsonValue);
+		await db.StringSetAsync(
+			$"{prefix}:{key}",
+			jsonValue,
+			ttl);
 	}
 
 	public static async Task<TValue?> GetValue<TValue>(
@@ -29,7 +33,8 @@ public static class IDatabaseExtensionMethods
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		string? jsonValue = await db.StringGetAsync($"{prefix}:{key}");
+		string? jsonValue = await db.StringGetAsync(
+			$"{prefix}:{key}");
 
 		return jsonValue is null
 			? null

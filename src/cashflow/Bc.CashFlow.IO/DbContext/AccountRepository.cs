@@ -1,6 +1,7 @@
 using System.Data;
 using System.Data.Common;
 using Bc.CashFlow.Domain.Account;
+using Bc.CashFlow.Domain.DbContext;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
@@ -26,7 +27,7 @@ public class AccountRepository : IAccountRepository
 		_factory = factory;
 	}
 
-	public async Task<IEnumerable<IAccount>> GetAccounts(
+	public async Task<IEnumerable<Identity<int>>> GetAccountsId(
 		int? userId,
 		int? accountTypeId,
 		string? name,
@@ -56,23 +57,17 @@ public class AccountRepository : IAccountRepository
 		parameters.Add("@CreatedSince", createdAtSince, DbType.DateTime);
 		parameters.Add("@CreatedUntil", createdAtUntil, DbType.DateTime);
 
-		return (await _dbConnection.QueryAsync<AccountDto>(
+		return (await _dbConnection.QueryAsync<AccountIdDto>(
 				"usp_SelectAccounts",
 				parameters,
 				commandType: CommandType.StoredProcedure,
 				transaction: _dbTransaction))
 			.Select(
 				row =>
-					_factory.Create(
-						row.AccountId,
-						row.UserId,
-						row.AccountTypeId,
-						row.AccountName,
-						row.InitialBalance,
-						row.CurrentBalance,
-						row.BalanceUpdatedAt,
-						row.CreatedAt
-					));
+					new Identity<int>
+					{
+						Value = row.AccountId
+					});
 	}
 
 	public async Task<IAccount?> GetAccount(
@@ -104,6 +99,11 @@ public class AccountRepository : IAccountRepository
 					))
 			.SingleOrDefault();
 	}
+}
+
+file record AccountIdDto
+{
+	public required int AccountId { get; init; }
 }
 
 file record AccountDto
