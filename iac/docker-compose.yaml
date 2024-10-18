@@ -14,7 +14,7 @@ services:
     volumes:
       - cashflow-db:/var/opt/mssql
     ports:
-      - 1433:1433
+      - '1433:1433'
     networks:
       cashflow-db:
       cashflow-db-migration:
@@ -68,10 +68,24 @@ services:
     depends_on:
       - cashflow-db-create-user
 
+  cashflow-cache:
+    extends:
+      file: docker-compose.bccf.yaml
+      service: _service
+    image: eqalpha/keydb:latest
+    container_name: cashflow-cache
+    hostname: cashflow-cache
+    ports:
+      - '6379:6379'
+    networks:
+      cashflow-cache:
+
 networks:
   cashflow-db:
     driver: bridge
   cashflow-db-migration:
+    driver: bridge
+  cashflow-cache:
     driver: bridge
 
 volumes:
