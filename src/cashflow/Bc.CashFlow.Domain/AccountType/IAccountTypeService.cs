@@ -9,4 +9,8 @@ public interface IAccountTypeService
 		int? paymentDueDaysFrom,
 		int? paymentDueDaysTo,
 		CancellationToken cancellationToken);
+
+	Task<IAccountType?> GetAccountType(
+		int id,
+		CancellationToken cancellationToken);
 }

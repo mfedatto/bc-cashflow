@@ -34,4 +34,13 @@ public class AccountTypeService : IAccountTypeService
 			paymentDueDaysTo,
 			cancellationToken);
 	}
+
+	public async Task<IAccountType?> GetAccountType(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		return await _uow.AccountTypeRepository.GetAccountType(
+			id,
+			cancellationToken);
+	}
 }
