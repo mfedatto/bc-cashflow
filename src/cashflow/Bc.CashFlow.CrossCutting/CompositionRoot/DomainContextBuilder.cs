@@ -25,5 +25,6 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
         IConfiguration configuration)
     {
         builder.BindConfig<DatabaseConfig>(configuration);
+        builder.BindConfig<CacheConfig>(configuration);
     }
 }
