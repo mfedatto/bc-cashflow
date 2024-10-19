@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{544111
 		entrypoint.sh = entrypoint.sh
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.CashFlow.Scheduler", "Bc.CashFlow.Scheduler\Bc.CashFlow.Scheduler.csproj", "{9441BF81-07ED-4EBC-A447-164E46DBFC1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{4FAEF9B3-F905-B3F8-1D0C-BDAB6499CE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FAEF9B3-F905-B3F8-1D0C-BDAB6499CE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FAEF9B3-F905-B3F8-1D0C-BDAB6499CE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9441BF81-07ED-4EBC-A447-164E46DBFC1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9441BF81-07ED-4EBC-A447-164E46DBFC1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9441BF81-07ED-4EBC-A447-164E46DBFC1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9441BF81-07ED-4EBC-A447-164E46DBFC1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
