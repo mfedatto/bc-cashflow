@@ -13,6 +13,27 @@ public class Tests
 	{
 		get
 		{
+			yield return new(1, "user1", new DateTime(2024, 1, 1, 10, 0, 0));
+			yield return new(2, "user2", new DateTime(2024, 1, 2, 11, 30, 0));
+			yield return new(8, "user7", DateTime.Now);
+			yield return new(10, "user10", DateTime.Now.AddYears(1));
+		}
+	}
+
+	public static IEnumerable<TestCaseData> UserFactoryCreateInvalidUserDataCases
+	{
+		get
+		{
+			yield return new(-1, "user1", new DateTime(2024, 1, 1, 10, 0, 0));
+			yield return new(4, "", new DateTime(2024, 1, 4, 13, 15, 0));
+			yield return new(6, "user5", DateTime.MinValue);
+		}
+	}
+
+	public static IEnumerable<TestCaseData> CreateNewUserSuccessCases
+	{
+		get
+		{
 			yield return new(1, "user1", "salt123", "hash123", new DateTime(2024, 1, 1, 10, 0, 0));
 			yield return new(2, "user2", "salt456", "hash456", new DateTime(2024, 1, 2, 11, 30, 0));
 			yield return new(8, "user7", "salt789", "hash789", DateTime.Now);
@@ -20,7 +41,7 @@ public class Tests
 		}
 	}
 
-	public static IEnumerable<TestCaseData> UserFactoryCreateInvalidUserDataCases
+	public static IEnumerable<TestCaseData> CreateNewUsersInvalidUserDataCases
 	{
 		get
 		{
@@ -38,8 +59,6 @@ public class Tests
 	public void GivenSuccessUserData_WhenFactoryCreate_ReturnsProperUser(
 		int userId,
 		string username,
-		string passwordSalt,
-		string passwordHash,
 		DateTime createdAt)
 	{
 		// Arrange
@@ -65,8 +84,6 @@ public class Tests
 	public void GivenInvalidUserData_WhenFactoryCreate_ReturnsProperUser(
 		int userId,
 		string username,
-		string passwordSalt,
-		string passwordHash,
 		DateTime createdAt)
 	{
 		// Arrange
