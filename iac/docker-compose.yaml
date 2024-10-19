@@ -96,6 +96,22 @@ services:
     networks:
       cashflow-queue:
 
+  cashflow-web:
+    build:
+      context: ../src/cashflow
+      dockerfile: ../../iac/cashflow-web/Dockerfile
+    container_name: cashflow-web
+    hostname: cashflow-web
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - '5183:80'
+    networks:
+      cashflow-web:
+      cashflow-db:
+      cashflow-cache:
+      cashflow-queue:
+
 networks:
   cashflow-db:
     driver: bridge
@@ -104,6 +120,8 @@ networks:
   cashflow-cache:
     driver: bridge
   cashflow-queue:
+    driver: bridge
+  cashflow-web:
     driver: bridge
 
 volumes:
