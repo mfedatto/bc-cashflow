@@ -14,12 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.CashFlow.Services", "Bc.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.CashFlow.Web", "Bc.CashFlow.Web\Bc.CashFlow.Web.csproj", "{4FAEF9B3-F905-B3F8-1D0C-BDAB6499CE89}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{5441119F-7C9F-4B05-7151-6937D3FEBC77}"
-	ProjectSection(SolutionItems) = preProject
-		Dockerfile = Dockerfile
-		entrypoint.sh = entrypoint.sh
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bc.CashFlow.Scheduler", "Bc.CashFlow.Scheduler\Bc.CashFlow.Scheduler.csproj", "{9441BF81-07ED-4EBC-A447-164E46DBFC1D}"
 EndProject
 Global
