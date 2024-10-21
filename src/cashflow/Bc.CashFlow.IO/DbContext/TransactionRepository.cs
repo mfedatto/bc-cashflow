@@ -73,6 +73,38 @@ public class TransactionRepository : ITransactionRepository
 					));
 	}
 
+	public async Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
+			int? accountId,
+			DateTime projectedRepaymentDate,
+			CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@AccountId", accountId, DbType.Int32);
+		parameters.Add("@ProjectedRepaymentDate", projectedRepaymentDate, DbType.DateTime);
+
+		return (await _dbConnection.QueryAsync<TransactionDto>(
+				"usp_SelectTransactionsOnProjectedRepaymentDate",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.TransactionId,
+						row.UserId,
+						row.AccountId,
+						(TransactionType)row.TransactionType,
+						row.Amount,
+						row.Description,
+						row.TransactionDate,
+						row.TransactionFee,
+						row.ProjectedRepaymentDate
+					));
+	}
+
 	public async Task<Identity<int>?> CreateTransaction(
 		int? userId,
 		int accountId,

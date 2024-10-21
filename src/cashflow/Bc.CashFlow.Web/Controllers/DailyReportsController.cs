@@ -1,0 +1,60 @@
+using Bc.CashFlow.Domain.DailyReport;
+using Bc.CashFlow.Domain.DbContext;
+using Bc.CashFlow.Web.Models.DailyReport;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Bc.CashFlow.Web.Controllers;
+
+public class DailyReportsController : Controller
+{
+	private readonly ILogger<DailyReportsController> _logger;
+	private readonly IDailyReportBusiness _business;
+
+	public DailyReportsController(
+		ILogger<DailyReportsController> logger,
+		IDailyReportBusiness business)
+	{
+		_logger = logger;
+		_business = business;
+	}
+	
+	[HttpGet]
+	public async Task<IActionResult> Index(
+		[FromQuery(Name = "reference-date-since")] DateTime? referenceDateSince,
+		[FromQuery(Name = "reference-date-until")] DateTime? referenceDateUntil,
+		CancellationToken cancellationToken)
+	{
+		IEnumerable<IDailyReport> dailyReportsList =
+			await _business.GetDailyReports(
+				referenceDateSince,
+				referenceDateUntil,
+				cancellationToken);
+		DailyReportIndexViewModel viewModel = new(dailyReportsList);
+		
+		return View(viewModel);
+	}
+	
+	[HttpGet]
+	public async Task<IActionResult> Create()
+	{
+		return View();
+	}
+	
+	[HttpPost]
+	public async Task<IActionResult> Create(
+		DailyReportCreateViewModel viewModel,
+		CancellationToken cancellationToken)
+	{
+		if (!ModelState.IsValid)
+		{
+			return View(viewModel);
+		}
+
+		await _business.ConsolidateDailyReport(
+			viewModel.ReferenceDate,
+			cancellationToken);
+
+		return RedirectToAction(nameof(Index));
+
+	}
+}

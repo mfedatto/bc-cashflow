@@ -16,6 +16,11 @@ public interface ITransactionRepository
 		DateTime? projectedRepaymentDateUntil,
 		CancellationToken cancellationToken);
 
+	Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
+		int? accountId,
+		DateTime projectedRepaymentDate,
+		CancellationToken cancellationToken);
+
 	Task<Identity<int>?> CreateTransaction(
 		int? userId,
 		int accountId,

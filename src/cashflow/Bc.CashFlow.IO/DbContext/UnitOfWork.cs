@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.AppSettings;
+using Bc.CashFlow.Domain.DailyReport;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
@@ -40,6 +41,7 @@ public sealed class UnitOfWork : IUnitOfWork
 	public IAccountTypeRepository AccountTypeRepository => _serviceProvider.GetService<IAccountTypeRepository>()!;
 	public IAccountRepository AccountRepository => _serviceProvider.GetService<IAccountRepository>()!;
 	public ITransactionRepository TransactionRepository => _serviceProvider.GetService<ITransactionRepository>()!;
+	public IDailyReportRepository DailyReportRepository => _serviceProvider.GetService<IDailyReportRepository>()!;
 
 	public async Task BeginTransactionAsync()
 	{

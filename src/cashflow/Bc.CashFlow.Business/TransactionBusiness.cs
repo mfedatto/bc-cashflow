@@ -160,6 +160,7 @@ public class TransactionBusiness : ITransactionBusiness
 				transactionType);
 		decimal transactionFee = GetTransactionFee(
 			accountType,
+			transactionType,
 			amount);
 		DateTime projectedRepaymentDate = GetProjectedRepaymentDate(
 			accountType,
@@ -169,7 +170,7 @@ public class TransactionBusiness : ITransactionBusiness
 			user?.Id,
 			account.Id,
 			transactionType,
-			amountReSigned,
+			amount,
 			description,
 			transactionDate,
 			transactionFee,
@@ -198,8 +199,11 @@ public class TransactionBusiness : ITransactionBusiness
 
 	private static decimal GetTransactionFee(
 		IAccountType accountType,
+		TransactionType transactionType,
 		decimal amount)
 	{
+		if (transactionType is TransactionType.Debit) return 0;
+		
 		return amount * accountType.BaseFee;
 	}
 

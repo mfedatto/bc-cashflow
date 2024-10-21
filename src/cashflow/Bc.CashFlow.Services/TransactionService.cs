@@ -47,6 +47,17 @@ public class TransactionService : ITransactionService
 			cancellationToken);
 	}
 
+	public async Task<IEnumerable<ITransaction>> GetTransactionsOnProjectedRepaymentDate(
+		int? accountId,
+		DateTime projectedRepaymentDate,
+		CancellationToken cancellationToken)
+	{
+		return await _uow.TransactionRepository.GetTransactionsByProjectedRepaymentDate(
+			accountId,
+			projectedRepaymentDate,
+			cancellationToken);
+	}
+
 	public async Task<Identity<int>?> CreateTransaction(
 		int? userId,
 		int accountId,

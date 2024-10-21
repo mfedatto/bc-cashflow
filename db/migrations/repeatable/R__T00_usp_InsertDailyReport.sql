@@ -3,6 +3,7 @@ CREATE OR ALTER PROCEDURE usp_InsertDailyReport
     @ReportDate DATE,
     @TotalDebits DECIMAL(18, 2),
     @TotalCredits DECIMAL(18, 2),
+    @TotalFee DECIMAL(18, 2),
     @Balance DECIMAL(18, 2),
     @CreatedAt DATETIME = NULL
 AS
@@ -18,6 +19,7 @@ BEGIN
         ReportDate,
         TotalDebits,
         TotalCredits,
+        TotalFee,
         Balance,
         CreatedAt)
     VALUES (
@@ -25,6 +27,7 @@ BEGIN
         @ReportDate,
         @TotalDebits,
         @TotalCredits,
+        @TotalFee,
         @Balance,
         @CreatedAt);
 

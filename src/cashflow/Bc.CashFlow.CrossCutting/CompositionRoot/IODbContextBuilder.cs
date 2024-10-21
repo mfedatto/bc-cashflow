@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
+using Bc.CashFlow.Domain.DailyReport;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
@@ -29,5 +30,6 @@ public class IODbContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
 		builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 		builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+		builder.Services.AddScoped<IDailyReportRepository, DailyReportRepository>();
 	}
 }

@@ -74,7 +74,27 @@ public class AccountService : IAccountService
 		return result;
 	}
 
-	private async Task<IEnumerable<Identity<int>>> GetAccountsId(
+	public async Task<IEnumerable<Identity<int>>> GetAccountsId(
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		return await _uow.AccountRepository.GetAccountsId(
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			cancellationToken);
+	}
+
+	public async Task<IEnumerable<Identity<int>>> GetAccountsId(
 		int? userId,
 		int? accountTypeId,
 		string? name,
@@ -110,7 +130,7 @@ public class AccountService : IAccountService
 		CancellationToken cancellationToken)
 	{
 		List<IAccount> result = [];
-		
+
 		foreach (Identity<int> identity in accountsIdsList)
 		{
 			IAccount? account = await GetAccount(
@@ -159,7 +179,7 @@ public class AccountService : IAccountService
 			cancellationToken);
 
 		_logger.LogDebug("Account id {id} added to cache.", id);
-		
+
 		return persistedValue;
 	}
 }

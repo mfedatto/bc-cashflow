@@ -8,6 +8,7 @@ public class DailyReportFactory
 		DateTime date,
 		decimal totalDebits,
 		decimal totalCredits,
+		decimal totalFee,
 		decimal balance,
 		DateTime createdAt)
 	{
@@ -18,6 +19,7 @@ public class DailyReportFactory
 			Date = date,
 			TotalDebits = totalDebits,
 			TotalCredits = totalCredits,
+			TotalFee = totalFee,
 			Balance = balance,
 			CreatedAt = createdAt
 		};
@@ -31,6 +33,7 @@ file record DailyReportVo : IDailyReport
 	public DateTime Date { get; init; }
 	public decimal TotalDebits { get; init; }
 	public decimal TotalCredits { get; init; }
+	public decimal TotalFee { get; init; }
 	public decimal Balance { get; init; }
 	public DateTime CreatedAt { get; init; }
 }

@@ -1,6 +1,7 @@
 using System.Data.Common;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
+using Bc.CashFlow.Domain.DailyReport;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 
@@ -14,6 +15,7 @@ public interface IUnitOfWork : IDisposable
 	IAccountTypeRepository AccountTypeRepository { get; }
 	IAccountRepository AccountRepository { get; }
 	ITransactionRepository TransactionRepository { get; }
+	IDailyReportRepository DailyReportRepository { get; }
 
 	Task BeginTransactionAsync();
 	Task CommitAsync();

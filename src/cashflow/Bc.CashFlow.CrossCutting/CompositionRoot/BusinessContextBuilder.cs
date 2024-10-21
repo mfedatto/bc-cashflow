@@ -1,6 +1,7 @@
 ﻿using Bc.CashFlow.Business;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
+using Bc.CashFlow.Domain.DailyReport;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Domain.User;
 using Microsoft.AspNetCore.Builder;
@@ -19,5 +20,6 @@ public class BusinessContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<IAccountTypeBusiness, AccountTypeBusiness>();
 		builder.Services.AddScoped<IAccountBusiness, AccountBusiness>();
 		builder.Services.AddScoped<ITransactionBusiness, TransactionBusiness>();
+		builder.Services.AddScoped<IDailyReportBusiness, DailyReportBusiness>();
 	}
 }
