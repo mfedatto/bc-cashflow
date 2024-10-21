@@ -1,4 +1,4 @@
-namespace Bc.CashFlow.Domain.User;
+namespace Bc.CashFlow.Domain.Account;
 
 public class AccountNotFoundException : Exception
 {

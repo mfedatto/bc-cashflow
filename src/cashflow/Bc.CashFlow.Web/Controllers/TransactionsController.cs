@@ -1,4 +1,3 @@
-using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
 using Bc.CashFlow.Web.Models.Transaction;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +7,10 @@ namespace Bc.CashFlow.Web.Controllers;
 
 public class TransactionsController : Controller
 {
+	private readonly ITransactionBusiness _business;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<TransactionsController> _logger;
-	private readonly ITransactionBusiness _business;
 
 	public TransactionsController(
 		ILogger<TransactionsController> logger,
@@ -69,7 +69,7 @@ public class TransactionsController : Controller
 	{
 		if (ModelState.IsValid)
 		{
-			Identity<int> transactionId = await _business.CreateTransaction(
+			_ = await _business.CreateTransaction(
 				viewModel.UserId,
 				viewModel.AccountId,
 				viewModel.TransactionType,

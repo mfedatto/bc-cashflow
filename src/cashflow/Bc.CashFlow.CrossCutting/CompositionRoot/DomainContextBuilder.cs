@@ -13,24 +13,24 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderConfigBinder
 {
-    public void Install(
-        WebApplicationBuilder builder,
-        IConfiguration? configuration = null)
-    {
-        builder.Services.AddSingleton<UserFactory>();
-        builder.Services.AddSingleton<AccountTypeFactory>();
-        builder.Services.AddSingleton<AccountFactory>();
-        builder.Services.AddSingleton<TransactionFactory>();
-        builder.Services.AddSingleton<DailyReportFactory>();
-    }
+	public void BindConfig(
+		WebApplicationBuilder builder,
+		IConfiguration configuration)
+	{
+		builder.BindConfig<DatabaseConfig>(configuration);
+		builder.BindConfig<CacheConfig>(configuration);
+		builder.BindConfig<QueueConfig>(configuration);
+		builder.BindConfig<SchedulerConfig>(configuration);
+	}
 
-    public void BindConfig(
-        WebApplicationBuilder builder,
-        IConfiguration configuration)
-    {
-        builder.BindConfig<DatabaseConfig>(configuration);
-        builder.BindConfig<CacheConfig>(configuration);
-        builder.BindConfig<QueueConfig>(configuration);
-        builder.BindConfig<SchedulerConfig>(configuration);
-    }
+	public void Install(
+		WebApplicationBuilder builder,
+		IConfiguration? configuration = null)
+	{
+		builder.Services.AddSingleton<UserFactory>();
+		builder.Services.AddSingleton<AccountTypeFactory>();
+		builder.Services.AddSingleton<AccountFactory>();
+		builder.Services.AddSingleton<TransactionFactory>();
+		builder.Services.AddSingleton<DailyReportFactory>();
+	}
 }

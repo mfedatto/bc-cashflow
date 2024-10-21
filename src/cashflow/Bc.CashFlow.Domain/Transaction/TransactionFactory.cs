@@ -2,6 +2,7 @@ namespace Bc.CashFlow.Domain.Transaction;
 
 public class TransactionFactory
 {
+	// ReSharper disable once MemberCanBeMadeStatic.Global
 	public ITransaction Create(
 		int id,
 		int userId,
@@ -14,15 +15,15 @@ public class TransactionFactory
 		DateTime? projectedRepaymentDate)
 	{
 		return new TransactionVo(
-			Id: id,
-			UserId: userId,
-			AccountId: accountId,
-			TransactionType: transactionType,
-			Amount: amount,
-			Description: description,
-			TransactionDate: transactionDate,
-			TransactionFee: transactionFee,
-			ProjectedRepaymentDate: projectedRepaymentDate);
+			id,
+			userId,
+			accountId,
+			transactionType,
+			amount,
+			description,
+			transactionDate,
+			transactionFee,
+			projectedRepaymentDate);
 	}
 }
 

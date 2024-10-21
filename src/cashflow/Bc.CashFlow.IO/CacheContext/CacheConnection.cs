@@ -7,9 +7,10 @@ namespace Bc.CashFlow.IO.CacheContext;
 
 public class CacheConnection : ICacheConnection
 {
+	private readonly CacheConfig _config;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<CacheConnection> _logger;
-	private readonly CacheConfig _config;
 
 	public CacheConnection(
 		ILogger<CacheConnection> logger,
@@ -21,7 +22,10 @@ public class CacheConnection : ICacheConnection
 
 	public IConnectionMultiplexer Connect()
 	{
-		if (_config.Configuration is null) throw new NullCacheConfigurationException();
+		if (_config.Configuration is null)
+		{
+			throw new NullCacheConfigurationException();
+		}
 
 		ConfigurationOptions configuration = ConfigurationOptions.Parse(
 			_config.Configuration,

@@ -10,5 +10,5 @@ public class DailyReportIndexViewModel
 		DailyReportsList = dailyReportsList;
 	}
 
-	public IEnumerable<IDailyReport> DailyReportsList { get; set; }
+	public IEnumerable<IDailyReport> DailyReportsList { get; init; }
 }

@@ -17,7 +17,7 @@ public class UserService : IUserService
 		_logger = logger;
 		_uow = uow;
 	}
-	
+
 	public async Task<IEnumerable<IUser>> GetUsers(
 		string? username,
 		DateTime? createdSince,
@@ -30,7 +30,7 @@ public class UserService : IUserService
 			createdUntil,
 			cancellationToken);
 	}
-	
+
 	public async Task<IUser> GetSingleUser(
 		int id,
 		CancellationToken cancellationToken)
@@ -39,8 +39,11 @@ public class UserService : IUserService
 			id,
 			cancellationToken);
 
-		if (result is null) throw new UserNotFoundException();
-		
+		if (result is null)
+		{
+			throw new UserNotFoundException();
+		}
+
 		return result;
 	}
 }

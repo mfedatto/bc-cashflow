@@ -16,9 +16,10 @@ namespace Bc.CashFlow.IO.DbContext;
 
 public sealed class UnitOfWork : IUnitOfWork
 {
+	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UnitOfWork> _logger;
-	private readonly IServiceProvider _serviceProvider;
 	private readonly DbConnection _dbConnection;
+	private readonly IServiceProvider _serviceProvider;
 	private DbTransaction? _dbTransaction;
 	private bool _disposed;
 
@@ -34,6 +35,7 @@ public sealed class UnitOfWork : IUnitOfWork
 
 	// ReSharper disable once ConvertToAutoPropertyWhenPossible
 	public DbConnection Connection => _dbConnection;
+
 	// ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
 	public DbTransaction? Transaction => _dbTransaction;
 
@@ -45,15 +47,25 @@ public sealed class UnitOfWork : IUnitOfWork
 
 	public async Task BeginTransactionAsync()
 	{
-		if (_dbTransaction is not null) throw new ConnectionInUseByOtherTransactionException();
-		if (!ConnectionState.Open.Equals(_dbConnection.State)) await _dbConnection.OpenAsync();
+		if (_dbTransaction is not null)
+		{
+			throw new ConnectionInUseByOtherTransactionException();
+		}
+
+		if (!ConnectionState.Open.Equals(_dbConnection.State))
+		{
+			await _dbConnection.OpenAsync();
+		}
 
 		_dbTransaction = await _dbConnection.BeginTransactionAsync();
 	}
 
 	public async Task CommitAsync()
 	{
-		if (_dbTransaction is null) throw new ConnectionWithoutTransactionException();
+		if (_dbTransaction is null)
+		{
+			throw new ConnectionWithoutTransactionException();
+		}
 
 		await _dbTransaction.CommitAsync();
 		await _dbTransaction.DisposeAsync();
@@ -66,18 +78,6 @@ public sealed class UnitOfWork : IUnitOfWork
 		await _dbTransaction?.RollbackAsync()!;
 	}
 
-	private void Dispose(bool disposing)
-	{
-		if (_disposed) return;
-		if (disposing)
-		{
-			_dbTransaction?.Dispose();
-			_dbConnection.Dispose();
-		}
-
-		_disposed = true;
-	}
-
 	[SuppressMessage(
 		"Usage",
 		"CA1816:Dispose methods should call SuppressFinalize")]
@@ -85,6 +85,22 @@ public sealed class UnitOfWork : IUnitOfWork
 	{
 		Dispose(true);
 		GC.SuppressFinalize(this);
+	}
+
+	private void Dispose(bool disposing)
+	{
+		if (_disposed)
+		{
+			return;
+		}
+
+		if (disposing)
+		{
+			_dbTransaction?.Dispose();
+			_dbConnection.Dispose();
+		}
+
+		_disposed = true;
 	}
 
 	~UnitOfWork()

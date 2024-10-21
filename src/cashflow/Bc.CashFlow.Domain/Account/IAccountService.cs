@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.DbContext;
 
 namespace Bc.CashFlow.Domain.Account;
 
+[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global")]
 public interface IAccountService
 {
 	Task<IEnumerable<IAccount>> GetAccounts(

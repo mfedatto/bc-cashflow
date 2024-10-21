@@ -9,11 +9,12 @@ namespace Bc.CashFlow.IO.DbContext;
 
 public class TransactionRepository : ITransactionRepository
 {
-	// ReSharper disable once NotAccessedField.Local
-	private readonly ILogger<TransactionRepository> _logger;
 	private readonly DbConnection _dbConnection;
 	private readonly DbTransaction _dbTransaction;
 	private readonly TransactionFactory _factory;
+
+	// ReSharper disable once NotAccessedField.Local
+	private readonly ILogger<TransactionRepository> _logger;
 
 	public TransactionRepository(
 		ILogger<TransactionRepository> logger,
@@ -74,9 +75,9 @@ public class TransactionRepository : ITransactionRepository
 	}
 
 	public async Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
-			int? accountId,
-			DateTime projectedRepaymentDate,
-			CancellationToken cancellationToken)
+		int? accountId,
+		DateTime projectedRepaymentDate,
+		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 

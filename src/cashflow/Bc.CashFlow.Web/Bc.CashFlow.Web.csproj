@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bc.CashFlow.CrossCutting\Bc.CashFlow.CrossCutting.csproj" />
-      <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" />
-      <ProjectReference Include="..\Bc.CashFlow.IO\Bc.CashFlow.IO.csproj" />
+        <ProjectReference Include="..\Bc.CashFlow.CrossCutting\Bc.CashFlow.CrossCutting.csproj"/>
+        <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj"/>
+        <ProjectReference Include="..\Bc.CashFlow.IO\Bc.CashFlow.IO.csproj"/>
     </ItemGroup>
 
 </Project>

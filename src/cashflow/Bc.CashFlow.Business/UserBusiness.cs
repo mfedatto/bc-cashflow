@@ -16,7 +16,7 @@ public class UserBusiness : IUserBusiness
 		_logger = logger;
 		_userService = userService;
 	}
-	
+
 	public async Task<IEnumerable<IUser>> GetUsers(
 		string? username,
 		DateTime? createdSince,
@@ -29,7 +29,7 @@ public class UserBusiness : IUserBusiness
 			createdUntil,
 			cancellationToken);
 	}
-	
+
 	public async Task<IUser> GetSingleUser(
 		int id,
 		CancellationToken cancellationToken)
@@ -38,8 +38,11 @@ public class UserBusiness : IUserBusiness
 			id,
 			cancellationToken);
 
-		if (result is null) throw new UserNotFoundException();
-		
+		if (result is null)
+		{
+			throw new UserNotFoundException();
+		}
+
 		return result;
 	}
 }

@@ -7,18 +7,19 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
 
 public static class ContextBuilderConfigBinderExtensions
 {
-    public static WebApplicationBuilder BindConfig<T>(
-        this WebApplicationBuilder builder,
-        IConfiguration configuration)
-        where T : class, IConfig, new()
-    {
-        T configurator = new();
+	// ReSharper disable once UnusedMethodReturnValue.Global
+	public static WebApplicationBuilder BindConfig<T>(
+		this WebApplicationBuilder builder,
+		IConfiguration configuration)
+		where T : class, IConfig, new()
+	{
+		T configurator = new();
 
-        configuration.GetSection(configurator.Section)
-            .Bind(configurator);
-        
-        builder.Services.AddSingleton(configurator);
+		configuration.GetSection(configurator.Section)
+			.Bind(configurator);
 
-        return builder;
-    }
+		builder.Services.AddSingleton(configurator);
+
+		return builder;
+	}
 }

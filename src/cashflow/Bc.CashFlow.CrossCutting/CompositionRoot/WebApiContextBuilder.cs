@@ -7,13 +7,6 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public class WebApiContextBuilder : IContextBuilderInstaller, IContextBuilderAppConfigurator
 {
-	public void Install(
-		WebApplicationBuilder builder,
-		IConfiguration? configuration = null)
-	{
-		builder.Services.AddControllersWithViews();
-	}
-
 	public WebApplication Configure(WebApplication app)
 	{
 		if (!app.Environment.IsDevelopment())
@@ -24,9 +17,16 @@ public class WebApiContextBuilder : IContextBuilderInstaller, IContextBuilderApp
 		app.UseRouting();
 		app.UseAuthorization();
 		app.MapControllerRoute(
-			name: "default",
-			pattern: "{controller=Home}/{action=Index}/{id?}");
+			"default",
+			"{controller=Home}/{action=Index}/{id?}");
 
 		return app;
+	}
+
+	public void Install(
+		WebApplicationBuilder builder,
+		IConfiguration? configuration = null)
+	{
+		builder.Services.AddControllersWithViews();
 	}
 }

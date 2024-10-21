@@ -9,6 +9,6 @@ public class UserIndexViewModel
 	{
 		UsersList = usersList;
 	}
-	
+
 	public IEnumerable<IUser> UsersList { get; init; }
 }

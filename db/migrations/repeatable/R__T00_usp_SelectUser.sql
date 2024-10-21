@@ -1,17 +1,16 @@
-CREATE OR ALTER PROCEDURE usp_SelectUser
+CREATE
+OR
+ALTER PROCEDURE usp_SelectUser
     @UserId INT
-AS
+    AS
 BEGIN
 
-    SELECT
-        UserId,
-        Username,
-        PasswordSalt,
-        PasswordHash,
-        CreatedAt
-    FROM
-        tbl_User
-    WHERE
-        UserId = @UserId;
+SELECT UserId,
+       Username,
+       PasswordSalt,
+       PasswordHash,
+       CreatedAt
+FROM tbl_User
+WHERE UserId = @UserId;
 
 END

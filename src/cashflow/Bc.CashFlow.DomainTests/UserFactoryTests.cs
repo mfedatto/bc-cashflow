@@ -4,11 +4,6 @@ namespace Bc.CashFlow.DomainTests;
 
 public class Tests
 {
-	[SetUp]
-	public void Setup()
-	{
-	}
-
 	public static IEnumerable<TestCaseData> UserFactoryCreateSuccessCases
 	{
 		get
@@ -55,7 +50,13 @@ public class Tests
 		}
 	}
 
-	[Test, TestCaseSource(nameof(UserFactoryCreateSuccessCases))]
+	[SetUp]
+	public void Setup()
+	{
+	}
+
+	[Test]
+	[TestCaseSource(nameof(UserFactoryCreateSuccessCases))]
 	public void GivenSuccessUserData_WhenFactoryCreate_ReturnsProperUser(
 		int userId,
 		string username,
@@ -80,7 +81,8 @@ public class Tests
 			});
 	}
 
-	[Test, TestCaseSource(nameof(UserFactoryCreateInvalidUserDataCases))]
+	[Test]
+	[TestCaseSource(nameof(UserFactoryCreateInvalidUserDataCases))]
 	public void GivenInvalidUserData_WhenFactoryCreate_ReturnsProperUser(
 		int userId,
 		string username,
@@ -94,7 +96,7 @@ public class Tests
 			() =>
 			{
 				// Act
-				IUser actual = given.Create(
+				_ = given.Create(
 					userId,
 					username,
 					createdAt);

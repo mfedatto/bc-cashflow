@@ -1,5 +1,4 @@
 using Bc.CashFlow.Domain.DailyReport;
-using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Web.Models.DailyReport;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,8 +6,10 @@ namespace Bc.CashFlow.Web.Controllers;
 
 public class DailyReportsController : Controller
 {
-	private readonly ILogger<DailyReportsController> _logger;
 	private readonly IDailyReportBusiness _business;
+
+	// ReSharper disable once NotAccessedField.Local
+	private readonly ILogger<DailyReportsController> _logger;
 
 	public DailyReportsController(
 		ILogger<DailyReportsController> logger,
@@ -17,11 +18,13 @@ public class DailyReportsController : Controller
 		_logger = logger;
 		_business = business;
 	}
-	
+
 	[HttpGet]
 	public async Task<IActionResult> Index(
-		[FromQuery(Name = "reference-date-since")] DateTime? referenceDateSince,
-		[FromQuery(Name = "reference-date-until")] DateTime? referenceDateUntil,
+		[FromQuery(Name = "reference-date-since")]
+		DateTime? referenceDateSince,
+		[FromQuery(Name = "reference-date-until")]
+		DateTime? referenceDateUntil,
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<IDailyReport> dailyReportsList =
@@ -30,16 +33,16 @@ public class DailyReportsController : Controller
 				referenceDateUntil,
 				cancellationToken);
 		DailyReportIndexViewModel viewModel = new(dailyReportsList);
-		
+
 		return View(viewModel);
 	}
-	
+
 	[HttpGet]
-	public async Task<IActionResult> Create()
+	public IActionResult Create()
 	{
 		return View();
 	}
-	
+
 	[HttpPost]
 	public async Task<IActionResult> Create(
 		DailyReportCreateViewModel viewModel,
@@ -55,6 +58,5 @@ public class DailyReportsController : Controller
 			cancellationToken);
 
 		return RedirectToAction(nameof(Index));
-
 	}
 }

@@ -10,7 +10,7 @@
 
     <div class="mb-3">
         <label asp-for="ReferenceDate" class="form-label">Data de Referência</label>
-        <input asp-for="ReferenceDate" type="date" class="form-control" />
+        <input asp-for="ReferenceDate" type="date" class="form-control"/>
         <span asp-validation-for="ReferenceDate" class="text-danger"></span>
     </div>
 
@@ -18,5 +18,5 @@
 </form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

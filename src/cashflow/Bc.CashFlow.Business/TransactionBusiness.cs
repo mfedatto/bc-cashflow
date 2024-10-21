@@ -9,11 +9,12 @@ namespace Bc.CashFlow.Business;
 
 public class TransactionBusiness : ITransactionBusiness
 {
+	private readonly IAccountService _accountService;
+	private readonly IAccountTypeService _accountTypeService;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<TransactionBusiness> _logger;
 	private readonly ITransactionService _transactionService;
-	private readonly IAccountService _accountService;
-	private readonly IAccountTypeService _accountTypeService;
 	private readonly IUserService _userService;
 
 	public TransactionBusiness(
@@ -105,7 +106,10 @@ public class TransactionBusiness : ITransactionBusiness
 			id,
 			cancellationToken);
 
-		if (result is null) throw new AccountNotFoundException();
+		if (result is null)
+		{
+			throw new AccountNotFoundException();
+		}
 
 		return result;
 	}
@@ -120,7 +124,10 @@ public class TransactionBusiness : ITransactionBusiness
 			account.AccountTypeId,
 			cancellationToken);
 
-		if (result is null) throw new AccountTypeNotFoundException();
+		if (result is null)
+		{
+			throw new AccountTypeNotFoundException();
+		}
 
 		return result;
 	}
@@ -135,8 +142,11 @@ public class TransactionBusiness : ITransactionBusiness
 			id,
 			cancellationToken);
 
-		if (result is null) throw new UserNotFoundException();
-		
+		if (result is null)
+		{
+			throw new UserNotFoundException();
+		}
+
 		return result;
 	}
 
@@ -150,14 +160,11 @@ public class TransactionBusiness : ITransactionBusiness
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
-		
+
 		IAccountType accountType = await GetRequiredAccountType(
 			account,
 			cancellationToken);
 
-		decimal amountReSigned = GetReSignedAmount(
-				amount,
-				transactionType);
 		decimal transactionFee = GetTransactionFee(
 			accountType,
 			transactionType,
@@ -177,23 +184,11 @@ public class TransactionBusiness : ITransactionBusiness
 			projectedRepaymentDate,
 			cancellationToken);
 
-		if (result is null) throw new TransactionCreationReturnedNullIdentityException();
+		if (result is null)
+		{
+			throw new TransactionCreationReturnedNullIdentityException();
+		}
 
-		return result;
-	}
-
-	private static decimal GetReSignedAmount(
-		decimal amount,
-		TransactionType transactionType)
-	{
-		decimal amountMultiplier = transactionType
-			switch
-			{
-				TransactionType.Debit => -1,
-				_ => 1
-			};
-		decimal result = amount * amountMultiplier;
-		
 		return result;
 	}
 
@@ -202,8 +197,11 @@ public class TransactionBusiness : ITransactionBusiness
 		TransactionType transactionType,
 		decimal amount)
 	{
-		if (transactionType is TransactionType.Debit) return 0;
-		
+		if (transactionType is TransactionType.Debit)
+		{
+			return 0;
+		}
+
 		return amount * accountType.BaseFee;
 	}
 

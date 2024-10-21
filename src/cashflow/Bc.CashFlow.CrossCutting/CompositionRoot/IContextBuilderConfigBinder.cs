@@ -5,7 +5,7 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public interface IContextBuilderConfigBinder
 {
-    void BindConfig(
-        WebApplicationBuilder builder,
-        IConfiguration configuration);
+	void BindConfig(
+		WebApplicationBuilder builder,
+		IConfiguration configuration);
 }

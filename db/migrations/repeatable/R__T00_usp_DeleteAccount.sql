@@ -1,10 +1,12 @@
-CREATE OR ALTER PROCEDURE usp_DeleteAccount
+CREATE
+OR
+ALTER PROCEDURE usp_DeleteAccount
     @AccountId INT
-AS
+    AS
 BEGIN
 
-    DELETE FROM tbl_Account
-    WHERE
-        AccountId = @AccountId;
+DELETE
+FROM tbl_Account
+WHERE AccountId = @AccountId;
 
 END

@@ -19,6 +19,6 @@
             <dd class="col-sm-9">@Model.User.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
         </dl>
 
-        <a href="/Users/Index" class="btn btn-secondary mt-4">Lista de usuários</a>
+        <a asp-controller="Users" asp-action="Index" class="btn btn-secondary mt-4">Lista de usuários</a>
     </div>
 </div>

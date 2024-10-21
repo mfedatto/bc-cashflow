@@ -7,10 +7,11 @@ namespace Bc.CashFlow.Services;
 
 public class AccountService : IAccountService
 {
+	private readonly ICacheContext _cc;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<AccountService> _logger;
 	private readonly IUnitOfWork _uow;
-	private readonly ICacheContext _cc;
 
 	public AccountService(
 		ILogger<AccountService> logger,
@@ -125,26 +126,6 @@ public class AccountService : IAccountService
 			cancellationToken);
 	}
 
-	private async Task<IEnumerable<IAccount>> GetAccounts(
-		IEnumerable<Identity<int>> accountsIdsList,
-		CancellationToken cancellationToken)
-	{
-		List<IAccount> result = [];
-
-		foreach (Identity<int> identity in accountsIdsList)
-		{
-			IAccount? account = await GetAccount(
-				identity.Value,
-				cancellationToken);
-
-			if (account is null) continue;
-
-			result.Add(account);
-		}
-
-		return result;
-	}
-
 	public async Task<IAccount?> GetAccount(
 		int id,
 		CancellationToken cancellationToken)
@@ -181,5 +162,28 @@ public class AccountService : IAccountService
 		_logger.LogDebug("Account id {id} added to cache.", id);
 
 		return persistedValue;
+	}
+
+	private async Task<IEnumerable<IAccount>> GetAccounts(
+		IEnumerable<Identity<int>> accountsIdsList,
+		CancellationToken cancellationToken)
+	{
+		List<IAccount> result = [];
+
+		foreach (Identity<int> identity in accountsIdsList)
+		{
+			IAccount? account = await GetAccount(
+				identity.Value,
+				cancellationToken);
+
+			if (account is null)
+			{
+				continue;
+			}
+
+			result.Add(account);
+		}
+
+		return result;
 	}
 }

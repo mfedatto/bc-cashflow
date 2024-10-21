@@ -9,8 +9,8 @@ public class TransactionService : ITransactionService
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<TransactionService> _logger;
-	private readonly IUnitOfWork _uow;
 	private readonly IQueueContext _q;
+	private readonly IUnitOfWork _uow;
 
 	public TransactionService(
 		ILogger<TransactionService> logger,

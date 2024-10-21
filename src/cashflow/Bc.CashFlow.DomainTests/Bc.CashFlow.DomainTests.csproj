@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj" />
+        <ProjectReference Include="..\Bc.CashFlow.Domain\Bc.CashFlow.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -7,9 +7,10 @@ namespace Bc.CashFlow.IO.CacheContext;
 
 public class QueueConnectionFactory : IQueueConnectionFactory
 {
+	private readonly QueueConfig _config;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<CacheConnection> _logger;
-	private readonly QueueConfig _config;
 
 	public QueueConnectionFactory(
 		ILogger<CacheConnection> logger,
@@ -21,8 +22,11 @@ public class QueueConnectionFactory : IQueueConnectionFactory
 
 	public IConnection CreateConnection()
 	{
-		if (_config.HostName is null) throw new NullQueueHostNameException();
-		
+		if (_config.HostName is null)
+		{
+			throw new NullQueueHostNameException();
+		}
+
 		ConnectionFactory connectionFactory = new()
 		{
 			HostName = _config.HostName,

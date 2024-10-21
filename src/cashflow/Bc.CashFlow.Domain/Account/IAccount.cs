@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bc.CashFlow.Domain.Account;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public interface IAccount
 {
 	int Id { get; }

@@ -6,9 +6,10 @@ namespace Bc.CashFlow.Web.Controllers;
 
 public class AccountTypesController : Controller
 {
+	private readonly IAccountTypeBusiness _business;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UsersController> _logger;
-	private readonly IAccountTypeBusiness _business;
 
 	public AccountTypesController(
 		ILogger<UsersController> logger,

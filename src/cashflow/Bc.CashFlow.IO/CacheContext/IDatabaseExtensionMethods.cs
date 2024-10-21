@@ -3,6 +3,7 @@ using StackExchange.Redis;
 
 namespace Bc.CashFlow.IO.CacheContext;
 
+// ReSharper disable once InconsistentNaming
 public static class IDatabaseExtensionMethods
 {
 	public static async Task SetValue<TValue>(

@@ -1,6 +1,8 @@
 COMMIT;
 
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'Hangfire')
+IF
+NOT EXISTS (SELECT * FROM sys.databases WHERE name = N'Hangfire')
 BEGIN
-    CREATE DATABASE Hangfire
+    CREATE
+DATABASE Hangfire
 END

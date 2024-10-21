@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.Account;
 using StackExchange.Redis;
 
 namespace Bc.CashFlow.IO.CacheContext;
 
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class AccountCacheCollection : BaseCacheCollection<IAccount, AccountCacheCollection.AccountDto>
 {
 	public AccountCacheCollection(

@@ -6,9 +6,10 @@ namespace Bc.CashFlow.Web.Controllers;
 
 public class UsersController : Controller
 {
+	private readonly IUserBusiness _business;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UsersController> _logger;
-	private readonly IUserBusiness _business;
 
 	public UsersController(
 		ILogger<UsersController> logger,
@@ -20,7 +21,7 @@ public class UsersController : Controller
 
 	[HttpGet]
 	public async Task<IActionResult> Index(
-			[FromQuery(Name = "username")] string? username,
+		[FromQuery(Name = "username")] string? username,
 		[FromQuery(Name = "created-since")] DateTime? createdSince,
 		[FromQuery(Name = "created-until")] DateTime? createdUntil,
 		CancellationToken cancellationToken)
@@ -35,7 +36,7 @@ public class UsersController : Controller
 
 		return View(viewModel);
 	}
-	
+
 	[HttpGet]
 	public async Task<IActionResult> Details(
 		[FromRoute(Name = "id")] int userId,

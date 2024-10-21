@@ -6,6 +6,7 @@ namespace Bc.CashFlow.Services;
 
 public class DailyReportService : IDailyReportService
 {
+	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<DailyReportService> _logger;
 	private readonly IUnitOfWork _uow;
 
@@ -56,7 +57,10 @@ public class DailyReportService : IDailyReportService
 				reportId,
 				cancellationToken);
 
-		if (result is null) throw new DailyReportNotFoundException();
+		if (result is null)
+		{
+			throw new DailyReportNotFoundException();
+		}
 
 		return result;
 	}

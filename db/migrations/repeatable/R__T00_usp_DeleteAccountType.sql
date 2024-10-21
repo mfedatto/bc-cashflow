@@ -1,11 +1,9 @@
-CREATE OR ALTER PROCEDURE usp_DeleteAccountType
-    @AccountTypeId INT
+CREATE OR ALTER PROCEDURE usp_DeleteAccountType @AccountTypeId INT
 AS
 BEGIN
 
-    DELETE FROM
-        tbl_AccountType
-    WHERE
-        AccountTypeId = @AccountTypeId;
+    DELETE
+    FROM tbl_AccountType
+    WHERE AccountTypeId = @AccountTypeId;
 
 END

@@ -2,6 +2,7 @@ namespace Bc.CashFlow.Domain.DailyReport;
 
 public class DailyReportFactory
 {
+	// ReSharper disable once MemberCanBeMadeStatic.Global
 	public IDailyReport Create(
 		int id,
 		int? accountId,

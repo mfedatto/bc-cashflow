@@ -1,8 +1,6 @@
 ﻿using Bc.CashFlow.Domain.AppSettings;
 using Hangfire;
-using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +8,13 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public class SchedulerContextBuilder : IContextBuilderInstaller, IContextBuilderAppConfigurator
 {
+	public WebApplication Configure(WebApplication app)
+	{
+		app.UseHangfireDashboard();
+
+		return app;
+	}
+
 	public void Install(
 		WebApplicationBuilder builder,
 		IConfiguration? configuration = null)
@@ -27,12 +32,5 @@ public class SchedulerContextBuilder : IContextBuilderInstaller, IContextBuilder
 			});
 		builder.Services.AddHangfireServer();
 		builder.Services.AddMvc();
-	}
-
-	public WebApplication Configure(WebApplication app)
-	{
-		app.UseHangfireDashboard();
-
-		return app;
 	}
 }

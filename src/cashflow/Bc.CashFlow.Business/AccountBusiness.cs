@@ -5,9 +5,10 @@ namespace Bc.CashFlow.Business;
 
 public class AccountBusiness : IAccountBusiness
 {
+	private readonly IAccountService _accountService;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<AccountBusiness> _logger;
-	private readonly IAccountService _accountService;
 
 	public AccountBusiness(
 		ILogger<AccountBusiness> logger,

@@ -1,10 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bc.CashFlow.Domain.AppSettings;
 
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class SchedulerConfig : IConfig
 {
-	public string Section => "Scheduler";
-
 	public HangfireConfig? Hangfire { get; set; }
+	public string Section => "Scheduler";
 
 	public class HangfireConfig
 	{

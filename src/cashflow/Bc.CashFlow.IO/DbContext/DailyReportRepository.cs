@@ -9,11 +9,12 @@ namespace Bc.CashFlow.IO.DbContext;
 
 public class DailyReportRepository : IDailyReportRepository
 {
-	// ReSharper disable once NotAccessedField.Local
-	private readonly ILogger<DailyReportRepository> _logger;
 	private readonly DbConnection _dbConnection;
 	private readonly DbTransaction _dbTransaction;
 	private readonly DailyReportFactory _factory;
+
+	// ReSharper disable once NotAccessedField.Local
+	private readonly ILogger<DailyReportRepository> _logger;
 
 	public DailyReportRepository(
 		ILogger<DailyReportRepository> logger,

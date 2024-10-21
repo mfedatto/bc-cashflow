@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Bc.CashFlow.IO.CacheContext;
 
-public class CacheContext: ICacheContext
+public class CacheContext : ICacheContext
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<CacheContext> _logger;
@@ -20,7 +20,7 @@ public class CacheContext: ICacheContext
 		_logger = logger;
 		_serviceProvider = serviceProvider;
 	}
-	
+
 	public ICacheCollection<IUser> User => _serviceProvider.GetService<ICacheCollection<IUser>>()!;
 	public ICacheCollection<IAccountType> AccountType => _serviceProvider.GetService<ICacheCollection<IAccountType>>()!;
 	public ICacheCollection<IAccount> Account => _serviceProvider.GetService<ICacheCollection<IAccount>>()!;

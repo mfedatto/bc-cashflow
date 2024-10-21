@@ -8,11 +8,12 @@ namespace Bc.CashFlow.Business;
 
 public class DailyReportBusiness : IDailyReportBusiness
 {
+	private readonly IAccountService _accountService;
+	private readonly IDailyReportService _dailyReportService;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<DailyReportBusiness> _logger;
 	private readonly ITransactionService _transactionService;
-	private readonly IAccountService _accountService;
-	private readonly IDailyReportService _dailyReportService;
 
 	public DailyReportBusiness(
 		ILogger<DailyReportBusiness> logger,
@@ -85,6 +86,8 @@ public class DailyReportBusiness : IDailyReportBusiness
 					accountsFeeBalance[accountIdentityId.Value],
 					accountBalance,
 					cancellationToken);
+
+			if (accountDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
 		}
 
 		decimal balanceBeforeFee = totalCreditBalance - totalDebitBalance;
@@ -99,6 +102,8 @@ public class DailyReportBusiness : IDailyReportBusiness
 				balanceBeforeFee,
 				finalBalance,
 				cancellationToken);
+
+		if (totalDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
 	}
 
 	public async Task<IEnumerable<IDailyReport>> GetDailyReports(

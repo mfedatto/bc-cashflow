@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bc.CashFlow.Domain.AccountType;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public interface IAccountTypeBusiness
 {
 	Task<IEnumerable<IAccountType>> GetAccountTypes(

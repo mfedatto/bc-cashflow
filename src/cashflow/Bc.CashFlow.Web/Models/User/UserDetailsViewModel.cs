@@ -9,6 +9,6 @@ public class UserDetailsViewModel
 	{
 		User = user;
 	}
-	
+
 	public IUser User { get; init; }
 }

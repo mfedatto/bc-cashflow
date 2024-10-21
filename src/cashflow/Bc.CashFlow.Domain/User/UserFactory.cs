@@ -10,14 +10,25 @@ public class UserFactory
 		string username,
 		DateTime createdAt)
 	{
-		if (userId <= 0) throw new InvalidUserDataException("user ID must be grater than 0");
-		if (string.IsNullOrWhiteSpace(username)) throw new InvalidUserDataException("username cannot be null nor white space");
-		if (createdAt == DateTime.MinValue) throw new InvalidUserDataException("create at cannot be MinDate");
+		if (userId <= 0)
+		{
+			throw new InvalidUserDataException("user ID must be grater than 0");
+		}
+
+		if (string.IsNullOrWhiteSpace(username))
+		{
+			throw new InvalidUserDataException("username cannot be null nor white space");
+		}
+
+		if (createdAt == DateTime.MinValue)
+		{
+			throw new InvalidUserDataException("create at cannot be MinDate");
+		}
 
 		return new UserVo(
-			Id: userId,
-			Username: username,
-			CreatedAt: createdAt
+			userId,
+			username,
+			createdAt
 		);
 	}
 }

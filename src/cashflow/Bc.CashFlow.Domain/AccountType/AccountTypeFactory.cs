@@ -10,10 +10,10 @@ public class AccountTypeFactory
 		int paymentDueDays)
 	{
 		return new AccountTypeVo(
-			Id: id,
-			Name: name,
-			BaseFee: baseFee,
-			PaymentDueDays: paymentDueDays
+			id,
+			name,
+			baseFee,
+			paymentDueDays
 		);
 	}
 }

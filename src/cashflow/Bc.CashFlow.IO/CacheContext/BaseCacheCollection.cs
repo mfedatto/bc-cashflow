@@ -7,8 +7,6 @@ public abstract class BaseCacheCollection<TInterface, TConcrete> : ICacheCollect
 	where TInterface : class
 	where TConcrete : class, TInterface
 {
-	public string KeyPrefix { get; init; }
-
 	private readonly IDatabase _db;
 
 	protected BaseCacheCollection(
@@ -18,6 +16,8 @@ public abstract class BaseCacheCollection<TInterface, TConcrete> : ICacheCollect
 		KeyPrefix = keyPrefix;
 		_db = db;
 	}
+
+	public string KeyPrefix { get; }
 
 	public async Task SetVale(
 		string key,

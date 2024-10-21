@@ -2,6 +2,7 @@ namespace Bc.CashFlow.Domain.Account;
 
 public class AccountFactory
 {
+	// ReSharper disable once MemberCanBeMadeStatic.Global
 	public IAccount Create(
 		int id,
 		int userId,
@@ -13,14 +14,14 @@ public class AccountFactory
 		DateTime createdAt)
 	{
 		return new AccountVo(
-			Id: id,
-			UserId: userId,
-			AccountTypeId: accountTypeId,
-			Name: name,
-			InitialBalance: initialBalance,
-			CurrentBalance: currentBalance,
-			BalanceUpdatedAt: balanceUpdatedAt,
-			CreatedAt: createdAt);
+			id,
+			userId,
+			accountTypeId,
+			name,
+			initialBalance,
+			currentBalance,
+			balanceUpdatedAt,
+			createdAt);
 	}
 }
 

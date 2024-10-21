@@ -1,10 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Bc.CashFlow.Domain.Account;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public interface IAccountBusiness
 {
 	Task<IEnumerable<IAccount>> GetAccounts(
 		CancellationToken cancellationToken);
-	
+
 	Task<IEnumerable<IAccount>> GetAccounts(
 		int? userId,
 		int? accountTypeId,

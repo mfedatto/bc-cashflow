@@ -1,40 +1,38 @@
-CREATE OR ALTER PROCEDURE usp_EnsureAccountType
-    @AccountTypeName VARCHAR(50),
-    @BaseFee DECIMAL(10, 2) = 0,
+CREATE
+OR
+ALTER PROCEDURE usp_EnsureAccountType
+    @AccountTypeName VARCHAR (50),
+    @BaseFee DECIMAL (10, 2) = 0,
     @PaymentDueDays INT = 0,
     @Id INT OUTPUT
-AS
+    AS
 BEGIN
 
-    IF NOT EXISTS (
+    IF
+NOT EXISTS (
        SELECT 1
        FROM tbl_AccountType
        WHERE AccountTypeName = @AccountTypeName)
-    BEGIN
+BEGIN
 
-        INSERT INTO tbl_AccountType (
-            AccountTypeName,
-            BaseFee,
-            PaymentDueDays)
-        VALUES (
-            @AccountTypeName,
-            @BaseFee,
-            @PaymentDueDays);
+INSERT INTO tbl_AccountType (AccountTypeName,
+                             BaseFee,
+                             PaymentDueDays)
+VALUES (@AccountTypeName,
+        @BaseFee,
+        @PaymentDueDays);
 
-        SELECT @Id = SCOPE_IDENTITY();
+SELECT @Id = SCOPE_IDENTITY();
 
-    END
-    ELSE
-    BEGIN
+END
+ELSE
+BEGIN
 
-        SELECT
-            TOP 1
+SELECT TOP 1
             @Id = AccountTypeId
-        FROM
-            tbl_AccountType
-        WHERE
-            AccountTypeName = @AccountTypeName
+FROM tbl_AccountType
+WHERE AccountTypeName = @AccountTypeName
 
-    END
+END
 
 END

@@ -8,11 +8,12 @@ namespace Bc.CashFlow.IO.DbContext;
 
 public class UserRepository : IUserRepository
 {
-	// ReSharper disable once NotAccessedField.Local
-	private readonly ILogger<UserRepository> _logger;
 	private readonly DbConnection _dbConnection;
 	private readonly DbTransaction _dbTransaction;
 	private readonly UserFactory _factory;
+
+	// ReSharper disable once NotAccessedField.Local
+	private readonly ILogger<UserRepository> _logger;
 
 	public UserRepository(
 		ILogger<UserRepository> logger,

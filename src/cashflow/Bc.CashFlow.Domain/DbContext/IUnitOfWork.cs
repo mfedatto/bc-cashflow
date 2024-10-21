@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.AccountType;
 using Bc.CashFlow.Domain.DailyReport;
@@ -7,6 +8,7 @@ using Bc.CashFlow.Domain.User;
 
 namespace Bc.CashFlow.Domain.DbContext;
 
+[SuppressMessage("ReSharper", "UnusedMember.Global")]
 public interface IUnitOfWork : IDisposable
 {
 	DbConnection Connection { get; }

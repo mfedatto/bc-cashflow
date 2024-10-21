@@ -8,10 +8,11 @@ namespace Bc.CashFlow.IO.QueueContext;
 
 public class QueuePublisher : IQueuePublisher
 {
+	private readonly QueueConfig _config;
+	private readonly IConnection _connection;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<QueuePublisher> _logger;
-	private readonly IConnection _connection;
-	private readonly QueueConfig _config;
 
 	public QueuePublisher(
 		ILogger<QueuePublisher> logger,

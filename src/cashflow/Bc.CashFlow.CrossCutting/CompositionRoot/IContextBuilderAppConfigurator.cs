@@ -4,6 +4,6 @@ namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
 public interface IContextBuilderAppConfigurator
 {
-    WebApplication Configure(
-        WebApplication app);
+	WebApplication Configure(
+		WebApplication app);
 }
