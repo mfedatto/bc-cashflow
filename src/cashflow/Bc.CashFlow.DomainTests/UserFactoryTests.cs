@@ -2,8 +2,14 @@ using Bc.CashFlow.Domain.User;
 
 namespace Bc.CashFlow.DomainTests;
 
+[TestFixture]
 public class Tests
 {
+	[SetUp]
+	public void Setup()
+	{
+	}
+
 	public static IEnumerable<TestCaseData> UserFactoryCreateSuccessCases
 	{
 		get
@@ -50,14 +56,9 @@ public class Tests
 		}
 	}
 
-	[SetUp]
-	public void Setup()
-	{
-	}
-
 	[Test]
 	[TestCaseSource(nameof(UserFactoryCreateSuccessCases))]
-	public void GivenSuccessUserData_WhenFactoryCreate_ReturnsProperUser(
+	public void GivenSuccessUserData_WhenFactoryCreate_ThenReturnsProperUser(
 		int userId,
 		string username,
 		DateTime createdAt)
@@ -83,7 +84,7 @@ public class Tests
 
 	[Test]
 	[TestCaseSource(nameof(UserFactoryCreateInvalidUserDataCases))]
-	public void GivenInvalidUserData_WhenFactoryCreate_ReturnsProperUser(
+	public void GivenInvalidUserData_WhenFactoryCreate_ThenReturnsProperUser(
 		int userId,
 		string username,
 		DateTime createdAt)
