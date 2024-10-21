@@ -19,38 +19,71 @@ services:
       cashflow-db:
       cashflow-db-migration:
 
-  cashflow-db-create-database:
+  cashflow-db-bccf-create-database:
     extends:
       file: docker-compose.db-migration.yaml
       service: _db-migration
-    container_name: cashflow-db-create-database
-    hostname: cashflow-db-create-database
+    container_name: cashflow-db-bccf-create-database
+    hostname: cashflow-db-bccf-create-database
     environment:
       CONNECTION_STRING: Server=cashflow-db;Database=master;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
       LOCATIONS: /migrations
     volumes:
-      - ./cashflow-db-create-database:/migrations
+      - ./cashflow-db/bccf-create-db:/migrations
     networks:
       cashflow-db-migration:
     depends_on:
       - cashflow-db
 
-  cashflow-db-create-user:
+  cashflow-db-bccf-create-user:
     extends:
       file: docker-compose.db-migration.yaml
       service: _db-migration
-    container_name: cashflow-db-create-user
-    hostname: cashflow-db-create-user
+    container_name: cashflow-db-bccf-create-user
+    hostname: cashflow-db-bccf-create-user
     environment:
       CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
       LOCATIONS: /migrations
       PLACEHOLDERS: bccf_db_username:${CASHFLOW_DB_USERNAME};bccf_db_password:${CASHFLOW_DB_PASSWORD}
     volumes:
-      - ./cashflow-db-create-user:/migrations
+      - ./cashflow-db/bccf-create-user:/migrations
     networks:
       cashflow-db-migration:
     depends_on:
-      - cashflow-db-create-database
+      - cashflow-db-bccf-create-database
+
+  cashflow-db-hangfire-create-db:
+    extends:
+      file: docker-compose.db-migration.yaml
+      service: _db-migration
+    container_name: cashflow-db-hangfire-create-db
+    hostname: cashflow-db-hangfire-create-db
+    environment:
+      CONNECTION_STRING: Server=cashflow-db;Database=master;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
+      LOCATIONS: /migrations
+    volumes:
+      - ./cashflow-db/hangfire-create-db:/migrations
+    networks:
+      cashflow-db-migration:
+    depends_on:
+      - cashflow-db
+
+  cashflow-db-hangfire-create-user:
+    extends:
+      file: docker-compose.db-migration.yaml
+      service: _db-migration
+    container_name: cashflow-db-hangfire-create-user
+    hostname: cashflow-db-hangfire-create-user
+    environment:
+      CONNECTION_STRING: Server=cashflow-db;Database=Hangfire;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
+      LOCATIONS: /migrations
+      PLACEHOLDERS: bccf_db_username:${HANGFIRE_DB_USERNAME};bccf_db_password:${HANGFIRE_DB_PASSWORD}
+    volumes:
+      - ./cashflow-db/hangfire-create-user:/migrations
+    networks:
+      cashflow-db-migration:
+    depends_on:
+      - cashflow-db-bccf-create-database
 
   cashflow-db-migration:
     extends:
@@ -66,7 +99,7 @@ services:
     networks:
       cashflow-db-migration:
     depends_on:
-      - cashflow-db-create-user
+      - cashflow-db-bccf-create-user
 
   cashflow-cache:
     extends:
