@@ -6,18 +6,28 @@ public class DailyReportJob : IJob
 {
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<DailyReportJob> _logger;
-	private readonly IDailyReportBusiness _business;
+	private readonly IServiceProvider _serviceProvider;
 
 	public DailyReportJob(
 		ILogger<DailyReportJob> logger,
-		IDailyReportBusiness business)
+		IServiceProvider serviceProvider)
 	{
 		_logger = logger;
-		_business = business;
+		_serviceProvider = serviceProvider;
 	}
-	
+
 	public void Run()
 	{
-		_business.ConsolidateDailyReport(new DateTime(2024, 10, 18), CancellationToken.None);
+		// ReSharper disable once ConvertToUsingDeclaration
+		using (IServiceScope scope = _serviceProvider.CreateScope())
+		{
+			IDailyReportBusiness dailyReportBusiness = scope.ServiceProvider.GetRequiredService<IDailyReportBusiness>();
+
+			dailyReportBusiness.ConsolidateDailyReport(
+					DateTime.Today.Date,
+					CancellationToken.None)
+				.GetAwaiter()
+				.GetResult();
+		}
 	}
 }

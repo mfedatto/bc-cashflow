@@ -23,16 +23,20 @@ public static class WebApplicationExtensions
 		return ((WebApplication)app
 				.UseHangfireDashboard())
 			.ConfigureApp<SchedulerContextBuilder>()
-			.EnqueueJob<DailyReportJob>();
+			.AddOrUpdate<DailyReportJob>(
+				"daily-report",
+				"0 0 * * *");
 	}
 
+	// ReSharper disable once UnusedMember.Local
 	private static WebApplication EnqueueJob<TJob>(
 		this WebApplication app)
 		where TJob : IJob
 	{
 		return app.EnqueueJob(
 			() =>
-				app.Services.GetRequiredService<TJob>().Run());
+				app.Services.GetRequiredService<TJob>()
+					.Run());
 	}
 
 	private static WebApplication EnqueueJob(
@@ -43,6 +47,37 @@ public static class WebApplicationExtensions
 			.GetRequiredService<IBackgroundJobClient>();
 
 		backgroundJobs.Enqueue(methodCall);
+
+		return app;
+	}
+
+	// ReSharper disable once UnusedMember.Local
+	private static WebApplication AddOrUpdate<TJob>(
+		this WebApplication app,
+		string jobName,
+		string cronExpression)
+		where TJob : IJob
+	{
+		return app.AddOrUpdate(
+			jobName,
+			() =>
+				app.Services.GetRequiredService<TJob>().Run(),
+			cronExpression);
+	}
+
+	private static WebApplication AddOrUpdate(
+		this WebApplication app,
+		string jobName,
+		Expression<Action> methodCall,
+		string cronExpression)
+	{
+		IRecurringJobManager recurringJobs = app.Services
+			.GetRequiredService<IRecurringJobManager>();
+
+		recurringJobs.AddOrUpdate(
+			jobName,
+			methodCall,
+			cronExpression);
 
 		return app;
 	}
