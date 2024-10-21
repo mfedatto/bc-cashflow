@@ -5,7 +5,16 @@ namespace Bc.CashFlow.Web.Extensions;
 
 public static class WebApplicationExtensions
 {
-	public static WebApplication Configure(this WebApplication app)
+	public static WebApplicationBuilder Setup(
+		this WebApplicationBuilder builder)
+	{
+		builder.AddCompositionRoot<WebApiContextBuilder>();
+
+		return builder;
+	}
+
+	public static WebApplication Configure(
+		this WebApplication app)
 	{
 		return ((WebApplication)app.UseExceptionHandler("/Home/Error"))
 			.ConfigureApp<WebApiContextBuilder>();
