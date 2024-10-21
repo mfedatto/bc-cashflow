@@ -145,6 +145,22 @@ services:
       cashflow-cache:
       cashflow-queue:
 
+  cashflow-scheduler:
+    build:
+      context: ../src/cashflow
+      dockerfile: ../../iac/cashflow-scheduler/Dockerfile
+    container_name: cashflow-scheduler
+    hostname: cashflow-scheduler
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - '5184:80'
+    networks:
+      cashflow-scheduler:
+      cashflow-db:
+      cashflow-cache:
+      cashflow-queue:
+
 networks:
   cashflow-db:
     driver: bridge
@@ -155,6 +171,8 @@ networks:
   cashflow-queue:
     driver: bridge
   cashflow-web:
+    driver: bridge
+  cashflow-scheduler:
     driver: bridge
 
 volumes:

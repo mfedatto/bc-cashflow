@@ -31,5 +31,6 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
         builder.BindConfig<DatabaseConfig>(configuration);
         builder.BindConfig<CacheConfig>(configuration);
         builder.BindConfig<QueueConfig>(configuration);
+        builder.BindConfig<SchedulerConfig>(configuration);
     }
 }
