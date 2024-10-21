@@ -18,7 +18,12 @@ public class TransactionFactory
 			id,
 			userId,
 			accountId,
-			transactionType,
+			(int)transactionType switch
+			{
+				(int)TransactionType.Credit => TransactionType.Credit,
+				(int)TransactionType.Debit => TransactionType.Debit,
+				_ => throw new TransactionTypeOutOfRangeException()
+			},
 			amount,
 			description,
 			transactionDate,

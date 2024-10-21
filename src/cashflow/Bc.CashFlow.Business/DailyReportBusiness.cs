@@ -87,7 +87,10 @@ public class DailyReportBusiness : IDailyReportBusiness
 					accountBalance,
 					cancellationToken);
 
-			if (accountDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
+			if (accountDailyReport is null)
+			{
+				throw new DailyReportCreationReturnedNullIdentityException();
+			}
 		}
 
 		decimal balanceBeforeFee = totalCreditBalance - totalDebitBalance;
@@ -103,7 +106,10 @@ public class DailyReportBusiness : IDailyReportBusiness
 				finalBalance,
 				cancellationToken);
 
-		if (totalDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
+		if (totalDailyReport is null)
+		{
+			throw new DailyReportCreationReturnedNullIdentityException();
+		}
 	}
 
 	public async Task<IEnumerable<IDailyReport>> GetDailyReports(

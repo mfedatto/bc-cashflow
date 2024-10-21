@@ -16,9 +16,10 @@ namespace Bc.CashFlow.IO.DbContext;
 
 public sealed class UnitOfWork : IUnitOfWork
 {
+	private readonly DbConnection _dbConnection;
+
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<UnitOfWork> _logger;
-	private readonly DbConnection _dbConnection;
 	private readonly IServiceProvider _serviceProvider;
 	private DbTransaction? _dbTransaction;
 	private bool _disposed;
