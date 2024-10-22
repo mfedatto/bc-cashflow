@@ -1,5 +1,32 @@
 # BC Cash Flow
 
+## Tabela de Conteúdo
+
+- [Descrição](#descrição)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Requisitos para Execução](#requisitos-para-execução)
+- [Como Rodar o Projeto Localmente](#como-rodar-o-projeto-localmente)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Diagrama de Implantação](#diagrama-de-implantação)
+- [Modelo Entidade-Relacional](#modelo-entidade-relacional)
+- [Fluxo de Construção do Ambiente](#fluxo-de-construção-do-ambiente)
+- [Registros de Decisão Arquitetural](#registros-de-decisão-arquitetural)
+  - [ADR001 - Interface](docs/adr/adr001-interface.md)
+  - [ADR002 - Arquitetura](docs/adr/adr002-arquitetura.md)
+  - [ADR003 - Banco de dados](docs/adr/adr003-banco-de-dados.md)
+  - [ADR004 - Banco de dados](docs/adr/adr004-banco-de-dados.md)
+  - [ADR005 - Evolve DB Docker](docs/adr/adr005-evolve-db-docker.md)
+  - [ADR006 - Database Setup](docs/adr/adr006-database-setup.md)
+  - [ADR007 - Migration tiers](docs/adr/adr007-migration-tiers.md)
+  - [ADR008 - Cross Cutting](docs/adr/adr008-cross-cutting.md)
+  - [ADR009 - Localization](docs/adr/adr009-localization.md)
+  - [ADR010 - Business](docs/adr/adr010-business.md)
+  - [ADR011 - Startup context builder](docs/adr/adr011-startup-context-builder.md)
+  - [ADR012 - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
+  - [ADR013 - Setup](docs/adr/adr013-setup.md)
+- [Licença](#licença)
+
 ## Descrição
 
 O BC Cash Flow é um sistema desenvolvido em C# para o controle de fluxo de caixa, permitindo a gestão de lançamentos
