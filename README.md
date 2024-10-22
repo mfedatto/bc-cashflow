@@ -18,6 +18,10 @@ resiliência e segurança, garantindo alta disponibilidade e desempenho.
 - C#
 - .NET Core
 - SQL Server (ou outro banco de dados relacional)
+- RabbitMQ
+- Redis
+- Hangfire
+- Evolve
 
 ## Requisitos para Execução
 
@@ -32,42 +36,24 @@ resiliência e segurança, garantindo alta disponibilidade e desempenho.
 git clone https://github.com/mfedatto/bc-cashflow.git
 ```
 
-2. Navegue até o diretório do projeto:
+2. Navegue até o diretório de infra como código:
 
 ```bash
-cd bc-cashflow
+cd iac
 ```
 
-3. Acesse o diretório da aplicação:
+3. Suba a composição via docker compose:
 
 ```bash
-cd src/cashflow/CashFlow.WebUI
-```
-
-4. Restaure as dependências:
-
-```bash
-dotnet restore
-```
-
-5. Configure o banco de dados no arquivo de configuração `appsettings.json`.
-6. Execute as migrações para configurar o banco de dados:
-
-```bash
-dotnet ef database update
-```
-
-7. Rode a aplicação (no diretório do .csproj):
-
-```bash
-dotnet run
+docker compose up -d
 ```
 
 ## Estrutura do Projeto
 
-`/src/`: Código fonte do sistema.
-`/tests/`: Testes automatizados.
-`/docs/`: Documentação técnica do projeto.
+- `/docs/`: Documentação técnica do projeto.
+- `/src/`: Código fonte do sistema.
+- `/iac/`: Infra como código.
+- `/db/`: Databse migration.
 
 ## Licença
 
