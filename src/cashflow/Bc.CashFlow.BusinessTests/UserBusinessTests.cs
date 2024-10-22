@@ -22,11 +22,97 @@ public class UserBusinessTests
 			_userServiceMock.Object);
 	}
 
-	[Test]
-	public async Task GivenUserBusiness_WhenGetSingleUser_ThenReturnsSameUserObtainedFromService()
+	public static IEnumerable<TestCaseData> UserBusinessGetUsersSuccessCases
+	{
+		get
+		{
+			yield return new(
+				new List<IUser> { },
+				"duck",
+				DateTime.Now.AddDays(1),
+				DateTime.Now.AddDays(10));
+			yield return new(
+				new List<IUser> 
+				{
+					new Mock<IUser>().Object
+				},
+				"cat",
+				DateTime.Now.AddDays(2),
+				DateTime.Now.AddDays(20));
+			yield return new(
+				new List<IUser> 
+				{
+					new Mock<IUser>().Object,
+						new Mock<IUser>().Object
+				},
+				"dog",
+				DateTime.Now.AddDays(3),
+				DateTime.Now.AddDays(30));
+			yield return new(
+				null,
+				"snake",
+				DateTime.Now.AddDays(4),
+				DateTime.Now.AddDays(40));
+		}
+	}
+
+	public static IEnumerable<TestCaseData> UserBusinessGetSingleUserSuccessCases
+	{
+		get
+		{
+			yield return new(1);
+			yield return new(2);
+			yield return new(8);
+			yield return new(-10);
+		}
+	}
+
+	[TestCaseSource(nameof(UserBusinessGetUsersSuccessCases))]
+	public async Task GivenUserBusiness_WhenGetUsers_ThenReturnsSameUsersObtainedFromService(
+		IEnumerable<IUser> expected,
+		string? username,
+		DateTime? createdSince,
+		DateTime? createdUntil)
 	{
 		// Arrange
-		const int userId = 1;
+		_userServiceMock.Setup(
+				s =>
+					s.GetUsers(
+						username,
+						createdSince,
+						createdUntil,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expected);
+
+		// Act
+		IEnumerable<IUser> actual =
+			await _userBusiness.GetUsers(
+				username,
+				createdSince,
+				createdUntil,
+				CancellationToken.None);
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.That(actual, Is.EqualTo(expected));
+				_userServiceMock.Verify(
+					s =>
+						s.GetUsers(
+							username,
+							createdSince,
+							createdUntil,
+							It.IsAny<CancellationToken>()),
+					Times.Once);
+			});
+	}
+
+	[TestCaseSource(nameof(UserBusinessGetSingleUserSuccessCases))]
+	public async Task GivenUserBusiness_WhenGetSingleUser_ThenReturnsSameUserObtainedFromService(
+		int userId)
+	{
+		// Arrange
 		IUser expected = new Mock<IUser>().Object;
 
 		_userServiceMock.Setup(
