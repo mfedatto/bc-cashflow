@@ -77,7 +77,7 @@ services:
     environment:
       CONNECTION_STRING: Server=cashflow-db;Database=Hangfire;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
       LOCATIONS: /migrations
-      PLACEHOLDERS: bccf_db_username:${HANGFIRE_DB_USERNAME};bccf_db_password:${HANGFIRE_DB_PASSWORD}
+      PLACEHOLDERS: hangfire_db_username:${HANGFIRE_DB_USERNAME};hangfire_db_password:${HANGFIRE_DB_PASSWORD}
     volumes:
       - ./cashflow-db/hangfire-create-user:/migrations
     networks:
