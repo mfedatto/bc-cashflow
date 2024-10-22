@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
-public class WebApiContextBuilder : IContextBuilderInstaller, IContextBuilderAppConfigurator
+public class WebContextBuilder : IContextBuilderInstaller, IContextBuilderAppConfigurator
 {
 	public WebApplication Configure(WebApplication app)
 	{

@@ -8,7 +8,7 @@ public static class WebApplicationExtensions
 	public static WebApplicationBuilder Setup(
 		this WebApplicationBuilder builder)
 	{
-		builder.AddCompositionRoot<WebApiContextBuilder>();
+		builder.AddCompositionRoot<WebContextBuilder>();
 
 		return builder;
 	}
@@ -17,6 +17,6 @@ public static class WebApplicationExtensions
 		this WebApplication app)
 	{
 		return ((WebApplication)app.UseExceptionHandler("/Home/Error"))
-			.ConfigureApp<WebApiContextBuilder>();
+			.ConfigureApp<WebContextBuilder>();
 	}
 }

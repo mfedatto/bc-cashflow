@@ -1,6 +1,8 @@
 ﻿using Bc.CashFlow.Domain.AppSettings;
 using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +12,13 @@ public class SchedulerContextBuilder : IContextBuilderInstaller, IContextBuilder
 {
 	public WebApplication Configure(WebApplication app)
 	{
-		app.UseHangfireDashboard();
+		app.UseHangfireDashboard(
+			"/hangfire",
+			new()
+			{
+				Authorization = [new AllowAllConnectionsFilter()],
+				IgnoreAntiforgeryToken = true
+			});
 
 		return app;
 	}
@@ -19,6 +27,9 @@ public class SchedulerContextBuilder : IContextBuilderInstaller, IContextBuilder
 		WebApplicationBuilder builder,
 		IConfiguration? configuration = null)
 	{
+		builder.Services.AddDataProtection()
+			.SetApplicationName("cashflow-scheduler")
+			.PersistKeysToFileSystem(new("/root/.aspnet/DataProtection-Keys"));
 		builder.Services.AddHangfire(
 			sc =>
 			{
@@ -32,5 +43,13 @@ public class SchedulerContextBuilder : IContextBuilderInstaller, IContextBuilder
 			});
 		builder.Services.AddHangfireServer();
 		builder.Services.AddMvc();
+	}
+
+	private class AllowAllConnectionsFilter : IDashboardAuthorizationFilter
+	{
+		public bool Authorize(DashboardContext context)
+		{
+			return true;
+		}
 	}
 }

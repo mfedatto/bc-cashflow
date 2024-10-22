@@ -21,6 +21,7 @@ public class DomainContextBuilder : IContextBuilderInstaller, IContextBuilderCon
 		builder.BindConfig<CacheConfig>(configuration);
 		builder.BindConfig<QueueConfig>(configuration);
 		builder.BindConfig<SchedulerConfig>(configuration);
+		builder.BindConfig<AntiForgeryConfig>(configuration);
 	}
 
 	public void Install(

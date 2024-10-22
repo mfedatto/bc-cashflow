@@ -16,9 +16,9 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 ARG HTTP_PORT=80
-
 ENV HTTP_PORT=${HTTP_PORT}
-
 EXPOSE ${HTTP_PORT}
+
+RUN mkdir -p /root/.aspnet/DataProtection-Keys
 
 ENTRYPOINT ["dotnet", "Bc.CashFlow.Web.dll", "--urls", "http://*:${WEB_PORT}"]
