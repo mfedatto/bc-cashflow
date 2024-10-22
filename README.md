@@ -108,6 +108,7 @@ docker compose up -d
 - [`ADR011` - Startup context builder](docs/adr/adr011-startup-context-builder.md)
 - [`ADR012` - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
 - [`ADR013` - Setup](docs/adr/adr013-setup.md)
+- [`ADR014` - Dockerfile](docs/adr/adr014-dockerfile.md)
 
 ## Licença
 
