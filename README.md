@@ -62,6 +62,10 @@ docker compose up -d
 
 ![Entity-Relationship Model](docs/erm.png)
 
+## Fluxo de construção do ambiente
+
+![Environmetn Build - Workflow Diagram](docs/ebwd.png)
+
 ## Registros de decisão arquitetural
 
 - [`ADR001` - Interface](docs/adr/adr001-interface.md)
