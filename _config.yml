@@ -12,11 +12,6 @@ author:
   name: "Maurício Fedatto"
   email: "mfedatto@gmail.com"
 
-layout: "default"
-
-include:
-  - docs
-
 show_downloads: false
 
 social:
