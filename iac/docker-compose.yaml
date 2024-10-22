@@ -2,112 +2,30 @@ services:
 
   cashflow-db:
     extends:
-      file: docker-compose.bccf.yaml
-      service: _service
-    image: mcr.microsoft.com/mssql/server:latest
-    container_name: cashflow-db
-    hostname: cashflow-db
+      file: 'docker-compose.bccf.yaml'
+      service: '_service'
+    image: 'mcr.microsoft.com/mssql/server:latest'
+    container_name: 'cashflow-db'
+    hostname: 'cashflow-db'
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: $CASHFLOW_DB_SU_PWD
-      MSSQL_PID: $MSSQL_PID
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: '$CASHFLOW_DB_SU_PWD'
+      MSSQL_PID: '$MSSQL_PID'
     volumes:
-      - cashflow-db:/var/opt/mssql
+      - 'cashflow-db:/var/opt/mssql'
     ports:
       - '1433:1433'
     networks:
       cashflow-db:
       cashflow-db-migration:
 
-  cashflow-db-bccf-create-database:
-    extends:
-      file: docker-compose.db-migration.yaml
-      service: _db-migration
-    container_name: cashflow-db-bccf-create-database
-    hostname: cashflow-db-bccf-create-database
-    environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=master;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
-      LOCATIONS: /migrations
-    volumes:
-      - ./cashflow-db/bccf-create-db:/migrations
-    networks:
-      cashflow-db-migration:
-    depends_on:
-      - cashflow-db
-
-  cashflow-db-bccf-create-user:
-    extends:
-      file: docker-compose.db-migration.yaml
-      service: _db-migration
-    container_name: cashflow-db-bccf-create-user
-    hostname: cashflow-db-bccf-create-user
-    environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
-      LOCATIONS: /migrations
-      PLACEHOLDERS: bccf_db_username:${CASHFLOW_DB_USERNAME};bccf_db_password:${CASHFLOW_DB_PASSWORD}
-    volumes:
-      - ./cashflow-db/bccf-create-user:/migrations
-    networks:
-      cashflow-db-migration:
-    depends_on:
-      - cashflow-db-bccf-create-database
-
-  cashflow-db-hangfire-create-db:
-    extends:
-      file: docker-compose.db-migration.yaml
-      service: _db-migration
-    container_name: cashflow-db-hangfire-create-db
-    hostname: cashflow-db-hangfire-create-db
-    environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=master;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
-      LOCATIONS: /migrations
-    volumes:
-      - ./cashflow-db/hangfire-create-db:/migrations
-    networks:
-      cashflow-db-migration:
-    depends_on:
-      - cashflow-db
-
-  cashflow-db-hangfire-create-user:
-    extends:
-      file: docker-compose.db-migration.yaml
-      service: _db-migration
-    container_name: cashflow-db-hangfire-create-user
-    hostname: cashflow-db-hangfire-create-user
-    environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=Hangfire;UID=sa;PWD=${CASHFLOW_DB_SU_PWD}
-      LOCATIONS: /migrations
-      PLACEHOLDERS: hangfire_db_username:${HANGFIRE_DB_USERNAME};hangfire_db_password:${HANGFIRE_DB_PASSWORD}
-    volumes:
-      - ./cashflow-db/hangfire-create-user:/migrations
-    networks:
-      cashflow-db-migration:
-    depends_on:
-      - cashflow-db-bccf-create-database
-
-  cashflow-db-migration:
-    extends:
-      file: docker-compose.db-migration.yaml
-      service: _db-migration
-    container_name: cashflow-db-migration
-    hostname: cashflow-db-migration
-    environment:
-      CONNECTION_STRING: Server=cashflow-db;Database=BCCF;UID=${CASHFLOW_DB_USERNAME};PWD=${CASHFLOW_DB_PASSWORD}
-      LOCATIONS: /migrations
-    volumes:
-      - ../db/migrations:/migrations
-    networks:
-      cashflow-db-migration:
-    depends_on:
-      - cashflow-db-bccf-create-user
-
   cashflow-cache:
     extends:
-      file: docker-compose.bccf.yaml
-      service: _service
-    image: eqalpha/keydb:latest
-    container_name: cashflow-cache
-    hostname: cashflow-cache
+      file: 'docker-compose.bccf.yaml'
+      service: '_service'
+    image: 'eqalpha/keydb:latest'
+    container_name: 'cashflow-cache'
+    hostname: 'cashflow-cache'
     ports:
       - '6379:6379'
     networks:
@@ -115,14 +33,14 @@ services:
 
   cashflow-queue:
     extends:
-      file: docker-compose.bccf.yaml
-      service: _service
-    image: rabbitmq:management
-    container_name: cashflow-queue
-    hostname: cashflow-queue
+      file: 'docker-compose.bccf.yaml'
+      service: '_service'
+    image: 'rabbitmq:management'
+    container_name: 'cashflow-queue'
+    hostname: 'cashflow-queue'
     environment:
-      RABBITMQ_DEFAULT_USER: $RABBITMQ_DEFAULT_USER
-      RABBITMQ_DEFAULT_PASS: $RABBITMQ_DEFAULT_PASS
+      RABBITMQ_DEFAULT_USER: '${RABBITMQ_DEFAULT_USER}'
+      RABBITMQ_DEFAULT_PASS: '${RABBITMQ_DEFAULT_PASS}'
     ports:
       - '5672:5672'
       - '15672:15672'
@@ -130,36 +48,32 @@ services:
       cashflow-queue:
 
   cashflow-web:
-    build:
-      context: ../src/cashflow
-      dockerfile: ../../iac/cashflow-web/Dockerfile
-    container_name: cashflow-web
-    hostname: cashflow-web
+    extends:
+      file: 'docker-compose.cashflow.yaml'
+      service: 'cashflow-app'
+    container_name: 'cashflow-web'
+    hostname: 'cashflow-web'
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      CASHFLOW_APP: 'WEB'
+      HTTP_PORT: '8080'
     ports:
-      - '5183:80'
+      - '5380:8080'
     networks:
       cashflow-web:
-      cashflow-db:
-      cashflow-cache:
-      cashflow-queue:
 
   cashflow-scheduler:
-    build:
-      context: ../src/cashflow
-      dockerfile: ../../iac/cashflow-scheduler/Dockerfile
-    container_name: cashflow-scheduler
-    hostname: cashflow-scheduler
+    extends:
+      file: 'docker-compose.cashflow.yaml'
+      service: 'cashflow-app'
+    container_name: 'cashflow-scheduler'
+    hostname: 'cashflow-scheduler'
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      CASHFLOW_APP: 'SCHEDULER'
+      HTTP_PORT: '8080'
     ports:
-      - '5184:80'
+      - '5381:8080'
     networks:
       cashflow-scheduler:
-      cashflow-db:
-      cashflow-cache:
-      cashflow-queue:
 
 networks:
   cashflow-db:
