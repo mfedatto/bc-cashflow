@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.DbContext;
+using Bc.CashFlow.Domain.Transaction;
 
 namespace Bc.CashFlow.Domain.Account;
 
@@ -42,5 +43,9 @@ public interface IAccountService
 
 	Task<IAccount?> GetAccount(
 		int id,
+		CancellationToken cancellationToken);
+
+	Task UpdateBalance(
+		ITransaction transaction,
 		CancellationToken cancellationToken);
 }

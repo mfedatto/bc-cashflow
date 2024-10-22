@@ -35,4 +35,8 @@ public interface ITransactionService
 	Task PublishNewTransactionToBalance(
 		int id,
 		CancellationToken cancellationToken);
+
+	Task<ITransaction?> GetTransaction(
+		int transactionId,
+		CancellationToken cancellationToken);
 }

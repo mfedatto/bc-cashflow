@@ -31,4 +31,8 @@ public interface ITransactionRepository
 		decimal? transactionFee,
 		DateTime? projectedRepaymentDate,
 		CancellationToken cancellationToken);
+
+	Task<ITransaction?> GetTransaction(
+		int transactionId,
+		CancellationToken cancellationToken);
 }

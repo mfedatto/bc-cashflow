@@ -1,6 +1,7 @@
 using Bc.CashFlow.Domain.Account;
 using Bc.CashFlow.Domain.CacheContext;
 using Bc.CashFlow.Domain.DbContext;
+using Bc.CashFlow.Domain.Transaction;
 using Microsoft.Extensions.Logging;
 
 namespace Bc.CashFlow.Services;
@@ -141,6 +142,17 @@ public class AccountService : IAccountService
 			return cachedValue;
 		}
 
+		IAccount? persistedValue = await UpdateCache(
+			id,
+			cancellationToken);
+
+		return persistedValue;
+	}
+
+	private async Task<IAccount?> UpdateCache(
+		int id,
+		CancellationToken cancellationToken)
+	{
 		IAccount? persistedValue = await _uow.AccountRepository.GetAccount(
 			id,
 			cancellationToken);
@@ -154,14 +166,23 @@ public class AccountService : IAccountService
 
 		_logger.LogDebug("Account id {id} retrieved from database.", id);
 
-		await _cc.Account.SetVale(
-			persistedValue.Id.ToString(),
+		await SetAccountCache(
 			persistedValue,
 			cancellationToken);
 
-		_logger.LogDebug("Account id {id} added to cache.", id);
-
 		return persistedValue;
+	}
+
+	private async Task SetAccountCache(
+		IAccount account,
+		CancellationToken cancellationToken)
+	{
+		await _cc.Account.SetVale(
+			account.Id.ToString(),
+			account,
+			cancellationToken);
+
+		_logger.LogDebug("Account id {id} added to cache.", account.Id);
 	}
 
 	private async Task<IEnumerable<IAccount>> GetAccounts(
@@ -185,5 +206,33 @@ public class AccountService : IAccountService
 		}
 
 		return result;
+	}
+
+	public async Task UpdateBalance(
+		ITransaction transaction,
+		CancellationToken cancellationToken)
+	{
+		IAccount? account = await GetAccount(
+			transaction.AccountId,
+			cancellationToken);
+
+		if (account is null) throw new AccountNotFoundException();
+
+		decimal adjustedAmount =
+			transaction.TransactionType switch
+			{
+				TransactionType.Credit => transaction.Amount - (transaction.TransactionFee ?? 0),
+				TransactionType.Debit => transaction.Amount * -1,
+				_ => throw new TransactionTypeOutOfRangeException()
+			};
+
+		await _uow.AccountRepository.UpdateBalance(
+			transaction.AccountId,
+			adjustedAmount,
+			cancellationToken);
+
+		await UpdateCache(
+			transaction.AccountId,
+			cancellationToken);
 	}
 }

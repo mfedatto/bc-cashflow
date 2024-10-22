@@ -21,4 +21,9 @@ public interface IAccountRepository
 	Task<IAccount?> GetAccount(
 		int id,
 		CancellationToken cancellationToken);
+
+	Task UpdateBalance(
+		int accountId,
+		decimal adjustedAmount,
+		CancellationToken cancellationToken);
 }

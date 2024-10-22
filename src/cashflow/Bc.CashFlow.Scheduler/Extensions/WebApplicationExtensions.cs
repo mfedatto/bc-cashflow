@@ -11,8 +11,10 @@ public static class WebApplicationExtensions
 	public static WebApplicationBuilder Setup(
 		this WebApplicationBuilder builder)
 	{
-		builder.AddCompositionRoot<SchedulerContextBuilder>()
-			.Services.AddSingleton<DailyReportJob>();
+		builder.AddCompositionRoot<SchedulerContextBuilder>();
+		
+		builder.Services.AddSingleton<DailyReportJob>();
+		builder.Services.AddSingleton<BalanceNewAccountTransactionJob>();
 
 		return builder;
 	}
@@ -25,7 +27,10 @@ public static class WebApplicationExtensions
 			.ConfigureApp<SchedulerContextBuilder>()
 			.AddOrUpdate<DailyReportJob>(
 				"daily-report",
-				"0 0 * * *");
+				"0 0 * * *")
+			.AddOrUpdate<BalanceNewAccountTransactionJob>(
+				"balance-new-account-transaction",
+				"*/5 * * * *");
 	}
 
 	// ReSharper disable once UnusedMember.Local

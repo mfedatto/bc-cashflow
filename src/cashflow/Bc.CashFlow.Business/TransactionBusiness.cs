@@ -96,6 +96,23 @@ public class TransactionBusiness : ITransactionBusiness
 		return result;
 	}
 
+	public async Task UpdateAccountBalance(
+		int transactionId,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		ITransaction? transaction = await _transactionService.GetTransaction(
+			transactionId,
+			cancellationToken);
+
+		if (transaction is null) throw new TransactionNotFoundException();
+
+		await _accountService.UpdateBalance(
+			transaction,
+			cancellationToken);
+	}
+
 	private async Task<IAccount> GetRequiredAccount(
 		int id,
 		CancellationToken cancellationToken)

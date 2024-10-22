@@ -28,4 +28,8 @@ public interface ITransactionBusiness
 		string? description,
 		DateTime transactionDate,
 		CancellationToken cancellationToken);
+
+	Task UpdateAccountBalance(
+		int transactionId,
+		CancellationToken cancellationToken);
 }

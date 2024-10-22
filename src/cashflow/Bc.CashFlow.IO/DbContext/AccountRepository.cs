@@ -100,6 +100,25 @@ public class AccountRepository : IAccountRepository
 					))
 			.SingleOrDefault();
 	}
+
+	public async Task UpdateBalance(
+		int accountId,
+		decimal adjustedAmount,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@AccountId", accountId, DbType.Int32);
+		parameters.Add("@AdjustedAmount", adjustedAmount, DbType.Decimal);
+
+		await _dbConnection.ExecuteAsync(
+			"usp_UpdateAccountBalance",
+			parameters,
+			commandType: CommandType.StoredProcedure,
+			transaction: _dbTransaction);
+	}
 }
 
 file record AccountIdDto

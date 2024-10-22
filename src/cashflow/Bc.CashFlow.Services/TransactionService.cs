@@ -89,4 +89,13 @@ public class TransactionService : ITransactionService
 			id,
 			cancellationToken);
 	}
+
+	public async Task<ITransaction?> GetTransaction(
+		int transactionId,
+		CancellationToken cancellationToken)
+	{
+		return await _uow.TransactionRepository.GetTransaction(
+			transactionId,
+			cancellationToken);
+	}
 }

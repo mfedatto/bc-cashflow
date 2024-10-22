@@ -143,6 +143,37 @@ public class TransactionRepository : ITransactionRepository
 					})
 			.SingleOrDefault();
 	}
+
+	public async Task<ITransaction?> GetTransaction(
+		int transactionId,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@TransactionId", transactionId, DbType.Int32);
+
+		return (await _dbConnection.QueryAsync<TransactionDto>(
+				"usp_SelectTransaction",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.TransactionId,
+						row.UserId,
+						row.AccountId,
+						(TransactionType)row.TransactionType,
+						row.Amount,
+						row.Description,
+						row.TransactionDate,
+						row.TransactionFee,
+						row.ProjectedRepaymentDate
+					))
+			.SingleOrDefault();
+	}
 }
 
 file record TransactionIdDto
