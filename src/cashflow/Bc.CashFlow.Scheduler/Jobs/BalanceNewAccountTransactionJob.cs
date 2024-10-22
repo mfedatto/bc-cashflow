@@ -1,3 +1,5 @@
+using Bc.CashFlow.Domain.AppSettings;
+using Bc.CashFlow.Domain.QueueContext;
 using Bc.CashFlow.Domain.Transaction;
 
 namespace Bc.CashFlow.Scheduler.Jobs;
@@ -21,10 +23,25 @@ public class BalanceNewAccountTransactionJob : IJob
 		// ReSharper disable once ConvertToUsingDeclaration
 		using (IServiceScope scope = _serviceProvider.CreateScope())
 		{
+			IQueueContext q = scope.ServiceProvider.GetRequiredService<IQueueContext>();
 			ITransactionBusiness transactionBusiness = scope.ServiceProvider.GetRequiredService<ITransactionBusiness>();
 
-			transactionBusiness.UpdateAccountBalance(
-					-1,
+			q.IterateNewTransactionToBalanceQueue(
+					message =>
+					{
+						if (message is null)
+						{
+							_logger.LogError("The TransactionIdMessage was null.");
+						}
+						else
+						{
+							transactionBusiness.UpdateAccountBalance(
+									message.TransactionId,
+									CancellationToken.None)
+								.GetAwaiter()
+								.GetResult();
+						}
+					},
 					CancellationToken.None)
 				.GetAwaiter()
 				.GetResult();

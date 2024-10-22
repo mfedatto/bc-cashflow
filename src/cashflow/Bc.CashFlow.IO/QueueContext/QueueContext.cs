@@ -11,15 +11,18 @@ public class QueueContext : IQueueContext
 
 	// ReSharper disable once NotAccessedField.Local
 	private readonly ILogger<QueueContext> _logger;
-	private readonly IQueuePublisher _q;
+	private readonly IQueuePublisher _queuePublisher;
+	private readonly IQueueConsumer _queueConsumer;
 
 	public QueueContext(
 		ILogger<QueueContext> logger,
-		IQueuePublisher q,
+		IQueuePublisher queuePublisher,
+		IQueueConsumer queueConsumer,
 		QueueConfig config)
 	{
 		_logger = logger;
-		_q = q;
+		_queuePublisher = queuePublisher;
+		_queueConsumer = queueConsumer;
 		_config = config;
 	}
 
@@ -27,15 +30,29 @@ public class QueueContext : IQueueContext
 		int id,
 		CancellationToken cancellationToken)
 	{
-		string jsonValue = JsonSerializer.Serialize(
-			new
-			{
-				TransactionId = id
-			});
+		string jsonValue =
+			JsonSerializer.Serialize(
+				new TransactionIdMessage(id));
 
-		await _q.PublishMessage(
+		await _queuePublisher.PublishMessage(
 			jsonValue,
 			_config.NewTransactionToBalanceQueue!,
+			cancellationToken);
+	}
+
+	public async Task IterateNewTransactionToBalanceQueue(
+		Action<TransactionIdMessage?> messageReception,
+		CancellationToken cancellationToken)
+	{
+		await _queueConsumer.QueuePooling(
+			_config.NewTransactionToBalanceQueue!,
+			message =>
+			{
+				TransactionIdMessage? result =
+					JsonSerializer.Deserialize<TransactionIdMessage>(message);
+
+				messageReception(result);
+			},
 			cancellationToken);
 	}
 }

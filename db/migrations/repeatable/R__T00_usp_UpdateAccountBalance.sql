@@ -1,6 +1,6 @@
 CREATE
 OR
-ALTER PROCEDURE usp_UpdateAccount
+ALTER PROCEDURE usp_UpdateAccountBalance
     @AccountId INT,
     @AdjustedAmount DECIMAL
     AS
