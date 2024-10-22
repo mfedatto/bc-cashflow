@@ -4,15 +4,9 @@ title: BC Cash Flow
 description: Documentação oficial do BC Cash Flow
 url: "https://mfedatto.github.io/bc-cashflow"
 
-theme: "just-the-docs"
-
-just_the_docs:
-  search_enabled: true
-  nav_to_top: true
-
 author:
-  name: "Seu Nome"
-  email: "seuemail@exemplo.com"
+  name: "Maurício Fedatto"
+  email: "mfedatto@gmail.com"
 
 layout: "default"
 
@@ -22,11 +16,6 @@ include:
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
-
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - _config.yml
 
 social:
   twitter: "mfedatto"
