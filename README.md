@@ -25,8 +25,7 @@ resiliência e segurança, garantindo alta disponibilidade e desempenho.
 
 ## Requisitos para Execução
 
-- .NET SDK 8.0 ou superior
-- Banco de dados SQL Server
+- Docker Compose
 
 ## Como Rodar o Projeto Localmente
 
@@ -54,6 +53,30 @@ docker compose up -d
 - `/src/`: Código fonte do sistema.
 - `/iac/`: Infra como código.
 - `/db/`: Databse migration.
+
+## Diagrama de implantação
+
+![Deploymetn Diagram](docs/dd.png)
+
+## Modelo Entidade-Relacional
+
+![Entity-Relationship Model](docs/erm.png)
+
+## Registros de decisão arquitetural
+
+- [`ADR001` - Interface](docs/adr/adr001-interface.md)
+- [`ADR002` - Arquitetura](docs/adr/adr002-arquitetura.md)
+- [`ADR003` - Banco de dados](docs/adr/adr003-banco-de-dados.md)
+- [`ADR004` - Banco de dados](docs/adr/adr004-banco-de-dados.md)
+- [`ADR005` - Evolve DB Docker](docs/adr/adr005-evolve-db-docker.md)
+- [`ADR006` - Database Setup](docs/adr/adr006-database-setup.md)
+- [`ADR007` - Migration tiers](docs/adr/adr007-migration-tiers.md)
+- [`ADR008` - Cross Cutting](docs/adr/adr008-cross-cutting.md)
+- [`ADR009` - Localization](docs/adr/adr009-localization.md)
+- [`ADR010` - Business](docs/adr/adr010-business.md)
+- [`ADR011` - Startup context builder](docs/adr/adr011-startup-context-builder.md)
+- [`ADR012` - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
+- [`ADR013` - Setup](docs/adr/adr013-setup.md)
 
 ## Licença
 

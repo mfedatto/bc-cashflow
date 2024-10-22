@@ -53,6 +53,7 @@ entity "tbl_DailyReport" as tblDailyReport {
     --
     * TotalDebits : DECIMAL
     * TotalCredits : DECIMAL
+    * TotalFee : DECIMAL
     * Balance : DECIMAL
 }
 
