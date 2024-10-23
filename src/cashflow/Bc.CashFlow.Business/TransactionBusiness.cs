@@ -108,9 +108,10 @@ public class TransactionBusiness : ITransactionBusiness
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		ITransaction? transaction = await _transactionService.GetTransaction(
-			transactionId,
-			cancellationToken);
+		ITransaction? transaction =
+			await _transactionService.GetTransaction(
+				transactionId,
+				cancellationToken);
 
 		if (transaction is null) throw new TransactionNotFoundException();
 
@@ -141,7 +142,7 @@ public class TransactionBusiness : ITransactionBusiness
 		return result;
 	}
 
-	private async Task<IAccountType> GetRequiredAccountType(
+	public async Task<IAccountType> GetRequiredAccountType(
 		IAccount account,
 		CancellationToken cancellationToken)
 	{
@@ -159,7 +160,7 @@ public class TransactionBusiness : ITransactionBusiness
 		return result;
 	}
 
-	private async Task<IUser> GetRequiredUser(
+	public async Task<IUser> GetRequiredUser(
 		int id,
 		CancellationToken cancellationToken)
 	{
@@ -177,7 +178,7 @@ public class TransactionBusiness : ITransactionBusiness
 		return result;
 	}
 
-	private async Task<Identity<int>> CreateRequiredTransaction(
+	public async Task<Identity<int>> CreateRequiredTransaction(
 		IUser? user,
 		IAccount account,
 		TransactionType transactionType,
@@ -246,8 +247,9 @@ public class TransactionBusiness : ITransactionBusiness
 	public static decimal GetAdjustedAmount(
 		ITransaction transaction)
 	{
-		if (!Enum.IsDefined(typeof(TransactionType), transaction.TransactionType)) throw new TransactionTypeOutOfRangeException();
-		
+		if (!Enum.IsDefined(typeof(TransactionType), transaction.TransactionType))
+			throw new TransactionTypeOutOfRangeException();
+
 		return transaction.TransactionType
 			switch
 			{

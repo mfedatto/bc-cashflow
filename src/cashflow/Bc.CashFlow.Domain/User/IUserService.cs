@@ -8,7 +8,7 @@ public interface IUserService
 		DateTime? createdUntil,
 		CancellationToken cancellationToken);
 
-	Task<IUser> GetSingleUser(
+	Task<IUser?> GetSingleUser(
 		int id,
 		CancellationToken cancellationToken);
 }

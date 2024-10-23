@@ -31,19 +31,14 @@ public class UserService : IUserService
 			cancellationToken);
 	}
 
-	public async Task<IUser> GetSingleUser(
+	public async Task<IUser?> GetSingleUser(
 		int id,
 		CancellationToken cancellationToken)
 	{
 		IUser? result = await _uow.UserRepository.GetSingleUser(
 			id,
 			cancellationToken);
-
-		if (result is null)
-		{
-			throw new UserNotFoundException();
-		}
-
+		
 		return result;
 	}
 }
