@@ -32,7 +32,7 @@ public class UserBusinessTests
 				DateTime.Now.AddDays(1),
 				DateTime.Now.AddDays(10));
 			yield return new(
-				new List<IUser> 
+				new List<IUser>
 				{
 					new Mock<IUser>().Object
 				},
@@ -40,10 +40,10 @@ public class UserBusinessTests
 				DateTime.Now.AddDays(2),
 				DateTime.Now.AddDays(20));
 			yield return new(
-				new List<IUser> 
+				new List<IUser>
 				{
 					new Mock<IUser>().Object,
-						new Mock<IUser>().Object
+					new Mock<IUser>().Object
 				},
 				"dog",
 				DateTime.Now.AddDays(3),
@@ -56,17 +56,6 @@ public class UserBusinessTests
 		}
 	}
 
-	public static IEnumerable<TestCaseData> UserBusinessGetSingleUserSuccessCases
-	{
-		get
-		{
-			yield return new(1);
-			yield return new(2);
-			yield return new(8);
-			yield return new(-10);
-		}
-	}
-
 	[TestCaseSource(nameof(UserBusinessGetUsersSuccessCases))]
 	public async Task GivenUserBusiness_WhenGetUsers_ThenReturnsSameUsersObtainedFromService(
 		IEnumerable<IUser> expected,
@@ -75,9 +64,10 @@ public class UserBusinessTests
 		DateTime? createdUntil)
 	{
 		// Arrange
-		_userServiceMock.Setup(
-				s =>
-					s.GetUsers(
+		_userServiceMock
+			.Setup(
+				us =>
+					us.GetUsers(
 						username,
 						createdSince,
 						createdUntil,
@@ -98,14 +88,25 @@ public class UserBusinessTests
 			{
 				Assert.That(actual, Is.EqualTo(expected));
 				_userServiceMock.Verify(
-					s =>
-						s.GetUsers(
+					us =>
+						us.GetUsers(
 							username,
 							createdSince,
 							createdUntil,
 							It.IsAny<CancellationToken>()),
 					Times.Once);
 			});
+	}
+
+	public static IEnumerable<TestCaseData> UserBusinessGetSingleUserSuccessCases
+	{
+		get
+		{
+			yield return new(1);
+			yield return new(2);
+			yield return new(8);
+			yield return new(-10);
+		}
 	}
 
 	[TestCaseSource(nameof(UserBusinessGetSingleUserSuccessCases))]
@@ -115,7 +116,8 @@ public class UserBusinessTests
 		// Arrange
 		IUser expected = new Mock<IUser>().Object;
 
-		_userServiceMock.Setup(
+		_userServiceMock
+			.Setup(
 				s =>
 					s.GetSingleUser(
 						userId,
@@ -135,8 +137,8 @@ public class UserBusinessTests
 				Assert.That(actual, Is.Not.Null);
 				Assert.That(actual, Is.EqualTo(expected));
 				_userServiceMock.Verify(
-					s =>
-						s.GetSingleUser(
+					us =>
+						us.GetSingleUser(
 							userId,
 							It.IsAny<CancellationToken>()),
 					Times.Once);

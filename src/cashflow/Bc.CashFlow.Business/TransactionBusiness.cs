@@ -110,7 +110,7 @@ public class TransactionBusiness : ITransactionBusiness
 
 		decimal adjustedAmount = GetAdjustedAmount(
 			transaction);
-		
+
 		await _accountService.UpdateBalance(
 			transaction.AccountId,
 			adjustedAmount,
@@ -218,6 +218,12 @@ public class TransactionBusiness : ITransactionBusiness
 		TransactionType transactionType,
 		decimal amount)
 	{
+		if ((int)transactionType is not (int)TransactionType.Credit
+		    && (int)transactionType is not (int)TransactionType.Debit)
+		{
+			throw new TransactionTypeOutOfRangeException();
+		}
+
 		if (transactionType is TransactionType.Debit)
 		{
 			return 0;
@@ -230,6 +236,8 @@ public class TransactionBusiness : ITransactionBusiness
 		IAccountType accountType,
 		DateTime transactionDate)
 	{
+		if (accountType.PaymentDueDays < 0) throw new NegativePaymentDueDaysException();
+
 		return transactionDate.AddDays(accountType.PaymentDueDays);
 	}
 
