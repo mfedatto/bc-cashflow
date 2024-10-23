@@ -56,22 +56,24 @@ public class AccountService : IAccountService
 		DateTime? createdAtUntil,
 		CancellationToken cancellationToken)
 	{
-		IEnumerable<Identity<int>> accountsIdsList = await GetAccountsId(
-			userId,
-			accountTypeId,
-			name,
-			initialBalanceFrom,
-			initialBalanceTo,
-			currentBalanceFrom,
-			currentBalanceTo,
-			balanceUpdatedAtSince,
-			balanceUpdatedAtUntil,
-			createdAtSince,
-			createdAtUntil,
-			cancellationToken);
-		IEnumerable<IAccount> result = await GetAccounts(
-			accountsIdsList,
-			cancellationToken);
+		IEnumerable<Identity<int>> accountsIdsList =
+			await GetAccountsId(
+				userId,
+				accountTypeId,
+				name,
+				initialBalanceFrom,
+				initialBalanceTo,
+				currentBalanceFrom,
+				currentBalanceTo,
+				balanceUpdatedAtSince,
+				balanceUpdatedAtUntil,
+				createdAtSince,
+				createdAtUntil,
+				cancellationToken);
+		IEnumerable<IAccount> result =
+			await GetAccounts(
+				accountsIdsList,
+				cancellationToken);
 
 		return result;
 	}
@@ -131,9 +133,10 @@ public class AccountService : IAccountService
 		int id,
 		CancellationToken cancellationToken)
 	{
-		IAccount? cachedValue = await _cc.Account.GetValue(
-			id.ToString(),
-			cancellationToken);
+		IAccount? cachedValue =
+			await _cc.Account.GetValue(
+				id.ToString(),
+				cancellationToken);
 
 		if (cachedValue is not null)
 		{
@@ -142,9 +145,10 @@ public class AccountService : IAccountService
 			return cachedValue;
 		}
 
-		IAccount? persistedValue = await UpdateCache(
-			id,
-			cancellationToken);
+		IAccount? persistedValue =
+			await UpdateCache(
+				id,
+				cancellationToken);
 
 		return persistedValue;
 	}
@@ -153,9 +157,10 @@ public class AccountService : IAccountService
 		int id,
 		CancellationToken cancellationToken)
 	{
-		IAccount? persistedValue = await _uow.AccountRepository.GetAccount(
-			id,
-			cancellationToken);
+		IAccount? persistedValue =
+			await _uow.AccountRepository.GetAccount(
+				id,
+				cancellationToken);
 
 		if (persistedValue is null)
 		{
@@ -193,9 +198,10 @@ public class AccountService : IAccountService
 
 		foreach (Identity<int> identity in accountsIdsList)
 		{
-			IAccount? account = await GetAccount(
-				identity.Value,
-				cancellationToken);
+			IAccount? account =
+				await GetAccount(
+					identity.Value,
+					cancellationToken);
 
 			if (account is null)
 			{
@@ -209,30 +215,25 @@ public class AccountService : IAccountService
 	}
 
 	public async Task UpdateBalance(
-		ITransaction transaction,
+		int transactionId,
+		int accountId,
+		decimal adjustedAmount,
 		CancellationToken cancellationToken)
 	{
-		IAccount? account = await GetAccount(
-			transaction.AccountId,
-			cancellationToken);
+		IAccount? account =
+			await GetAccount(
+				accountId,
+				cancellationToken);
 
 		if (account is null) throw new AccountNotFoundException();
 
-		decimal adjustedAmount =
-			transaction.TransactionType switch
-			{
-				TransactionType.Credit => transaction.Amount - (transaction.TransactionFee ?? 0),
-				TransactionType.Debit => transaction.Amount * -1,
-				_ => throw new TransactionTypeOutOfRangeException()
-			};
-
 		await _uow.AccountRepository.UpdateBalance(
-			transaction.AccountId,
+			accountId,
 			adjustedAmount,
 			cancellationToken);
 
 		await UpdateCache(
-			transaction.AccountId,
+			accountId,
 			cancellationToken);
 	}
 }

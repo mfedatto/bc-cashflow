@@ -108,8 +108,13 @@ public class TransactionBusiness : ITransactionBusiness
 
 		if (transaction is null) throw new TransactionNotFoundException();
 
+		decimal adjustedAmount = GetAdjustedAmount(
+			transaction);
+		
 		await _accountService.UpdateBalance(
-			transaction,
+			transaction.Id,
+			transaction.AccountId,
+			adjustedAmount,
 			cancellationToken);
 	}
 
@@ -209,7 +214,7 @@ public class TransactionBusiness : ITransactionBusiness
 		return result;
 	}
 
-	private static decimal GetTransactionFee(
+	public static decimal GetTransactionFee(
 		IAccountType accountType,
 		TransactionType transactionType,
 		decimal amount)
@@ -222,10 +227,22 @@ public class TransactionBusiness : ITransactionBusiness
 		return amount * accountType.BaseFee;
 	}
 
-	private static DateTime GetProjectedRepaymentDate(
+	public static DateTime GetProjectedRepaymentDate(
 		IAccountType accountType,
 		DateTime transactionDate)
 	{
 		return transactionDate.AddDays(accountType.PaymentDueDays);
+	}
+
+	public static decimal GetAdjustedAmount(
+		ITransaction transaction)
+	{
+		return transaction.TransactionType
+			switch
+			{
+				TransactionType.Credit => transaction.Amount - (transaction.TransactionFee ?? 0),
+				TransactionType.Debit => transaction.Amount * -1,
+				_ => throw new TransactionTypeOutOfRangeException()
+			};
 	}
 }
