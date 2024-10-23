@@ -22,7 +22,7 @@ public class UserBusinessTests
 			_userServiceMock.Object);
 	}
 
-	public static IEnumerable<TestCaseData> UserBusinessGetUsersSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetUsersSuccessCases
 	{
 		get
 		{
@@ -56,8 +56,8 @@ public class UserBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(UserBusinessGetUsersSuccessCases))]
-	public async Task GivenUserBusiness_WhenGetUsers_ThenReturnsSameUsersObtainedFromService(
+	[TestCaseSource(nameof(GivenGetUsersSuccessCases))]
+	public async Task GivenGetUsers_WhenSuccessData_ThenReturnsSameUsersObtainedFromService(
 		IEnumerable<IUser> expected,
 		string? username,
 		DateTime? createdSince,
@@ -98,7 +98,7 @@ public class UserBusinessTests
 			});
 	}
 
-	public static IEnumerable<TestCaseData> UserBusinessGetSingleUserSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetSingleUserSuccessCases
 	{
 		get
 		{
@@ -109,8 +109,8 @@ public class UserBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(UserBusinessGetSingleUserSuccessCases))]
-	public async Task GivenUserBusiness_WhenGetSingleUser_ThenReturnsSameUserObtainedFromService(
+	[TestCaseSource(nameof(GivenGetSingleUserSuccessCases))]
+	public async Task GivenGetSingleUser_WhenSuccessData_ThenReturnsSameUserObtainedFromService(
 		int userId)
 	{
 		// Arrange

@@ -43,6 +43,12 @@ public class TransactionBusiness : ITransactionBusiness
 		DateTime? projectedRepaymentDateUntil,
 		CancellationToken cancellationToken)
 	{
+		if (transactionType is not null
+		    && !Enum.IsDefined(typeof(TransactionType), transactionType))
+		{
+			throw new TransactionTypeOutOfRangeException();
+		}
+
 		return await _transactionService.GetTransactions(
 			userId,
 			accountId,
@@ -117,7 +123,7 @@ public class TransactionBusiness : ITransactionBusiness
 			cancellationToken);
 	}
 
-	private async Task<IAccount> GetRequiredAccount(
+	public async Task<IAccount> GetRequiredAccount(
 		int id,
 		CancellationToken cancellationToken)
 	{
@@ -218,11 +224,7 @@ public class TransactionBusiness : ITransactionBusiness
 		TransactionType transactionType,
 		decimal amount)
 	{
-		if ((int)transactionType is not (int)TransactionType.Credit
-		    && (int)transactionType is not (int)TransactionType.Debit)
-		{
-			throw new TransactionTypeOutOfRangeException();
-		}
+		if (!Enum.IsDefined(typeof(TransactionType), transactionType)) throw new TransactionTypeOutOfRangeException();
 
 		if (transactionType is TransactionType.Debit)
 		{
@@ -244,6 +246,8 @@ public class TransactionBusiness : ITransactionBusiness
 	public static decimal GetAdjustedAmount(
 		ITransaction transaction)
 	{
+		if (!Enum.IsDefined(typeof(TransactionType), transaction.TransactionType)) throw new TransactionTypeOutOfRangeException();
+		
 		return transaction.TransactionType
 			switch
 			{

@@ -36,7 +36,7 @@ public class TransactionBusinessTests
 			_userServiceMock.Object);
 	}
 
-	public static IEnumerable<TestCaseData> TransactionBusinessGetTransactionFeeSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetTransactionFeeSuccessCases
 	{
 		get
 		{
@@ -59,8 +59,8 @@ public class TransactionBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(TransactionBusinessGetTransactionFeeSuccessCases))]
-	public void GivenTransactionBusiness_WhenGetTransactionFee_ThenReturnsExpectedFee(
+	[TestCaseSource(nameof(GivenGetTransactionFeeSuccessCases))]
+	public void GivenGetTransactionFee_WhenSuccessData_ThenReturnsExpectedFee(
 		decimal baseFee,
 		TransactionType transactionType,
 		decimal amount,
@@ -85,7 +85,7 @@ public class TransactionBusinessTests
 		Assert.That(actualFee, Is.EqualTo(expected));
 	}
 
-	public static IEnumerable<TestCaseData> TransactionBusinessGetTransactionFeeInvalidTransactionTypeCases
+	public static IEnumerable<TestCaseData> GivenGetTransactionFeeInvalidTransactionTypeCases
 	{
 		get
 		{
@@ -94,8 +94,8 @@ public class TransactionBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(TransactionBusinessGetTransactionFeeInvalidTransactionTypeCases))]
-	public void GivenTransactionBusiness_WhenGetTransactionFee_ThenThrowsTransactionTypeOutOfRangeException(
+	[TestCaseSource(nameof(GivenGetTransactionFeeInvalidTransactionTypeCases))]
+	public void GivenGetTransactionFee_WhenInvalidTransactionType_ThenThrowsTransactionTypeOutOfRangeException(
 		decimal baseFee,
 		TransactionType transactionType,
 		decimal amount)
@@ -121,7 +121,7 @@ public class TransactionBusinessTests
 			});
 	}
 
-	public static IEnumerable<TestCaseData> TransactionBusinessGetProjectedRepaymentDateSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetProjectedRepaymentDateSuccessCases
 	{
 		get
 		{
@@ -136,8 +136,8 @@ public class TransactionBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(TransactionBusinessGetProjectedRepaymentDateSuccessCases))]
-	public void GivenTransactionBusiness_WhenGetProjectedRepaymentDate_ThenReturnsExpectedProjectedRepaymentDate(
+	[TestCaseSource(nameof(GivenGetProjectedRepaymentDateSuccessCases))]
+	public void GivenGetProjectedRepaymentDate_WhenSuccessData_ThenReturnsExpectedProjectedRepaymentDate(
 		int paymentDueDays,
 		DateTime transactionDate,
 		DateTime expected)
@@ -161,7 +161,7 @@ public class TransactionBusinessTests
 	}
 
 	[Test]
-	public void GivenTransactionBusiness_WhenGetProjectedRepaymentDate_ThenThrowsNegativePaymentDueDaysException()
+	public void GivenGetProjectedRepaymentDate_WhenNegativePaymentDueDays_ThenThrowsNegativePaymentDueDaysException()
 	{
 		// Arrange
 		Mock<IAccountType> accountTypeMock = new();
@@ -183,7 +183,7 @@ public class TransactionBusinessTests
 			});
 	}
 
-	public static IEnumerable<TestCaseData> TransactionBusinessGetAdjustedAmountSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetAdjustedAmountSuccessCases
 	{
 		get
 		{
@@ -200,8 +200,8 @@ public class TransactionBusinessTests
 		}
 	}
 
-	[TestCaseSource(nameof(TransactionBusinessGetAdjustedAmountSuccessCases))]
-	public void GivenTransactionBusiness_WhenGetAdjustedAmount_ThenReturnsExpectedAdjustedAmount(
+	[TestCaseSource(nameof(GivenGetAdjustedAmountSuccessCases))]
+	public void GivenGetAdjustedAmount_WhenSuccessData_ThenReturnsExpectedAdjustedAmount(
 		TransactionType transactionType,
 		decimal amount,
 		decimal? transactionFee,
@@ -231,7 +231,7 @@ public class TransactionBusinessTests
 	}
 
 	[Test]
-	public void GivenTransactionBusiness_WhenGetAdjustedAmount_ThenThrowsTransactionTypeOutOfRangeException()
+	public void GivenGetAdjustedAmount_WhenInvalidTransactionType_ThenThrowsTransactionTypeOutOfRangeException()
 	{
 		// Arrange
 		Mock<ITransaction> transactionMock = new();
@@ -253,110 +253,185 @@ public class TransactionBusinessTests
 			});
 	}
 
-	public static IEnumerable<TestCaseData> TransactionBusinessGetTransactionsSuccessCases
+	public static IEnumerable<TestCaseData> GivenGetTransactionsSuccessCases
 	{
 		get
 		{
 			yield return new(null, null, null, null, null, null, null, null, null, null);
 			yield return new(null, null, null, null, null, null, null, null, null, new List<ITransaction>());
 			yield return new(null, null, null, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new(null, null, null, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new(null, null, null, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new(null, null, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new(null, null, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, null, null, null, null, null, null, null, null, null);
 			yield return new((int?)2, null, null, null, null, null, null, null, null, new List<ITransaction>());
 			yield return new((int?)3, null, null, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, null, null, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, null, null, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)4, null, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, null, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new((int?)1, (int?)11, null, null, null,  null, null, null, null, null);
-			yield return new((int?)2, (int?)12, null, null, null,  null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, null, null, null,  null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, null, null, null,  null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, null, null, null,  null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)1, (int?)11, null, null, null, null, null, null, null, null);
+			yield return new((int?)2, (int?)12, null, null, null, null, null, null, null, new List<ITransaction>());
+			yield return new((int?)3, (int?)13, null, null, null, null, null, null, null, new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, null, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, TransactionType.Debit, null, null, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, TransactionType.Debit, null, null, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, TransactionType.Debit, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, TransactionType.Debit, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, TransactionType.Debit, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, TransactionType.Debit, null, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, TransactionType.Debit, null, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, TransactionType.Debit, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, TransactionType.Debit, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, TransactionType.Credit, null, null, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, TransactionType.Credit, null, null, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, TransactionType.Credit, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, TransactionType.Credit, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, TransactionType.Credit, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, TransactionType.Credit, null, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, TransactionType.Credit, null, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, TransactionType.Credit, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, TransactionType.Credit, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, (TransactionType?)0, null, null, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, (TransactionType?)0, null, null, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, (TransactionType?)0, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, (TransactionType?)0, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, (TransactionType?)0, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, (TransactionType?)0, null, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)0, null, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)0, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)0, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, (TransactionType?)1, null, null, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, (TransactionType?)1, null, null, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, (TransactionType?)1, null, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, (TransactionType?)1, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, (TransactionType?)1, null, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, (TransactionType?)1, null, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)1, null, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)1, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)1, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, (TransactionType?)1, (decimal?)101, null, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, (TransactionType?)1, (decimal?)102, null, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, (TransactionType?)1, (decimal?)103, null, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, (TransactionType?)1, (decimal?)104, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, (TransactionType?)1, (decimal?)105, null, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, (TransactionType?)1, (decimal?)102, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)1, (decimal?)103, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)1, (decimal?)104, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)1, (decimal?)105, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new((int?)1, (int?)11, (TransactionType?)0, (decimal?)101, (decimal?)201, null, null, null, null, null);
-			yield return new((int?)2, (int?)12, (TransactionType?)0, (decimal?)102, (decimal?)202, null, null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, (TransactionType?)0, (decimal?)103, (decimal?)203, null, null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, (TransactionType?)0, (decimal?)104, (decimal?)204, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, (TransactionType?)0, (decimal?)105, (decimal?)205, null, null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)1, (int?)11, (TransactionType?)0, (decimal?)101, (decimal?)201, null, null, null,
+				null, null);
+			yield return new((int?)2, (int?)12, (TransactionType?)0, (decimal?)102, (decimal?)202, null, null, null,
+				null, new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)0, (decimal?)103, (decimal?)203, null, null, null,
+				null, new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)0, (decimal?)104, (decimal?)204, null, null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)0, (decimal?)105, (decimal?)205, null, null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new((int?)1, (int?)11, null, (decimal?)101, (decimal?)201, DateTime.Now.AddDays(1), null, null, null, null);
-			yield return new((int?)2, (int?)12, null, (decimal?)102, (decimal?)202, DateTime.Now.AddDays(2), null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, null, (decimal?)103, (decimal?)203, DateTime.Now.AddDays(3), null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, null, (decimal?)104, (decimal?)204, DateTime.Now.AddDays(4), null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, null, (decimal?)105, (decimal?)205, DateTime.Now.AddDays(5), null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)1, (int?)11, null, (decimal?)101, (decimal?)201, DateTime.Now.AddDays(1), null, null,
+				null, null);
+			yield return new((int?)2, (int?)12, null, (decimal?)102, (decimal?)202, DateTime.Now.AddDays(2), null, null,
+				null, new List<ITransaction>());
+			yield return new((int?)3, (int?)13, null, (decimal?)103, (decimal?)203, DateTime.Now.AddDays(3), null, null,
+				null, new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, null, (decimal?)104, (decimal?)204, DateTime.Now.AddDays(4), null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, null, (decimal?)105, (decimal?)205, DateTime.Now.AddDays(5), null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new((int?)1, (int?)11, TransactionType.Credit, (decimal?)101m, (decimal?)201m, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), null, null, null);
-			yield return new((int?)2, (int?)12, TransactionType.Credit, (decimal?)102m, (decimal?)202m, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, TransactionType.Credit, (decimal?)103m, (decimal?)203m, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, TransactionType.Credit, (decimal?)104m, (decimal?)204m, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, TransactionType.Credit, (decimal?)105m, (decimal?)205m, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)1, (int?)11, TransactionType.Credit, (decimal?)101m, (decimal?)201m,
+				DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), null, null, null);
+			yield return new((int?)2, (int?)12, TransactionType.Credit, (decimal?)102m, (decimal?)202m,
+				DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), null, null, new List<ITransaction>());
+			yield return new((int?)3, (int?)13, TransactionType.Credit, (decimal?)103m, (decimal?)203m,
+				DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), null, null, new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, TransactionType.Credit, (decimal?)104m, (decimal?)204m,
+				DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, TransactionType.Credit, (decimal?)105m, (decimal?)205m,
+				DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
 			yield return new((int?)1, (int?)11, null, null, null, DateTime.Now.AddDays(1), null, null, null, null);
-			yield return new((int?)2, (int?)12, null, null, null, DateTime.Now.AddDays(2), null, null, null, new List<ITransaction>());
-			yield return new((int?)3, (int?)13, null, null, null, DateTime.Now.AddDays(3), null, null, null, new List<ITransaction> { });
-			yield return new((int?)4, (int?)14, null, null, null, DateTime.Now.AddDays(4), null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new((int?)5, (int?)15, null, null, null, DateTime.Now.AddDays(5), null, null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new((int?)2, (int?)12, null, null, null, DateTime.Now.AddDays(2), null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, null, null, null, DateTime.Now.AddDays(3), null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, null, null, null, DateTime.Now.AddDays(4), null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, null, null, null, DateTime.Now.AddDays(5), null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new(null, (int?)11, (TransactionType?)1, null, (decimal?)101m, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), null, null, null);
-			yield return new(null, (int?)12, (TransactionType?)1, null, (decimal?)102m, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), null, null, new List<ITransaction>());
-			yield return new(null, (int?)13, (TransactionType?)1, null, (decimal?)103m, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), null, null, new List<ITransaction> { });
-			yield return new(null, (int?)14, (TransactionType?)1, null, (decimal?)104m, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new(null, (int?)15, (TransactionType?)1, null, (decimal?)105m, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), null, null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new(null, (int?)11, (TransactionType?)1, null, (decimal?)101m, DateTime.Now.AddDays(1),
+				DateTime.Now.AddDays(11), null, null, null);
+			yield return new(null, (int?)12, (TransactionType?)1, null, (decimal?)102m, DateTime.Now.AddDays(2),
+				DateTime.Now.AddDays(12), null, null, new List<ITransaction>());
+			yield return new(null, (int?)13, (TransactionType?)1, null, (decimal?)103m, DateTime.Now.AddDays(3),
+				DateTime.Now.AddDays(13), null, null, new List<ITransaction> { });
+			yield return new(null, (int?)14, (TransactionType?)1, null, (decimal?)104m, DateTime.Now.AddDays(4),
+				DateTime.Now.AddDays(14), null, null, new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new(null, (int?)15, (TransactionType?)1, null, (decimal?)105m, DateTime.Now.AddDays(5),
+				DateTime.Now.AddDays(15), null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new(null, (int?)11, TransactionType.Debit, (decimal?)101m, null, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), DateTime.Now.AddDays(1001), null, null);
-			yield return new(null, (int?)12, TransactionType.Debit, (decimal?)102m, null, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), DateTime.Now.AddDays(1002), null, new List<ITransaction>());
-			yield return new(null, (int?)13, TransactionType.Debit, (decimal?)103m, null, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), DateTime.Now.AddDays(1003), null, new List<ITransaction> { });
-			yield return new(null, (int?)14, TransactionType.Debit, (decimal?)104m, null, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), DateTime.Now.AddDays(1004), null, new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new(null, (int?)15, TransactionType.Debit, (decimal?)105m, null, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), DateTime.Now.AddDays(1005), null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new(null, (int?)11, TransactionType.Debit, (decimal?)101m, null, DateTime.Now.AddDays(1),
+				DateTime.Now.AddDays(11), DateTime.Now.AddDays(1001), null, null);
+			yield return new(null, (int?)12, TransactionType.Debit, (decimal?)102m, null, DateTime.Now.AddDays(2),
+				DateTime.Now.AddDays(12), DateTime.Now.AddDays(1002), null, new List<ITransaction>());
+			yield return new(null, (int?)13, TransactionType.Debit, (decimal?)103m, null, DateTime.Now.AddDays(3),
+				DateTime.Now.AddDays(13), DateTime.Now.AddDays(1003), null, new List<ITransaction> { });
+			yield return new(null, (int?)14, TransactionType.Debit, (decimal?)104m, null, DateTime.Now.AddDays(4),
+				DateTime.Now.AddDays(14), DateTime.Now.AddDays(1004), null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new(null, (int?)15, TransactionType.Debit, (decimal?)105m, null, DateTime.Now.AddDays(5),
+				DateTime.Now.AddDays(15), DateTime.Now.AddDays(1005), null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new(null, (int?)11, null, null, (decimal?)101m, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), DateTime.Now.AddDays(1001), DateTime.Now.AddDays(2001), null);
-			yield return new(null, (int?)12, null, null, (decimal?)102m, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), DateTime.Now.AddDays(1002), DateTime.Now.AddDays(2002), new List<ITransaction>());
-			yield return new(null, (int?)13, null, null, (decimal?)103m, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), DateTime.Now.AddDays(1003), DateTime.Now.AddDays(2003), new List<ITransaction> { });
-			yield return new(null, (int?)14, null, null, (decimal?)104m, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), DateTime.Now.AddDays(1004), DateTime.Now.AddDays(2004), new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new(null, (int?)15, null, null, (decimal?)105m, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), DateTime.Now.AddDays(1005), DateTime.Now.AddDays(2005), new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new(null, (int?)11, null, null, (decimal?)101m, DateTime.Now.AddDays(1),
+				DateTime.Now.AddDays(11), DateTime.Now.AddDays(1001), DateTime.Now.AddDays(2001), null);
+			yield return new(null, (int?)12, null, null, (decimal?)102m, DateTime.Now.AddDays(2),
+				DateTime.Now.AddDays(12), DateTime.Now.AddDays(1002), DateTime.Now.AddDays(2002),
+				new List<ITransaction>());
+			yield return new(null, (int?)13, null, null, (decimal?)103m, DateTime.Now.AddDays(3),
+				DateTime.Now.AddDays(13), DateTime.Now.AddDays(1003), DateTime.Now.AddDays(2003),
+				new List<ITransaction> { });
+			yield return new(null, (int?)14, null, null, (decimal?)104m, DateTime.Now.AddDays(4),
+				DateTime.Now.AddDays(14), DateTime.Now.AddDays(1004), DateTime.Now.AddDays(2004),
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new(null, (int?)15, null, null, (decimal?)105m, DateTime.Now.AddDays(5),
+				DateTime.Now.AddDays(15), DateTime.Now.AddDays(1005), DateTime.Now.AddDays(2005),
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 
-			yield return new(null, null, null, null, (decimal?)101m, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11), null, DateTime.Now.AddDays(2001), null);
-			yield return new(null, null, null, null, (decimal?)102m, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12), null, DateTime.Now.AddDays(2002), new List<ITransaction>());
-			yield return new(null, null, null, null, (decimal?)103m, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), null, DateTime.Now.AddDays(2003), new List<ITransaction> { });
-			yield return new(null, null, null, null, (decimal?)104m, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14), null, DateTime.Now.AddDays(2004), new List<ITransaction> { new Mock<ITransaction>().Object });
-			yield return new(null, null, null, null, (decimal?)105m, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15), null, DateTime.Now.AddDays(2005), new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+			yield return new(null, null, null, null, (decimal?)101m, DateTime.Now.AddDays(1), DateTime.Now.AddDays(11),
+				null, DateTime.Now.AddDays(2001), null);
+			yield return new(null, null, null, null, (decimal?)102m, DateTime.Now.AddDays(2), DateTime.Now.AddDays(12),
+				null, DateTime.Now.AddDays(2002), new List<ITransaction>());
+			yield return new(null, null, null, null, (decimal?)103m, DateTime.Now.AddDays(3), DateTime.Now.AddDays(13),
+				null, DateTime.Now.AddDays(2003), new List<ITransaction> { });
+			yield return new(null, null, null, null, (decimal?)104m, DateTime.Now.AddDays(4), DateTime.Now.AddDays(14),
+				null, DateTime.Now.AddDays(2004), new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new(null, null, null, null, (decimal?)105m, DateTime.Now.AddDays(5), DateTime.Now.AddDays(15),
+				null, DateTime.Now.AddDays(2005),
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
 		}
 	}
 
-	[TestCaseSource(nameof(TransactionBusinessGetTransactionsSuccessCases))]
-	public async Task GivenTransactionBusiness_WhenGetTransactions_ThenReturnsExpectedTransactions(
+	[TestCaseSource(nameof(GivenGetTransactionsSuccessCases))]
+	public async Task GivenGetTransactions_WhenSuccessData_ThenReturnsExpectedTransactions(
 		int? userId,
 		int? accountId,
 		TransactionType? transactionType,
@@ -418,6 +493,167 @@ public class TransactionBusinessTests
 							projectedRepaymentDateUntil,
 							It.IsAny<CancellationToken>()),
 					Times.Once);
+			});
+	}
+
+	public static IEnumerable<TestCaseData> GivenGetTransactionsInvalidCases
+	{
+		get
+		{
+			yield return new((int?)1, (int?)11, (TransactionType?)-1, null, null, null, null, null, null, null);
+			yield return new((int?)2, (int?)12, (TransactionType?)-1, null, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)-1, null, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)-1, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)-1, null, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+
+			yield return new((int?)1, (int?)11, (TransactionType?)-1, (decimal?)101, null, null, null, null, null,
+				null);
+			yield return new((int?)2, (int?)12, (TransactionType?)-1, (decimal?)102, null, null, null, null, null,
+				new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)-1, (decimal?)103, null, null, null, null, null,
+				new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)-1, (decimal?)104, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)-1, (decimal?)105, null, null, null, null, null,
+				new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+
+			yield return new((int?)1, (int?)11, (TransactionType?)-1, (decimal?)101, (decimal?)201, null, null, null,
+				null, null);
+			yield return new((int?)2, (int?)12, (TransactionType?)-1, (decimal?)102, (decimal?)202, null, null, null,
+				null, new List<ITransaction>());
+			yield return new((int?)3, (int?)13, (TransactionType?)-1, (decimal?)103, (decimal?)203, null, null, null,
+				null, new List<ITransaction> { });
+			yield return new((int?)4, (int?)14, (TransactionType?)-1, (decimal?)104, (decimal?)204, null, null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object });
+			yield return new((int?)5, (int?)15, (TransactionType?)-1, (decimal?)105, (decimal?)205, null, null, null,
+				null, new List<ITransaction> { new Mock<ITransaction>().Object, new Mock<ITransaction>().Object });
+		}
+	}
+
+	[TestCaseSource(nameof(GivenGetTransactionsInvalidCases))]
+	public void GivenGetTransactions_WhenInvalidTransactionType_ThenThrowsTransactionTypeOutOfRangeException(
+		int? userId,
+		int? accountId,
+		TransactionType? transactionType,
+		decimal? amountFrom,
+		decimal? amountTo,
+		DateTime? transactionDateSince,
+		DateTime? transactionDateUntil,
+		DateTime? projectedRepaymentDateSince,
+		DateTime? projectedRepaymentDateUntil,
+		IEnumerable<ITransaction> expected)
+	{
+		// Arrange
+		_transactionServiceMock
+			.Setup(
+				ts =>
+					ts.GetTransactions(
+						userId,
+						accountId,
+						transactionType,
+						amountFrom,
+						amountTo,
+						transactionDateSince,
+						transactionDateUntil,
+						projectedRepaymentDateSince,
+						projectedRepaymentDateUntil,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expected);
+
+		// Assert
+		Assert.Throws<TransactionTypeOutOfRangeException>(
+			() =>
+			{
+				// Act
+				_ = _transactionBusiness.GetTransactions(
+						userId,
+						accountId,
+						transactionType,
+						amountFrom,
+						amountTo,
+						transactionDateSince,
+						transactionDateUntil,
+						projectedRepaymentDateSince,
+						projectedRepaymentDateUntil,
+						CancellationToken.None)
+					.GetAwaiter()
+					.GetResult();
+			});
+	}
+
+	public static IEnumerable<TestCaseData> GivenGetRequiredAccountSuccessCases
+	{
+		get { yield return new(1); }
+	}
+
+	[TestCaseSource(nameof(GivenGetRequiredAccountSuccessCases))]
+	public async Task GivenGetRequiredAccount_WhenSuccessData_ThenReturnsExpectedAccount(
+		int idAccount)
+	{
+		// Arrange
+		IAccount expected = new Mock<IAccount>().Object;
+
+		_accountServiceMock
+			.Setup(
+				a =>
+					a.GetAccount(
+						idAccount,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expected);
+
+		// Act
+		IAccount actual =
+			await _transactionBusiness
+				.GetRequiredAccount(
+					idAccount,
+					CancellationToken.None);
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.That(actual, Is.EqualTo(expected));
+				_accountServiceMock.Verify(
+					a =>
+						a.GetAccount(
+							idAccount,
+							It.IsAny<CancellationToken>()),
+					Times.Once);
+			});
+	}
+
+	public static IEnumerable<TestCaseData> GivenGetRequiredAccountCancellationTokenCancelRequestedCases
+	{
+		get { yield return new(1, new CancellationTokenSource()); }
+	}
+
+	[TestCaseSource(nameof(GivenGetRequiredAccountCancellationTokenCancelRequestedCases))]
+	public async Task GivenGetRequiredAccount_WhenCancellationTokenRequestCancel_ThenThrowsThrowOperationCanceledException(
+		int idAccount,
+		CancellationTokenSource cancellationTokenSource)
+	{
+		// Arrange
+		await cancellationTokenSource.CancelAsync();
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.Throws<OperationCanceledException>(
+					() =>
+					{
+						// Act
+						_ = _transactionBusiness
+							.GetRequiredAccount(
+								idAccount,
+								cancellationTokenSource.Token)
+							.GetAwaiter()
+							.GetResult();
+					});
 			});
 	}
 }
