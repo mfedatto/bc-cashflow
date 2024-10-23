@@ -215,7 +215,6 @@ public class AccountService : IAccountService
 	}
 
 	public async Task UpdateBalance(
-		int transactionId,
 		int accountId,
 		decimal adjustedAmount,
 		CancellationToken cancellationToken)

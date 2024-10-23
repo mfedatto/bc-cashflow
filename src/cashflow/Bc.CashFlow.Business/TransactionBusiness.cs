@@ -112,7 +112,6 @@ public class TransactionBusiness : ITransactionBusiness
 			transaction);
 		
 		await _accountService.UpdateBalance(
-			transaction.Id,
 			transaction.AccountId,
 			adjustedAmount,
 			cancellationToken);

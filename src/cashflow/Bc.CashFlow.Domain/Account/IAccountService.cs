@@ -46,7 +46,6 @@ public interface IAccountService
 		CancellationToken cancellationToken);
 
 	Task UpdateBalance(
-		int transactionId,
 		int accountId,
 		decimal adjustedAmount,
 		CancellationToken cancellationToken);
