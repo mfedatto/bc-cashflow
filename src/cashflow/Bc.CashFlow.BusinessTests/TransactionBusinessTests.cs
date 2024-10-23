@@ -1399,16 +1399,17 @@ public class TransactionBusinessTests
 	}
 
 	[TestCaseSource(nameof(GivenCreateRequiredTransactionReturnsNullCases))]
-	public void GivenCreateRequiredTransaction_WhenReturnsNull_ThenThrowsTransactionCreationReturnedNullIdentityException(
-		int accountId,
-		int accountTypeId,
-		decimal baseFee,
-		int? userId,
-		TransactionType transactionType,
-		decimal amount,
-		string? description,
-		DateTime transactionDate,
-		int? expectedId)
+	public void
+		GivenCreateRequiredTransaction_WhenReturnsNull_ThenThrowsTransactionCreationReturnedNullIdentityException(
+			int accountId,
+			int accountTypeId,
+			decimal baseFee,
+			int? userId,
+			TransactionType transactionType,
+			decimal amount,
+			string? description,
+			DateTime transactionDate,
+			int? expectedId)
 	{
 		// Arrange
 		Mock<IAccountType> accountTypeMock = new();
@@ -1478,17 +1479,17 @@ public class TransactionBusinessTests
 					() =>
 					{
 						// Act
-						_ =_transactionBusiness
-								.CreateRequiredTransaction(
-									user,
-									account,
-									transactionType,
-									amount,
-									description,
-									transactionDate,
-									CancellationToken.None)
-								.GetAwaiter()
-								.GetResult();
+						_ = _transactionBusiness
+							.CreateRequiredTransaction(
+								user,
+								account,
+								transactionType,
+								amount,
+								description,
+								transactionDate,
+								CancellationToken.None)
+							.GetAwaiter()
+							.GetResult();
 					});
 				_accountTypeServiceMock
 					.Verify(
@@ -1511,6 +1512,97 @@ public class TransactionBusinessTests
 								projectedRepaymentDate,
 								It.IsAny<CancellationToken>()),
 						Times.Once);
+			});
+	}
+
+	public static IEnumerable<TestCaseData> GivenCreateRequiredTransactionCancellationTokenCancelRequestedCases
+	{
+		get
+		{
+			yield return new(101, 1011, 10101m, (int?)101001, TransactionType.Debit, 101101m, "",
+				DateTime.Now.AddDays(101), 1011001);
+			yield return new(102, 1012, 10102m, (int?)101002, TransactionType.Credit, 101102m, "",
+				DateTime.Now.AddDays(102), 1011002);
+			yield return new(103, 1013, 10103m, null, TransactionType.Debit, 101103m, "string3 desc",
+				DateTime.Now.AddDays(103), 1011003);
+			yield return new(104, 1014, 10104m, null, TransactionType.Credit, 101104m, "string4 desc",
+				DateTime.Now.AddDays(104), 1011004);
+			yield return new(105, 1015, 10105m, null, TransactionType.Debit, 101105m, null, DateTime.Now.AddDays(105),
+				1011005);
+			yield return new(106, 1016, 10106m, null, TransactionType.Credit, 101106m, null, DateTime.Now.AddDays(106),
+				1011006);
+			yield return new(107, 1017, 10107m, (int?)101007, TransactionType.Debit, 101107m, null,
+				DateTime.Now.AddDays(107), 1011007);
+			yield return new(108, 1018, 10108m, (int?)101008, TransactionType.Credit, 101108m, null,
+				DateTime.Now.AddDays(108), 1011008);
+
+			yield return new(201, 2011, 20101m, (int?)201001, 0, 201101m, "", DateTime.Now.AddDays(201), 2011001);
+			yield return new(202, 2012, 20102m, (int?)201002, 1, 201102m, "", DateTime.Now.AddDays(202), 2011002);
+			yield return new(203, 2013, 20103m, null, 0, 201103m, "string3 desc", DateTime.Now.AddDays(203), 2011003);
+			yield return new(204, 2014, 20104m, null, 1, 201104m, "string4 desc", DateTime.Now.AddDays(204), 2011004);
+			yield return new(205, 2015, 20105m, null, 0, 201105m, null, DateTime.Now.AddDays(205), 2011005);
+			yield return new(206, 2016, 20106m, null, 1, 201106m, null, DateTime.Now.AddDays(206), 2011006);
+			yield return new(207, 2017, 20107m, (int?)201007, 0, 201107m, null, DateTime.Now.AddDays(207), 2011007);
+			yield return new(208, 2018, 20108m, (int?)201008, 1, 201108m, null, DateTime.Now.AddDays(208), 2011008);
+		}
+	}
+
+	[TestCaseSource(nameof(GivenCreateRequiredTransactionCancellationTokenCancelRequestedCases))]
+	public void
+		GivenCreateRequiredTransaction_WhenCancellationTokenCancelRequested_ThenThrowsOperationCanceledException(
+			int accountId,
+			int accountTypeId,
+			decimal baseFee,
+			int? userId,
+			TransactionType transactionType,
+			decimal amount,
+			string? description,
+			DateTime transactionDate,
+			int? expectedId)
+	{
+		Mock<IAccount> accountMock = new();
+
+		accountMock.Setup(e => e.Id).Returns(accountId);
+		accountMock.Setup(e => e.AccountTypeId).Returns(accountTypeId);
+
+		// ReSharper disable once SuggestVarOrType_SimpleTypes
+		var account = accountMock.Object;
+
+		IUser? user = null;
+
+		if (userId is not null)
+		{
+			Mock<IUser> userMock = new();
+
+			userMock.Setup(u => u.Id).Returns(userId.Value);
+
+			user = userMock.Object;
+		}
+
+		CancellationTokenSource cancellationTokenSource = new();
+
+		cancellationTokenSource.Cancel();
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.Throws<OperationCanceledException>(
+					() =>
+					{
+						// Act
+						_ = _transactionBusiness
+							.CreateRequiredTransaction(
+								user,
+								account,
+								transactionType,
+								amount,
+								description,
+								transactionDate,
+								cancellationTokenSource.Token)
+							.GetAwaiter()
+							.GetResult();
+					});
 			});
 	}
 }
