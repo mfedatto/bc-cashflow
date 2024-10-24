@@ -115,8 +115,7 @@ public class TransactionBusiness : ITransactionBusiness
 
 		if (transaction is null) throw new TransactionNotFoundException();
 
-		decimal adjustedAmount = GetAdjustedAmount(
-			transaction);
+		decimal adjustedAmount = transaction.GetAdjustedAmount();
 
 		await _accountService.UpdateBalance(
 			transaction.AccountId,
@@ -242,20 +241,5 @@ public class TransactionBusiness : ITransactionBusiness
 		if (accountType.PaymentDueDays < 0) throw new NegativePaymentDueDaysException();
 
 		return transactionDate.AddDays(accountType.PaymentDueDays);
-	}
-
-	public static decimal GetAdjustedAmount(
-		ITransaction transaction)
-	{
-		if (!Enum.IsDefined(typeof(TransactionType), transaction.TransactionType))
-			throw new TransactionTypeOutOfRangeException();
-
-		return transaction.TransactionType
-			switch
-			{
-				TransactionType.Credit => transaction.Amount - (transaction.TransactionFee ?? 0),
-				TransactionType.Debit => transaction.Amount * -1,
-				_ => throw new TransactionTypeOutOfRangeException()
-			};
 	}
 }

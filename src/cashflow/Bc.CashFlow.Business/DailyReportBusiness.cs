@@ -46,9 +46,9 @@ public class DailyReportBusiness : IDailyReportBusiness
 			await _dailyReportService.CreateDailyReport(
 				null,
 				referenceDay,
-				totalTransactionsBalanceReport.TotalDebts,
+				totalTransactionsBalanceReport.TotalDebits,
 				totalTransactionsBalanceReport.TotalCredits,
-				totalTransactionsBalanceReport.TotalFee,
+				totalTransactionsBalanceReport.TotalFees,
 				totalTransactionsBalanceReport.FinalBalance,
 				cancellationToken);
 
@@ -69,9 +69,9 @@ public class DailyReportBusiness : IDailyReportBusiness
 				accountIdentityId.Value,
 				cancellationToken);
 
-			result.AddDebit(accountTransactionsBalanceReport.TotalDebts);
+			result.AddDebit(accountTransactionsBalanceReport.TotalDebits);
 			result.AddCredit(accountTransactionsBalanceReport.TotalCredits);
-			result.AddFee(accountTransactionsBalanceReport.TotalFee);
+			result.AddFee(accountTransactionsBalanceReport.TotalFees);
 		}
 
 		return result;
@@ -95,9 +95,9 @@ public class DailyReportBusiness : IDailyReportBusiness
 			await _dailyReportService.CreateDailyReport(
 				accountId,
 				referenceDay,
-				result.TotalDebts,
+				result.TotalDebits,
 				result.TotalCredits,
-				result.TotalFee,
+				result.TotalFees,
 				result.FinalBalance,
 				cancellationToken);
 
@@ -179,30 +179,30 @@ public class DailyReportBusiness : IDailyReportBusiness
 
 	public struct TransactionsBalanceReport
 	{
-		public decimal TotalDebts { get; private set; } = 0m;
+		public decimal TotalDebits { get; private set; } = 0m;
 		public decimal TotalCredits { get; private set; } = 0m;
-		public decimal TotalFee { get; private set; } = 0m;
-		public decimal BalanceBeforeFees => TotalCredits - TotalDebts;
-		public decimal FinalBalance => BalanceBeforeFees - TotalFee;
+		public decimal TotalFees { get; private set; } = 0m;
+		public decimal BalanceBeforeFees => TotalCredits - TotalDebits;
+		public decimal FinalBalance => BalanceBeforeFees - TotalFees;
 
 		public TransactionsBalanceReport()
 		{
 		}
 
 		public TransactionsBalanceReport(
-			decimal debts,
+			decimal debits,
 			decimal credits,
-			decimal fee)
+			decimal fees)
 		{
-			TotalDebts = debts;
+			TotalDebits = debits;
 			TotalCredits = credits;
-			TotalFee = fee;
+			TotalFees = fees;
 		}
 
 		public void AddDebit(
 			decimal value)
 		{
-			TotalDebts += value;
+			TotalDebits += value;
 		}
 
 		public void AddCredit(
@@ -214,7 +214,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		public void AddFee(
 			decimal value)
 		{
-			TotalFee += value;
+			TotalFees += value;
 		}
 	}
 }
