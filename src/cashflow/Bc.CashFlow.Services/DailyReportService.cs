@@ -18,7 +18,7 @@ public class DailyReportService : IDailyReportService
 		_uow = uow;
 	}
 
-	public async Task<Identity<int>> CreateDailyReport(
+	public async Task<Identity<int>?> CreateDailyReport(
 		int? accountId,
 		DateTime date,
 		decimal totalDebits,

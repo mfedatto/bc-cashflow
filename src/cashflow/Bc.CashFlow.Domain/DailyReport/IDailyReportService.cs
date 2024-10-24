@@ -4,7 +4,7 @@ namespace Bc.CashFlow.Domain.DailyReport;
 
 public interface IDailyReportService
 {
-	Task<Identity<int>> CreateDailyReport(
+	Task<Identity<int>?> CreateDailyReport(
 		int? accountId,
 		DateTime date,
 		decimal totalDebits,

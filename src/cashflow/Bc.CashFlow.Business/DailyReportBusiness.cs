@@ -42,7 +42,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 				referenceDay,
 				cancellationToken);
 
-		Identity<int> totalDailyReport =
+		Identity<int>? totalDailyReport =
 			await _dailyReportService.CreateDailyReport(
 				null,
 				referenceDay,
@@ -91,7 +91,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		TransactionsBalanceReport result =
 			GetTransactionsBalanceReport(transactionsList);
 
-		Identity<int> accountDailyReport =
+		Identity<int>? accountDailyReport =
 			await _dailyReportService.CreateDailyReport(
 				accountId,
 				referenceDay,
@@ -136,7 +136,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<Identity<int>> dailyReportsIdsList =
-			await GetDailyReportsId(
+			await GetDailyReportsIdList(
 				referenceDateSince,
 				referenceDateUntil,
 				cancellationToken);
@@ -148,7 +148,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		return dailyReportsList;
 	}
 
-	public async Task<IEnumerable<Identity<int>>> GetDailyReportsId(
+	public async Task<IEnumerable<Identity<int>>> GetDailyReportsIdList(
 		DateTime? referenceDateSince,
 		DateTime? referenceDateUntil,
 		CancellationToken cancellationToken)

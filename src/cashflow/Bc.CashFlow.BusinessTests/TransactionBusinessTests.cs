@@ -14,7 +14,7 @@ namespace Bc.CashFlow.BusinessTests;
 [SuppressMessage("ReSharper", "RedundantEmptyObjectOrCollectionInitializer")]
 public class TransactionBusinessTests
 {
-	private Mock<ILogger<TransactionBusiness>> _logger;
+	private Mock<ILogger<TransactionBusiness>> _loggerMock;
 	private Mock<ITransactionService> _transactionServiceMock;
 	private Mock<IAccountService> _accountServiceMock;
 	private Mock<IAccountTypeService> _accountTypeServiceMock;
@@ -24,13 +24,13 @@ public class TransactionBusinessTests
 	[SetUp]
 	public void Setup()
 	{
-		_logger = new();
+		_loggerMock = new();
 		_transactionServiceMock = new();
 		_accountServiceMock = new();
 		_accountTypeServiceMock = new();
 		_userServiceMock = new();
 		_transactionBusiness = new(
-			_logger.Object,
+			_loggerMock.Object,
 			_transactionServiceMock.Object,
 			_accountServiceMock.Object,
 			_accountTypeServiceMock.Object,
