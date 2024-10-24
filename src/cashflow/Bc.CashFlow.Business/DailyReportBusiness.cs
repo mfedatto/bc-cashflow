@@ -106,7 +106,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		return result;
 	}
 
-	public TransactionsBalanceReport GetTransactionsBalanceReport(
+	public static TransactionsBalanceReport GetTransactionsBalanceReport(
 		IEnumerable<ITransaction> transactionsList)
 	{
 		TransactionsBalanceReport result = new();
@@ -124,7 +124,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 					break;
 			}
 
-			result.AddCredit(transaction.TransactionFee ?? 0);
+			result.AddFee(transaction.TransactionFee ?? 0);
 		}
 
 		return result;
