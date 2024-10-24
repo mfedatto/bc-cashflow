@@ -122,10 +122,10 @@ public class UserBusinessTests
 					s.GetSingleUser(
 						userId,
 						It.IsAny<CancellationToken>()))
-			.ReturnsAsync(expected);
+			.ReturnsAsync((IUser?)expected);
 
 		// Act
-		IUser actual =
+		IUser? actual =
 			await _userBusiness.GetSingleUser(
 				userId,
 				CancellationToken.None);

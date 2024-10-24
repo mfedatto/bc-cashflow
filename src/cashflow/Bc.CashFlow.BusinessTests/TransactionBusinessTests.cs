@@ -37,6 +37,8 @@ public class TransactionBusinessTests
 			_userServiceMock.Object);
 	}
 
+	#region GetTransactionFee
+
 	public static IEnumerable<TestCaseData> GivenGetTransactionFeeSuccessCases
 	{
 		get
@@ -124,6 +126,10 @@ public class TransactionBusinessTests
 			});
 	}
 
+	#endregion
+
+	#region GetProjectedRepaymentDate
+
 	public static IEnumerable<TestCaseData> GivenGetProjectedRepaymentDateSuccessCases
 	{
 		get
@@ -187,6 +193,10 @@ public class TransactionBusinessTests
 					DateTime.Now);
 			});
 	}
+
+	#endregion
+
+	#region GetAdjustedAmount
 
 	public static IEnumerable<TestCaseData> GivenGetAdjustedAmountSuccessCases
 	{
@@ -258,6 +268,10 @@ public class TransactionBusinessTests
 					.GetAdjustedAmount(transaction);
 			});
 	}
+
+	#endregion
+
+	#region GetTransactions
 
 	public static IEnumerable<TestCaseData> GivenGetTransactionsSuccessCases
 	{
@@ -591,6 +605,10 @@ public class TransactionBusinessTests
 			});
 	}
 
+	#endregion
+
+	#region GetRequiredAccount
+
 	public static IEnumerable<TestCaseData> GivenGetRequiredAccountSuccessCases
 	{
 		get { yield return new(1); }
@@ -666,6 +684,10 @@ public class TransactionBusinessTests
 					});
 			});
 	}
+
+	#endregion
+
+	#region GetRequiredAccountType
 
 	public static IEnumerable<TestCaseData> GivenGetRequiredAccountTypeSuccessCases
 	{
@@ -819,6 +841,10 @@ public class TransactionBusinessTests
 			});
 	}
 
+	#endregion
+
+	#region GetRequiredUser
+
 	public static IEnumerable<TestCaseData> GivenGetRequiredUserSuccessCases
 	{
 		get
@@ -950,6 +976,10 @@ public class TransactionBusinessTests
 					});
 			});
 	}
+
+	#endregion
+
+	#region UpdateAccountBalance
 
 	public static IEnumerable<TestCaseData> GivenUpdateAccountBalanceSuccessCases
 	{
@@ -1108,6 +1138,10 @@ public class TransactionBusinessTests
 					});
 			});
 	}
+
+	#endregion
+
+	#region CreateRequiredTransaction
 
 	public static IEnumerable<TestCaseData> GivenCreateRequiredTransactionSuccessCases
 	{
@@ -1605,4 +1639,192 @@ public class TransactionBusinessTests
 					});
 			});
 	}
+
+	#endregion
+
+	#region CreateTransaction
+
+	public static IEnumerable<TestCaseData> GivenCreateTransactionSuccessCases
+	{
+		get
+		{
+			yield return new(101, 1011, 10101m, 101001, TransactionType.Debit, 101101m, "", DateTime.Now.AddDays(101),
+				1011001);
+			yield return new(102, 1012, 10102m, 101002, TransactionType.Credit, 101102m, "", DateTime.Now.AddDays(102),
+				1011002);
+			yield return new(103, 1013, 10103m, 101003, TransactionType.Debit, 101103m, "string3 desc",
+				DateTime.Now.AddDays(103), 1011003);
+			yield return new(104, 1014, 10104m, 101004, TransactionType.Credit, 101104m, "string4 desc",
+				DateTime.Now.AddDays(104), 1011004);
+			yield return new(105, 1015, 10105m, 101005, TransactionType.Debit, 101105m, null, DateTime.Now.AddDays(105),
+				1011005);
+			yield return new(106, 1016, 10106m, 101006, TransactionType.Credit, 101106m, null,
+				DateTime.Now.AddDays(106), 1011006);
+			yield return new(107, 1017, 10107m, 101007, TransactionType.Debit, 101107m, null, DateTime.Now.AddDays(107),
+				1011007);
+			yield return new(108, 1018, 10108m, 101008, TransactionType.Credit, 101108m, null,
+				DateTime.Now.AddDays(108), 1011008);
+
+			yield return new(201, 2011, 20101m, 201001, 0, 201101m, "", DateTime.Now.AddDays(201), 2011001);
+			yield return new(202, 2012, 20102m, 201002, 1, 201102m, "", DateTime.Now.AddDays(202), 2011002);
+			yield return new(203, 2013, 20103m, 201003, 0, 201103m, "string3 desc", DateTime.Now.AddDays(203), 2011003);
+			yield return new(204, 2014, 20104m, 201004, 1, 201104m, "string4 desc", DateTime.Now.AddDays(204), 2011004);
+			yield return new(205, 2015, 20105m, 201005, 0, 201105m, null, DateTime.Now.AddDays(205), 2011005);
+			yield return new(206, 2016, 20106m, 201006, 1, 201106m, null, DateTime.Now.AddDays(206), 2011006);
+			yield return new(207, 2017, 20107m, 201007, 0, 201107m, null, DateTime.Now.AddDays(207), 2011007);
+			yield return new(208, 2018, 20108m, 201008, 1, 201108m, null, DateTime.Now.AddDays(208), 2011008);
+		}
+	}
+
+	[TestCaseSource(nameof(GivenCreateTransactionSuccessCases))]
+	public async Task GivenCreateTransaction_WhenSuccessData_ThenReturnsExpectedIdentity(
+		int accountId,
+		int accountTypeId,
+		decimal baseFee,
+		int userId,
+		TransactionType transactionType,
+		decimal amount,
+		string? description,
+		DateTime transactionDate,
+		int expectedId)
+	{
+		// Arrange
+		Mock<IAccountType> accountTypeMock = new();
+
+		accountTypeMock.Setup(e => e.Id).Returns(accountTypeId);
+		accountTypeMock.Setup(e => e.BaseFee).Returns(baseFee);
+
+		// ReSharper disable once SuggestVarOrType_SimpleTypes
+		var accountType = accountTypeMock.Object;
+
+		Mock<IAccount> accountMock = new();
+
+		accountMock.Setup(e => e.Id).Returns(accountId);
+		accountMock.Setup(e => e.AccountTypeId).Returns(accountTypeId);
+
+		// ReSharper disable once SuggestVarOrType_SimpleTypes
+		var account = accountMock.Object;
+
+		_accountTypeServiceMock
+			.Setup(
+				a =>
+					a.GetAccountType(
+						accountTypeId,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync((IAccountType?)accountType);
+
+		decimal transactionFee = TransactionBusiness.GetTransactionFee(
+			accountType,
+			transactionType,
+			amount);
+		DateTime projectedRepaymentDate = TransactionBusiness.GetProjectedRepaymentDate(
+			accountType,
+			transactionDate);
+		Identity<int> expected =
+			new()
+			{
+				Value = expectedId
+			};
+
+		_accountServiceMock
+			.Setup(
+				a =>
+					a.GetAccount(
+						accountId,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(account);
+
+		Mock<IUser> userMock = new();
+
+		userMock.Setup(e => e.Id).Returns(userId);
+
+		// ReSharper disable once SuggestVarOrType_SimpleTypes
+		var user = userMock.Object;
+
+		_userServiceMock
+			.Setup(
+				a =>
+					a.GetSingleUser(
+						userId,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(user);
+
+		_transactionServiceMock
+			.Setup(
+				ts =>
+					ts.CreateTransaction(
+						userId,
+						accountId,
+						transactionType,
+						amount,
+						description,
+						transactionDate,
+						transactionFee,
+						projectedRepaymentDate,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(expected);
+
+		_transactionServiceMock
+			.Setup(
+				ts =>
+					ts.PublishNewTransactionToBalance(
+						expected.Value,
+						It.IsAny<CancellationToken>()));
+
+		// Act
+		Identity<int>? actual =
+			await _transactionBusiness
+				.CreateTransaction(
+					userId,
+					accountId,
+					transactionType,
+					amount,
+					description,
+					transactionDate,
+					CancellationToken.None);
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.That(actual, Is.EqualTo(expected));
+				_accountTypeServiceMock
+					.Verify(
+						a =>
+							a.GetAccountType(
+								accountTypeId,
+								It.IsAny<CancellationToken>()),
+						Times.Once);
+				_userServiceMock
+					.Verify(
+						a =>
+							a.GetSingleUser(
+								userId,
+								It.IsAny<CancellationToken>()),
+						Times.Once);
+				_transactionServiceMock
+					.Verify(
+						ts =>
+							ts.CreateTransaction(
+								userId,
+								accountId,
+								transactionType,
+								amount,
+								description,
+								transactionDate,
+								transactionFee,
+								projectedRepaymentDate,
+								It.IsAny<CancellationToken>()),
+						Times.Once);
+				_transactionServiceMock
+					.Verify(
+						ts =>
+							ts.PublishNewTransactionToBalance(
+								expected!.Value,
+								It.IsAny<CancellationToken>()),
+						Times.Once);
+			});
+	}
+
+	#endregion
 }

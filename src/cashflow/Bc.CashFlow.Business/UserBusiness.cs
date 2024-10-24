@@ -34,10 +34,12 @@ public class UserBusiness : IUserBusiness
 		int id,
 		CancellationToken cancellationToken)
 	{
-		IUser result = await _userService.GetSingleUser(
+		IUser? result = await _userService.GetSingleUser(
 			id,
 			cancellationToken);
 
+		if (result is null) throw new UserNotFoundException();
+		
 		return result;
 	}
 }

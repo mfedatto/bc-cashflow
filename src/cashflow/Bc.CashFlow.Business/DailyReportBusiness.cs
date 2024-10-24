@@ -36,80 +36,98 @@ public class DailyReportBusiness : IDailyReportBusiness
 		IEnumerable<Identity<int>> accountIdsList =
 			await _accountService.GetAccountsId(
 				cancellationToken);
-
-		Dictionary<int, decimal> accountsDebitBalance = new();
-		Dictionary<int, decimal> accountsCreditBalance = new();
-		Dictionary<int, decimal> accountsFeeBalance = new();
-		decimal totalDebitBalance = 0;
-		decimal totalCreditBalance = 0;
-		decimal totalFeeBalance = 0;
-
-		foreach (Identity<int> accountIdentityId in accountIdsList)
-		{
-			IEnumerable<ITransaction> transactionsList =
-				await _transactionService.GetTransactionsOnProjectedRepaymentDate(
-					accountIdentityId.Value,
-					referenceDay,
-					cancellationToken);
-
-			accountsDebitBalance.Add(accountIdentityId.Value, 0);
-			accountsCreditBalance.Add(accountIdentityId.Value, 0);
-			accountsFeeBalance.Add(accountIdentityId.Value, 0);
-
-			foreach (ITransaction transaction in transactionsList)
-			{
-				if (transaction.TransactionType is TransactionType.Debit)
-				{
-					accountsDebitBalance[accountIdentityId.Value] += transaction.Amount;
-					totalDebitBalance += transaction.Amount;
-				}
-				else
-				{
-					accountsCreditBalance[accountIdentityId.Value] += transaction.Amount;
-					totalCreditBalance += transaction.Amount;
-				}
-
-				accountsFeeBalance[accountIdentityId.Value] += transaction.TransactionFee ?? 0;
-				totalFeeBalance += transaction.TransactionFee ?? 0;
-			}
-
-			decimal accountBalance = accountsCreditBalance[accountIdentityId.Value]
-			                         - accountsDebitBalance[accountIdentityId.Value]
-			                         - accountsFeeBalance[accountIdentityId.Value];
-
-			Identity<int> accountDailyReport =
-				await _dailyReportService.CreateDailyReport(
-					accountIdentityId.Value,
-					referenceDay,
-					accountsDebitBalance[accountIdentityId.Value],
-					accountsCreditBalance[accountIdentityId.Value],
-					accountsFeeBalance[accountIdentityId.Value],
-					accountBalance,
-					cancellationToken);
-
-			if (accountDailyReport is null)
-			{
-				throw new DailyReportCreationReturnedNullIdentityException();
-			}
-		}
-
-		decimal balanceBeforeFee = totalCreditBalance - totalDebitBalance;
-		decimal finalBalance = balanceBeforeFee - totalFeeBalance;
+		TransactionsBalanceReport totalTransactionsBalanceReport =
+			await ConsolidateAccountsListBalance(
+				accountIdsList,
+				referenceDay,
+				cancellationToken);
 
 		Identity<int> totalDailyReport =
 			await _dailyReportService.CreateDailyReport(
 				null,
 				referenceDay,
-				totalDebitBalance,
-				totalCreditBalance,
-				balanceBeforeFee,
-				finalBalance,
+				totalTransactionsBalanceReport.TotalDebts,
+				totalTransactionsBalanceReport.TotalCredits,
+				totalTransactionsBalanceReport.TotalFee,
+				totalTransactionsBalanceReport.FinalBalance,
 				cancellationToken);
 
-		if (totalDailyReport is null)
+		if (totalDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
+	}
+
+	public async Task<TransactionsBalanceReport> ConsolidateAccountsListBalance(
+		IEnumerable<Identity<int>> accountIdsList,
+		DateTime referenceDay,
+		CancellationToken cancellationToken)
+	{
+		TransactionsBalanceReport result = new();
+
+		foreach (Identity<int> accountIdentityId in accountIdsList)
 		{
-			throw new DailyReportCreationReturnedNullIdentityException();
+			TransactionsBalanceReport accountTransactionsBalanceReport = await ConsolidateAccountDailyReport(
+				referenceDay,
+				accountIdentityId.Value,
+				cancellationToken);
+
+			result.AddDebit(accountTransactionsBalanceReport.TotalDebts);
+			result.AddCredit(accountTransactionsBalanceReport.TotalCredits);
+			result.AddFee(accountTransactionsBalanceReport.TotalFee);
 		}
+
+		return result;
+	}
+
+	public async Task<TransactionsBalanceReport> ConsolidateAccountDailyReport(
+		DateTime referenceDay,
+		int accountId,
+		CancellationToken cancellationToken)
+	{
+		IEnumerable<ITransaction> transactionsList =
+			await _transactionService.GetTransactionsOnProjectedRepaymentDate(
+				accountId,
+				referenceDay,
+				cancellationToken);
+
+		TransactionsBalanceReport result =
+			GetTransactionsBalanceReport(transactionsList);
+
+		Identity<int> accountDailyReport =
+			await _dailyReportService.CreateDailyReport(
+				accountId,
+				referenceDay,
+				result.TotalDebts,
+				result.TotalCredits,
+				result.TotalFee,
+				result.FinalBalance,
+				cancellationToken);
+
+		if (accountDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
+
+		return result;
+	}
+
+	public TransactionsBalanceReport GetTransactionsBalanceReport(
+		IEnumerable<ITransaction> transactionsList)
+	{
+		TransactionsBalanceReport result = new();
+
+		foreach (ITransaction transaction in transactionsList)
+		{
+			// ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+			switch (transaction.TransactionType)
+			{
+				case TransactionType.Debit:
+					result.AddDebit(transaction.Amount);
+					break;
+				case TransactionType.Credit:
+					result.AddCredit(transaction.Amount);
+					break;
+			}
+
+			result.AddCredit(transaction.TransactionFee ?? 0);
+		}
+
+		return result;
 	}
 
 	public async Task<IEnumerable<IDailyReport>> GetDailyReports(
@@ -130,7 +148,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		return dailyReportsList;
 	}
 
-	private async Task<IEnumerable<Identity<int>>> GetDailyReportsId(
+	public async Task<IEnumerable<Identity<int>>> GetDailyReportsId(
 		DateTime? referenceDateSince,
 		DateTime? referenceDateUntil,
 		CancellationToken cancellationToken)
@@ -141,7 +159,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 			cancellationToken);
 	}
 
-	private async Task<IEnumerable<IDailyReport>> GetDailyReports(
+	public async Task<IEnumerable<IDailyReport>> GetDailyReports(
 		IEnumerable<Identity<int>> dailyReportsIdsList,
 		CancellationToken cancellationToken)
 	{
@@ -157,5 +175,46 @@ public class DailyReportBusiness : IDailyReportBusiness
 		}
 
 		return result;
+	}
+
+	public struct TransactionsBalanceReport
+	{
+		public decimal TotalDebts { get; private set; } = 0m;
+		public decimal TotalCredits { get; private set; } = 0m;
+		public decimal TotalFee { get; private set; } = 0m;
+		public decimal BalanceBeforeFees => TotalCredits - TotalDebts;
+		public decimal FinalBalance => BalanceBeforeFees - TotalFee;
+
+		public TransactionsBalanceReport()
+		{
+		}
+
+		public TransactionsBalanceReport(
+			decimal debts,
+			decimal credits,
+			decimal fee)
+		{
+			TotalDebts = debts;
+			TotalCredits = credits;
+			TotalFee = fee;
+		}
+
+		public void AddDebit(
+			decimal value)
+		{
+			TotalDebts += value;
+		}
+
+		public void AddCredit(
+			decimal value)
+		{
+			TotalCredits += value;
+		}
+
+		public void AddFee(
+			decimal value)
+		{
+			TotalFee += value;
+		}
 	}
 }
