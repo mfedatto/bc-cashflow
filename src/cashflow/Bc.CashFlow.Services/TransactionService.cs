@@ -167,14 +167,14 @@ public class TransactionService : ITransactionService
 
 		_logger.LogDebug("Transaction id {id} retrieved from database.", id);
 
-		await SetAccountCache(
+		await SetTransactionCache(
 			persistedValue,
 			cancellationToken);
 
 		return persistedValue;
 	}
 
-	private async Task SetAccountCache(
+	private async Task SetTransactionCache(
 		ITransaction transaction,
 		CancellationToken cancellationToken)
 	{

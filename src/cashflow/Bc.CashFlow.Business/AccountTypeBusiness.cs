@@ -24,6 +24,8 @@ public class AccountTypeBusiness : IAccountTypeBusiness
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
 		int? paymentDueDaysTo,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		return await _accountTypeService.GetAccountTypes(
@@ -32,6 +34,8 @@ public class AccountTypeBusiness : IAccountTypeBusiness
 			baseFeeTo,
 			paymentDueDaysFrom,
 			paymentDueDaysTo,
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 

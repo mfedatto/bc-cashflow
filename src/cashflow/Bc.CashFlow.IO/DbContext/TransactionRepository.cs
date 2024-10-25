@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using Bc.CashFlow.Domain.DbContext;
 using Bc.CashFlow.Domain.Transaction;
 using Dapper;
@@ -106,6 +107,7 @@ public class TransactionRepository : ITransactionRepository
 			cancellationToken);
 	}
 
+	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
 	private IEnumerable<TransactionIdDto> GetTransactionsIdWithTotal(
 		int? userId,
 		int? accountId,
@@ -147,6 +149,7 @@ public class TransactionRepository : ITransactionRepository
 		return result;
 	}
 
+	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
 	public async Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
 		int? accountId,
 		DateTime projectedRepaymentDate,
@@ -179,6 +182,7 @@ public class TransactionRepository : ITransactionRepository
 					));
 	}
 
+	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
 	public async Task<ITransaction?> GetSingleTransaction(
 		int? accountId,
 		CancellationToken cancellationToken)
@@ -210,6 +214,7 @@ public class TransactionRepository : ITransactionRepository
 			.SingleOrDefault();
 	}
 
+	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
 	public async Task<Identity<int>?> CreateTransaction(
 		int? userId,
 		int accountId,
@@ -248,6 +253,7 @@ public class TransactionRepository : ITransactionRepository
 			.SingleOrDefault();
 	}
 
+	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
 	public async Task<ITransaction?> GetTransaction(
 		int transactionId,
 		CancellationToken cancellationToken)

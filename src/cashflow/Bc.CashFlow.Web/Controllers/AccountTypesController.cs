@@ -26,6 +26,8 @@ public class AccountTypesController : Controller
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
 		int? paymentDueDaysTo,
+		[FromQuery(Name = "paging-skip")] int? pagingSkip,
+		[FromQuery(Name = "paging-limit")] int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<IAccountType> accountTypes =
@@ -35,6 +37,8 @@ public class AccountTypesController : Controller
 				baseFeeTo,
 				paymentDueDaysFrom,
 				paymentDueDaysTo,
+				pagingSkip,
+				pagingLimit,
 				cancellationToken);
 		AccountTypeIndexViewModel viewModel = new(accountTypes);
 

@@ -1,6 +1,7 @@
 using System.Data;
 using System.Data.Common;
 using Bc.CashFlow.Domain.AccountType;
+using Bc.CashFlow.Domain.DbContext;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
@@ -27,16 +28,77 @@ public class AccountTypeRepository : IAccountTypeRepository
 		_factory = factory;
 	}
 
-	public async Task<IEnumerable<IAccountType>> GetAccountTypes(
+	public async Task<IEnumerable<Identity<int>>> GetAccountTypesId(
 		string? name,
 		decimal? baseFeeFrom,
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
 		int? paymentDueDaysTo,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
+		return (await Task.Run(
+				() =>
+					GetAccountTypesIdWithTotal(
+						name,
+						baseFeeFrom,
+						baseFeeTo,
+						paymentDueDaysFrom,
+						paymentDueDaysTo,
+						pagingSkip,
+						pagingLimit,
+						out _),
+				cancellationToken))
+			.Select(
+				row =>
+					new Identity<int> {
+						Value = row.AccountTypeId,
+					});
+	}
+
+	public async Task<int> GetAccountTypesTotal(
+		string? name,
+		decimal? baseFeeFrom,
+		decimal? baseFeeTo,
+		int? paymentDueDaysFrom,
+		int? paymentDueDaysTo,
+		int? pagingSkip,
+		int? pagingLimit,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		return (await Task.Run(
+				() =>
+				{
+					GetAccountTypesIdWithTotal(
+						name,
+						baseFeeFrom,
+						baseFeeTo,
+						paymentDueDaysFrom,
+						paymentDueDaysTo,
+						pagingSkip,
+						pagingLimit,
+						out int pagingTotal);
+
+					return pagingTotal;
+				},
+				cancellationToken));
+	}
+
+	private IEnumerable<AccountTypeIdDto> GetAccountTypesIdWithTotal(
+		string? name,
+		decimal? baseFeeFrom,
+		decimal? baseFeeTo,
+		int? paymentDueDaysFrom,
+		int? paymentDueDaysTo,
+		int? pagingSkip,
+		int? pagingLimit,
+		out int pagingTotal)
+	{
 		DynamicParameters parameters = new();
 
 		parameters.Add("@AccountTypeName", name, DbType.String);
@@ -44,20 +106,20 @@ public class AccountTypeRepository : IAccountTypeRepository
 		parameters.Add("@BaseFeeTo", baseFeeTo, DbType.Decimal);
 		parameters.Add("@PaymentDueDaysFrom", paymentDueDaysFrom, DbType.Int32);
 		parameters.Add("@PaymentDueDaysTo", paymentDueDaysTo, DbType.Int32);
+		parameters.Add("@PagingSkip", pagingSkip, DbType.Int32);
+		parameters.Add("@PagingLimit", pagingLimit, DbType.Int32);
+		parameters.Add("@PagingTotal", DbType.Int32, direction: ParameterDirection.Output);
 
-		return (await _dbConnection.QueryAsync<AccountTypeDto>(
+		IEnumerable<AccountTypeIdDto> result =
+			_dbConnection.Query<AccountTypeIdDto>(
 				"usp_SelectAccountTypes",
 				parameters,
 				commandType: CommandType.StoredProcedure,
-				transaction: _dbTransaction))
-			.Select(
-				row =>
-					_factory.Create(
-						row.AccountTypeId,
-						row.AccountTypeName,
-						row.BaseFee,
-						row.PaymentDueDays
-					));
+				transaction: _dbTransaction);
+
+		pagingTotal = parameters.Get<int>("@PagingTotal");
+		
+		return result;
 	}
 
 	public async Task<IAccountType?> GetAccountType(
@@ -87,7 +149,12 @@ public class AccountTypeRepository : IAccountTypeRepository
 	}
 }
 
-file record AccountTypeDto
+internal record AccountTypeIdDto
+{
+	public required int AccountTypeId { get; init; }
+}
+
+internal record AccountTypeDto
 {
 	public required int AccountTypeId { get; init; }
 	public required string AccountTypeName { get; init; }

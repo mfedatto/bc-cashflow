@@ -8,6 +8,8 @@ public interface IAccountTypeService
 		decimal? baseFeeTo,
 		int? paymentDueDaysFrom,
 		int? paymentDueDaysTo,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IAccountType?> GetAccountType(

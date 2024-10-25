@@ -113,28 +113,32 @@ Ambiente novo, construído totalmente pelo `docker compose up -d`.
 | Cache     | KeyDB (Redis)        | `cashflow-cache`     | `0.6` |     `64` |
 | Queue     | RabbitMQ             | `cashflow-queue`     | `0.2` |    `128` |
 
-##### Setup
+##### Test plan
 
-- Warmup
-  - Threads: `3`
-  - Ramp-up period: `0`
-  - Loop count: `3`
-  - Infinte: `false`
-  - Same user in each iteration: `true`
-  - Delay Thread creation until needed: `false`
-  - Specifiy Thread lifetime: `false`
-  - Duration (seconds): `disabled`
-  - Startup delay (seconds): `disabled`
-- Load test
-  - Threads: `10`
-  - Ramp-up period: `0`
-  - Loop count: ``
-  - Infinte: `true`
-  - Same user in each iteration: `true`
-  - Delay Thread creation until needed: `false`
-  - Specifiy Thread lifetime: `true`
-  - Duration (seconds): `120`
-  - Startup delay (seconds): `0`
+- Test plan
+  - Settings
+    - Connection timeout (ms): `3000`
+    - Response timeout (ms): `1000`
+  - Warmup
+    - Threads: `3`
+    - Ramp-up period: `0`
+    - Loop count: `3`
+    - Infinte: `false`
+    - Same user in each iteration: `true`
+    - Delay Thread creation until needed: `false`
+    - Specifiy Thread lifetime: `false`
+    - Duration (seconds): `disabled`
+    - Startup delay (seconds): `disabled`
+  - Load test
+    - Threads: `10`
+    - Ramp-up period: `0`
+    - Loop count: ``
+    - Infinte: `true`
+    - Same user in each iteration: `true`
+    - Delay Thread creation until needed: `false`
+    - Specifiy Thread lifetime: `true`
+    - Duration (seconds): `120`
+    - Startup delay (seconds): `0`
 
 ##### Results
 
