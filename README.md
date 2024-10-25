@@ -147,6 +147,61 @@ Ambiente novo, construído totalmente pelo `docker compose up -d`.
 | `POST /Transactions/Create` |    `5901` |    `99` | `19` | `3912` |  `179.16` | `0.000%` |  `49.17623` |        `814.54` |     `19.83` |  `16961.2` |
 | TOTAL                       |   `35423` |    `31` |  `0` | `3912` |   `85.23` | `0.000%` | `295.05397` |       `2299.82` |     `50.32` |   `7981.7` |
 
+#### Run 002
+
+Ambiente novo, construído totalmente pelo `docker compose up -d`.
+
+##### Host
+
+- Intel Core i7-9700KF CPU @ 3.60/4.90GHz (stock) 8 cores
+- 64,0 GB RAM
+- Windows 11 amd64
+
+##### Containers
+
+| Component | Tecnology            | Hostname             | CPUs  | RAM (MB) |
+| :-------- | :------------------- | :------------------- | ----: | -------: |
+| Web UI    | ASP.Net 8            | `cashflow-web`       |   n/a |      n/a |
+| Scheduler | ASP.Net 8 + Hangfire | `cashflow-scheduler` |   n/a |      n/a |
+| Database  | SQL Server           | `cashflow-db`        |   n/a |      n/a |
+| Cache     | KeyDB (Redis)        | `cashflow-cache`     |   n/a |      n/a |
+| Queue     | RabbitMQ             | `cashflow-queue`     |   n/a |      n/a |
+
+##### Setup
+
+- Warmup
+  - Threads: `3`
+  - Ramp-up period: `0`
+  - Loop count: `3`
+  - Infinte: `false`
+  - Same user in each iteration: `true`
+  - Delay Thread creation until needed: `false`
+  - Specifiy Thread lifetime: `false`
+  - Duration (seconds): `disabled`
+  - Startup delay (seconds): `disabled`
+- Load test
+  - Threads: `10`
+  - Ramp-up period: `0`
+  - Loop count: ``
+  - Infinte: `true`
+  - Same user in each iteration: `true`
+  - Delay Thread creation until needed: `false`
+  - Specifiy Thread lifetime: `true`
+  - Duration (seconds): `120`
+  - Startup delay (seconds): `0`
+
+##### Results
+
+| Label                       | # Samples | Average | Min  | Max    | Std. Dev. | Error %  | Throughput  | Received KB/sec | Sent KB/sec | Avg. Bytes |
+| :-------------------------- | --------: | ------: | ---: | -----: | --------: | -------: | ----------: | --------------: | ----------: | ---------: |
+| `GET /`                     |    `9068` |     `1` |  `0` |   `41` |    `1.19` | `0.000%` |  `75.57737` |        `230.50` |      `8.78` |   `3123.0` |
+| `GET /Users`                |    `9068` |     `3` |  `0` |  `166` |    `3.20` | `0.000%` |  `75.58115` |        `260.99` |      `9.15` |   `3536.0` |
+| `GET /Users/Details/1`      |    `9068` |     `3` |  `0` |   `58` |    `2.97` | `0.000%` |  `75.57863` |        `256.92` |      `9.89` |   `3481.0` |
+| `GET /Accounts`             |    `9068` |     `4` |  `1` |  `199` |    `4.12` | `0.000%` |  `75.58997` |        `293.65` |      `9.37` |   `3978.0` |
+| `GET /Transactions`         |    `9067` |    `43` |  `3` |  `246` |   `21.67` | `0.000%` |  `75.53693` |       `1241.84` |      `9.66` |  `16834.7` |
+| `POST /Transactions/Create` |    `9064` |    `63` | `14` | `2820` |   `97.48` | `0.000%` |  `75.52138` |       `1251.44` |     `30.45` |  `16968.4` |
+| TOTAL                       |   `54403` |    `19` |  `0` | `2820` |   `47.56` | `0.000%` | `453.07516` |       `3533.47` |     `77.27` |   `7986.0` |
+
 ## Diagrama de implantação
 
 ![Deploymetn Diagram](docs/dd.png)
