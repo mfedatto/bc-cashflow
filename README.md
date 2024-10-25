@@ -112,17 +112,40 @@ Ambiente novo, construído totalmente pelo `docker compose up -d`.
 | Cache     | KeyDB (Redis)        | `cashflow-cache`     | `0.6` |     `64` |
 | Queue     | RabbitMQ             | `cashflow-queue`     | `0.2` |    `128` |
 
+##### Setup
+
+- Warmup
+  - Threads: `3`
+  - Ramp-up period: `0`
+  - Loop count: `3`
+  - Infinte: `false`
+  - Same user in each iteration: `true`
+  - Delay Thread creation until needed: `false`
+  - Specifiy Thread lifetime: `false`
+  - Duration (seconds): `disabled`
+  - Startup delay (seconds): `disabled`
+- Load test
+  - Threads: `10`
+  - Ramp-up period: `0`
+  - Loop count: ``
+  - Infinte: `true`
+  - Same user in each iteration: `true`
+  - Delay Thread creation until needed: `false`
+  - Specifiy Thread lifetime: `true`
+  - Duration (seconds): `120`
+  - Startup delay (seconds): `0`
+
 ##### Results
 
-| Label                       | # Samples | Average | Min  | Max    | Std. Dev. | Error %  | Throughput | Received KB/sec | Sent KB/sec | Avg. Bytes |
-| :-------------------------- | --------: | ------: | ---: | -----: | --------: | -------: | ---------: | --------------: | ----------: | ---------: |
-| `GET /`                     |   `11108` |     `2` |  `0` |  `818` |   `10.93` | `0.000%` |  `5.88675` |         `17.95` |      `0.68` |   `3123.0` |
-| `GET /Users`                |   `11108` |    `10` |  `0` | `1209` |   `21.05` | `0.000%` |  `5.88675` |         `20.33` |      `0.71` |   `3536.0` |
-| `GET /Users/Details/1`      |   `11106` |     `6` |  `0` |  `919` |   `14.34` | `0.000%` |  `5.88598` |         `20.01` |      `0.77` |   `3481.0` |
-| `GET /Accounts`             |   `11106` |     `9` |  `1` |  `919` |   `20.24` | `0.000%` |  `5.88596` |         `22.87` |      `0.73` |   `3978.6` |
-| `GET /Transactions`         |   `11106` |    `67` |  `3` | `1260` |   `50.08` | `0.000%` |  `5.88564` |         `96.79` |      `0.75` |  `16840.2` |
-| `POST /Transactions/Create` |   `11100` |   `103` | `20` | `1261` |   `83.42` | `0.000%` |  `5.88267` |         `97.50` |      `2.37` |  `16971.9` |
-| TOTAL                       |   `66634` |    `33` |  `0` | `1261` |   `57.06` | `0.000%` | `35.31212` |        `275.44` |      `6.02` |   `7987.4` |
+| Label                       | # Samples | Average | Min  | Max    | Std. Dev. | Error %  | Throughput  | Received KB/sec | Sent KB/sec | Avg. Bytes |
+| :-------------------------- | --------: | ------: | ---: | -----: | --------: | -------: | ----------: | --------------: | ----------: | ---------: |
+| `GET /`                     |    `5905` |     `2` |  `0` |   `68` |    `5.36` | `0.000%` |  `49.23295` |        `150.15` |      `5.72` |   `3123.0` |
+| `GET /Users`                |    `5905` |     `9` |  `0` | `1000` |   `23.08` | `0.000%` |  `49.23541` |        `170.02` |      `5.96` |   `3536.0` |
+| `GET /Users/Details/1`      |    `5905` |     `6` |  `0` |   `80` |   `10.99` | `0.000%` |  `49.21407` |        `167.30` |      `6.44` |   `3481.0` |
+| `GET /Accounts`             |    `5904` |     `9` |  `1` | `1836` |   `38.04` | `0.000%` |  `49.21682` |        `191.20` |      `6.10` |   `3978.0` |
+| `GET /Transactions`         |    `5903` |    `60` |  `4` |  `314` |   `38.25` | `0.000%` |  `49.19372` |        `808.00` |      `6.29` |  `16819.1` |
+| `POST /Transactions/Create` |    `5901` |    `99` | `19` | `3912` |  `179.16` | `0.000%` |  `49.17623` |        `814.54` |     `19.83` |  `16961.2` |
+| TOTAL                       |   `35423` |    `31` |  `0` | `3912` |   `85.23` | `0.000%` | `295.05397` |       `2299.82` |     `50.32` |   `7981.7` |
 
 ## Diagrama de implantação
 
