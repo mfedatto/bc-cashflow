@@ -55,7 +55,7 @@ public class DailyReportBusiness : IDailyReportBusiness
 		if (totalDailyReport is null) throw new DailyReportCreationReturnedNullIdentityException();
 	}
 
-	public async Task<TransactionsBalanceReport> ConsolidateAccountsListBalance(
+	private async Task<TransactionsBalanceReport> ConsolidateAccountsListBalance(
 		IEnumerable<Identity<int>> accountIdsList,
 		DateTime referenceDay,
 		CancellationToken cancellationToken)

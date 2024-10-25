@@ -87,10 +87,24 @@ public class TransactionService : ITransactionService
 		DateTime projectedRepaymentDate,
 		CancellationToken cancellationToken)
 	{
-		return await _uow.TransactionRepository.GetTransactionsByProjectedRepaymentDate(
-			accountId,
-			projectedRepaymentDate,
-			cancellationToken);
+		List<ITransaction> result = [];
+		
+		IEnumerable<Identity<int>> transactionsIdList =
+			await _uow.TransactionRepository.GetTransactionsIdByProjectedRepaymentDate(
+				accountId,
+				projectedRepaymentDate,
+				cancellationToken);
+
+		foreach (Identity<int> identity in transactionsIdList)
+		{
+			ITransaction transaction = await GetRequiredTransaction(
+				identity.Value,
+				cancellationToken);
+
+			result.Add(transaction);
+		}
+		
+		return result;
 	}
 
 	public async Task<Identity<int>?> CreateTransaction(

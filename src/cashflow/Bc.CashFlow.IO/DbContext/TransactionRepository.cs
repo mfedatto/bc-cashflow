@@ -150,7 +150,7 @@ public class TransactionRepository : ITransactionRepository
 	}
 
 	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]
-	public async Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
+	public async Task<IEnumerable<Identity<int>>> GetTransactionsIdByProjectedRepaymentDate(
 		int? accountId,
 		DateTime projectedRepaymentDate,
 		CancellationToken cancellationToken)
@@ -162,24 +162,17 @@ public class TransactionRepository : ITransactionRepository
 		parameters.Add("@AccountId", accountId, DbType.Int32);
 		parameters.Add("@ProjectedRepaymentDate", projectedRepaymentDate, DbType.DateTime);
 
-		return (await _dbConnection.QueryAsync<TransactionDto>(
+		return (await _dbConnection.QueryAsync<TransactionIdDto>(
 				"usp_SelectTransactionsOnProjectedRepaymentDate",
 				parameters,
 				commandType: CommandType.StoredProcedure,
 				transaction: _dbTransaction))
 			.Select(
 				row =>
-					_factory.Create(
-						row.TransactionId,
-						row.UserId,
-						row.AccountId,
-						(TransactionType)row.TransactionType,
-						row.Amount,
-						row.Description,
-						row.TransactionDate,
-						row.TransactionFee,
-						row.ProjectedRepaymentDate
-					));
+					new Identity<int>
+					{
+						Value = row.TransactionId
+					});
 	}
 
 	[SuppressMessage("ReSharper.DPA", "DPA0006: Large number of DB commands")]

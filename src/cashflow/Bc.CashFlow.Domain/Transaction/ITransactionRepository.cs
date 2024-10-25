@@ -18,7 +18,7 @@ public interface ITransactionRepository
 		int? pagingLimit,
 		CancellationToken cancellationToken);
 
-	Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
+	Task<IEnumerable<Identity<int>>> GetTransactionsIdByProjectedRepaymentDate(
 		int? accountId,
 		DateTime projectedRepaymentDate,
 		CancellationToken cancellationToken);
