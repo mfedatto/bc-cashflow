@@ -11,6 +11,7 @@
 - [Teste de carga](#teste-de-carga)
   - [Relatórios de execução de teste de carga](#relatórios-de-execução-de-teste-de-carga)
     - [Run 001](#run-001)
+    - [Run 002](#run-002)
 - [Diagrama de Implantação](#diagrama-de-implantação)
 - [Modelo Entidade-Relacional](#modelo-entidade-relacional)
 - [Fluxo de Construção do Ambiente](#fluxo-de-construção-do-ambiente)
