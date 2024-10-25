@@ -18,6 +18,11 @@ services:
     networks:
       cashflow-db:
       cashflow-db-migration:
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '1536M'
 
   cashflow-cache:
     extends:
@@ -30,6 +35,11 @@ services:
       - '6379:6379'
     networks:
       cashflow-cache:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+          memory: '64M'
 
   cashflow-queue:
     extends:
@@ -46,6 +56,11 @@ services:
       - '15672:15672'
     networks:
       cashflow-queue:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '128M'
 
   cashflow-web:
     extends:
@@ -60,6 +75,11 @@ services:
       - '5380:8080'
     networks:
       cashflow-web:
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '256M'
 
   cashflow-scheduler:
     extends:
@@ -74,6 +94,11 @@ services:
       - '5381:8080'
     networks:
       cashflow-scheduler:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: '128M'
 
 networks:
   cashflow-db:

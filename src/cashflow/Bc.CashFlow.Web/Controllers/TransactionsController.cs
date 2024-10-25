@@ -44,7 +44,7 @@ public class TransactionsController : Controller
 			projectedRepaymentDateSince,
 			projectedRepaymentDateUntil,
 			cancellationToken);
-		TransactionIndexViewModel viewModel = new(transactionsList);
+		TransactionIndexViewModel viewModel = new(transactionsList.Take(100));
 
 		return View(viewModel);
 	}
@@ -62,27 +62,34 @@ public class TransactionsController : Controller
 	}
 
 	[HttpPost]
-	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(
-		TransactionCreateViewModel viewModel,
+		[FromForm(Name = "account-id")] int accountId,
+		[FromForm(Name = "transaction-type")] int transactionType,
+		[FromForm(Name = "amount")] decimal amount,
+		[FromForm(Name = "description")] string? description,
 		CancellationToken cancellationToken)
 	{
+		if (!Enum.IsDefined(typeof(TransactionType), transactionType)) throw new TransactionTypeOutOfRangeException();
+		
 		if (ModelState.IsValid)
 		{
 			_ = await _business.CreateTransaction(
-				viewModel.UserId,
-				viewModel.AccountId,
-				viewModel.TransactionType,
-				viewModel.Amount,
-				viewModel.Description,
+				null,
+				accountId,
+				(TransactionType)transactionType,
+				amount,
+				description,
 				DateTime.Now,
 				cancellationToken);
 
 			return RedirectToAction(nameof(Index));
 		}
 
-		viewModel.AccountsList = await GetAccountsSelectList(cancellationToken);
-
+		TransactionCreateViewModel viewModel = new()
+		{
+			AccountsList = await GetAccountsSelectList(cancellationToken)
+		};
+		
 		return View(viewModel);
 	}
 

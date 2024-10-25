@@ -921,8 +921,8 @@ public class DailyReportBusinessTests
 	{
 		get
 		{
-			yield return new(new int[] { 1, 2, 3, 4, 5, 6});
-			yield return new(new int[] { 11, 12, 13, 14, 15, 16});
+			yield return new(new int[] { 1, 2, 3, 4, 5, 6 });
+			yield return new(new int[] { 11, 12, 13, 14, 15, 16 });
 			yield return new(new int[] { 21, 22, 23 });
 			yield return new(Array.Empty<int>());
 		}
@@ -978,6 +978,94 @@ public class DailyReportBusinessTests
 							It.IsIn(dailyReportsIdsList),
 							It.IsAny<CancellationToken>()),
 					Times.Exactly(dailyReportsIdsList.Length));
+			});
+	}
+
+	#endregion
+
+	#region GetDailyReports (date range)
+
+	[SuppressMessage("Performance", "CA1861:Avoid constant arrays as arguments")]
+	public static IEnumerable<TestCaseData> GetDailyReportsDateRangeSuccessCases
+	{
+		get
+		{
+			yield return new(null, null, new[] { 11, 12, 13, 14 });
+			yield return new(DateTime.Now.AddDays(2), null, new[] { 21, 22, 23 });
+			yield return new(DateTime.Now.AddDays(3), DateTime.Now.AddDays(13), new[] { 21, 22 });
+			yield return new(null, DateTime.Now.AddDays(13), new[] { 21 });
+			yield return new(null, null, Array.Empty<int>());
+		}
+	}
+
+	[TestCaseSource(nameof(GetDailyReportsDateRangeSuccessCases))]
+	public async Task GivenGetDailyReportsDateRange_WhenSuccessData_ThenReturnsExpectedDailyReportsList(
+		DateTime? referenceDateSince,
+		DateTime? referenceDateUntil,
+		int[] dailyReportsIdList)
+	{
+		// Arrange
+		IEnumerable<Identity<int>> dailyReportsIdentityList = dailyReportsIdList
+			.Select(
+				id =>
+					new Identity<int>
+					{
+						Value = id
+					});
+		_dailyReportServiceMock.Setup(
+				drs =>
+					drs.GetDailyReportsId(
+						referenceDateSince,
+						referenceDateUntil,
+						It.IsAny<CancellationToken>()))
+			.ReturnsAsync(dailyReportsIdentityList);
+
+		ISetupSequentialResult<Task<IDailyReport>> setupSequentialResult =
+			_dailyReportServiceMock.SetupSequence(
+				drs =>
+					drs.GetDailyReport(
+						It.IsIn(dailyReportsIdList),
+						It.IsAny<CancellationToken>()));
+		IList<IDailyReport> expected = [];
+
+		foreach (int id in dailyReportsIdList)
+		{
+			Mock<IDailyReport> dailyReportMock = new();
+
+			dailyReportMock.Setup(dr => dr.Id).Returns(id);
+
+			IDailyReport result = dailyReportMock.Object;
+
+			setupSequentialResult.ReturnsAsync(result);
+
+			expected.Add(result);
+		}
+
+		// Act
+		IEnumerable<IDailyReport> actual =
+			await _dailyReportBusiness.GetDailyReports(
+				referenceDateSince,
+				referenceDateUntil,
+				CancellationToken.None);
+
+		// Assert
+		Assert.Multiple(
+			() =>
+			{
+				Assert.That(actual, Is.EqualTo(expected));
+				_dailyReportServiceMock.Verify(
+					drs =>
+						drs.GetDailyReportsId(
+							referenceDateSince,
+							referenceDateUntil,
+							It.IsAny<CancellationToken>()),
+					Times.Once);
+				_dailyReportServiceMock.Verify(
+					drs =>
+						drs.GetDailyReport(
+							It.IsIn(dailyReportsIdList),
+							It.IsAny<CancellationToken>()),
+					Times.Exactly(dailyReportsIdList.Length));
 			});
 	}
 

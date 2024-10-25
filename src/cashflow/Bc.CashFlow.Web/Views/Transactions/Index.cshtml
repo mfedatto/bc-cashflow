@@ -24,7 +24,7 @@
         <tbody>
         @foreach (ITransaction transaction in Model.TransactionsList)
         {
-            <tr>
+            <tr data-transaction-id="@transaction.Id">
                 <td>@transaction.Id</td>
                 <td>@transaction.AccountId</td>
                 <td>@transaction.TransactionType</td>

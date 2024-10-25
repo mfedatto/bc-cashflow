@@ -15,8 +15,8 @@ public class IOQueueContextBuilder : IContextBuilderInstaller
 		WebApplicationBuilder builder,
 		IConfiguration? configuration = null)
 	{
-		builder.Services.AddScoped<IQueueConnectionFactory, QueueConnectionFactory>();
-		builder.Services.AddScoped<IConnection>(
+		builder.Services.AddSingleton<IQueueConnectionFactory, QueueConnectionFactory>();
+		builder.Services.AddSingleton<IConnection>(
 			sp =>
 				sp.GetRequiredService<IQueueConnectionFactory>().CreateConnection());
 		builder.Services.AddScoped<IQueuePublisher, QueuePublisher>();

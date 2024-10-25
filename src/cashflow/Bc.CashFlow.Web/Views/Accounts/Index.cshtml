@@ -22,7 +22,7 @@
         <tbody>
         @foreach (IAccount account in Model.AccountsList)
         {
-            <tr>
+            <tr data-account-id="@account.Id">
                 <td>@account.Id</td>
                 <td>@account.Name</td>
                 <td class="text-end font-monospace">$ @($"{account.CurrentBalance:F2}")</td>

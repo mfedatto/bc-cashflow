@@ -46,6 +46,7 @@ public class DailyReportsController : Controller
 	[HttpPost]
 	public async Task<IActionResult> Create(
 		DailyReportCreateViewModel viewModel,
+		[FromForm(Name = "reference-date")] DateTime referenceDate,
 		CancellationToken cancellationToken)
 	{
 		if (!ModelState.IsValid)
@@ -54,7 +55,7 @@ public class DailyReportsController : Controller
 		}
 
 		await _business.ConsolidateDailyReport(
-			viewModel.ReferenceDate,
+			referenceDate,
 			cancellationToken);
 
 		return RedirectToAction(nameof(Index));

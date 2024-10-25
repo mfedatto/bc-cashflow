@@ -20,7 +20,7 @@
         <tbody>
         @foreach (IAccountType accountType in Model.AccountTypesList)
         {
-            <tr>
+            <tr data-account-type-id="@accountType.Id">
                 <td>@accountType.Id</td>
                 <td>@accountType.Name</td>
                 <td class="text-end font-monospace">@($"{accountType.BaseFee:F2}")</td>

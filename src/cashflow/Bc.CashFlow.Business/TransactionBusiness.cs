@@ -135,7 +135,7 @@ public class TransactionBusiness : ITransactionBusiness
 
 		if (result is null)
 		{
-			throw new AccountNotFoundException();
+			throw new AccountNotFoundException(id);
 		}
 
 		return result;

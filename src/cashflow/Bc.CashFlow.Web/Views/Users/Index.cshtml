@@ -14,7 +14,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">@user.Username</h5>
-                    <p class="card-text">
+                    <p class="card-text" data-user-id="@user.Id">
                         ID: @user.Id
                     </p>
                     <a asp-controller="Users" asp-action="Details" asp-route-id="@user.Id" class="btn btn-primary">
