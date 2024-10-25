@@ -38,6 +38,8 @@ public class AccountsController : Controller
 		DateTime? balanceUpdatedAtUntil,
 		[FromQuery(Name = "created-at-since")] DateTime? createdAtSince,
 		[FromQuery(Name = "created-at-until")] DateTime? createdAtUntil,
+		[FromQuery(Name = "paging-skip")] int? pagingSkip,
+		[FromQuery(Name = "paging-limit")] int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<IAccount> accounts = await _business.GetAccounts(
@@ -52,6 +54,8 @@ public class AccountsController : Controller
 			balanceUpdatedAtUntil,
 			createdAtSince,
 			createdAtUntil,
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 		AccountIndexViewModel viewModel = new(accounts);
 

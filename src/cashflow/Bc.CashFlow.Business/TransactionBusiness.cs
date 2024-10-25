@@ -41,6 +41,8 @@ public class TransactionBusiness : ITransactionBusiness
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		if (transactionType is not null
@@ -59,13 +61,19 @@ public class TransactionBusiness : ITransactionBusiness
 			transactionDateUntil,
 			projectedRepaymentDateSince,
 			projectedRepaymentDateUntil,
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 
 	public async Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		return await _accountService.GetAccounts(
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 
@@ -113,7 +121,7 @@ public class TransactionBusiness : ITransactionBusiness
 				transactionId,
 				cancellationToken);
 
-		if (transaction is null) throw new TransactionNotFoundException();
+		if (transaction is null) throw new TransactionNotFoundException(transactionId);
 
 		decimal adjustedAmount = transaction.GetAdjustedAmount();
 

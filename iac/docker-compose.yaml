@@ -1,3 +1,5 @@
+name: 'bc-cashflow'
+
 services:
 
   cashflow-db:

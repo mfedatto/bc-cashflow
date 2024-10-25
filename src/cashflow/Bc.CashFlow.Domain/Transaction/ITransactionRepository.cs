@@ -4,7 +4,7 @@ namespace Bc.CashFlow.Domain.Transaction;
 
 public interface ITransactionRepository
 {
-	Task<IEnumerable<ITransaction>> GetTransactions(
+	Task<IEnumerable<Identity<int>>> GetTransactionsId(
 		int? userId,
 		int? accountId,
 		TransactionType? transactionType,
@@ -14,11 +14,17 @@ public interface ITransactionRepository
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
 		int? accountId,
 		DateTime projectedRepaymentDate,
+		CancellationToken cancellationToken);
+
+	Task<ITransaction?> GetSingleTransaction(
+		int? accountId,
 		CancellationToken cancellationToken);
 
 	Task<Identity<int>?> CreateTransaction(

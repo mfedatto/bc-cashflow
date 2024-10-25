@@ -29,6 +29,6 @@ VALUES (@UserId,
         @TransactionFee,
         @ProjectedRepaymentDate);
 
-SELECT SCOPE_IDENTITY() AS Id;
+SELECT SCOPE_IDENTITY() AS TransactionId;
 
 END

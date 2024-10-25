@@ -8,6 +8,8 @@ namespace Bc.CashFlow.Domain.Account;
 public interface IAccountService
 {
 	Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<IAccount>> GetAccounts(
@@ -22,6 +24,8 @@ public interface IAccountService
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<Identity<int>>> GetAccountsId(
@@ -39,6 +43,8 @@ public interface IAccountService
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IAccount?> GetAccount(

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using ITransaction = Bc.CashFlow.Domain.Transaction.ITransaction;
 
 namespace Bc.CashFlow.CrossCutting.CompositionRoot;
 
@@ -28,5 +29,6 @@ public class IOCacheContextBuilder : IContextBuilderInstaller
 		builder.Services.AddScoped<ICacheCollection<IUser>, UserCacheCollection>();
 		builder.Services.AddScoped<ICacheCollection<IAccountType>, AccountTypeCacheCollection>();
 		builder.Services.AddScoped<ICacheCollection<IAccount>, AccountCacheCollection>();
+		builder.Services.AddScoped<ICacheCollection<ITransaction>, TransactionCacheCollection>();
 	}
 }

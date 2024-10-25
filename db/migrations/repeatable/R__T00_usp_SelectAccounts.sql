@@ -1,6 +1,3 @@
-DROP PROCEDURE IF EXISTS usp_GetAccount;
-GO;
-
 CREATE
 OR
 ALTER PROCEDURE usp_SelectAccounts
@@ -14,10 +11,21 @@ ALTER PROCEDURE usp_SelectAccounts
     @BalanceUpdatedSince DATETIME = NULL,
     @BalanceUpdatedUntil DATETIME = NULL,
     @CreatedSince DATETIME = NULL,
-    @CreatedUntil DATETIME = NULL
+    @CreatedUntil DATETIME = NULL,
+    @PagingSkip INT = NULL,
+    @PagingLimit INT = NULL,
+    @PagingTotal INT OUTPUT
     AS
 BEGIN
+    SET
+NOCOUNT ON;
 
+    DECLARE
+@QueryResults TABLE (
+        AccountId INT
+    );
+
+INSERT INTO @QueryResults (AccountId)
 SELECT AccountId
 FROM tbl_Account
 WHERE (@AccountName IS NULL OR AccountName LIKE '%' + @AccountName + '%')
@@ -32,4 +40,11 @@ WHERE (@AccountName IS NULL OR AccountName LIKE '%' + @AccountName + '%')
   AND (@CreatedSince IS NULL OR CreatedAt >= @CreatedSince)
   AND (@CreatedUntil IS NULL OR CreatedAt <= @CreatedUntil);
 
-END
+SELECT @PagingTotal = COUNT(*)
+FROM @QueryResults;
+
+SELECT AccountId
+FROM @QueryResults
+ORDER BY AccountId
+OFFSET ISNULL(@PagingSkip, 0) ROWS FETCH NEXT ISNULL(@PagingLimit, CASE WHEN @PagingTotal = 0 THEN 1 ELSE @PagingTotal END) ROWS ONLY;
+END;

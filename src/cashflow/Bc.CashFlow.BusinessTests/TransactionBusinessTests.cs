@@ -389,6 +389,8 @@ public class TransactionBusinessTests
 		IEnumerable<ITransaction> expected)
 	{
 		// Arrange
+		int? pagingSkip = null;
+		int? pagingLimit = null;
 		_transactionServiceMock
 			.Setup(
 				ts =>
@@ -402,6 +404,8 @@ public class TransactionBusinessTests
 						transactionDateUntil,
 						projectedRepaymentDateSince,
 						projectedRepaymentDateUntil,
+						pagingSkip,
+						pagingLimit,
 						It.IsAny<CancellationToken>()))
 			.ReturnsAsync(expected);
 
@@ -417,6 +421,8 @@ public class TransactionBusinessTests
 				transactionDateUntil,
 				projectedRepaymentDateSince,
 				projectedRepaymentDateUntil,
+				pagingSkip,
+				pagingLimit,
 				CancellationToken.None);
 
 		// Assert
@@ -436,6 +442,8 @@ public class TransactionBusinessTests
 							transactionDateUntil,
 							projectedRepaymentDateSince,
 							projectedRepaymentDateUntil,
+							pagingSkip,
+							pagingLimit,
 							It.IsAny<CancellationToken>()),
 					Times.Once);
 			});
@@ -493,6 +501,8 @@ public class TransactionBusinessTests
 		IEnumerable<ITransaction> expected)
 	{
 		// Arrange
+		int? pagingSkip = null;
+		int? pagingLimit = null;
 		_transactionServiceMock
 			.Setup(
 				ts =>
@@ -506,6 +516,8 @@ public class TransactionBusinessTests
 						transactionDateUntil,
 						projectedRepaymentDateSince,
 						projectedRepaymentDateUntil,
+						pagingSkip,
+						pagingLimit,
 						It.IsAny<CancellationToken>()))
 			.ReturnsAsync(expected);
 
@@ -524,6 +536,8 @@ public class TransactionBusinessTests
 						transactionDateUntil,
 						projectedRepaymentDateSince,
 						projectedRepaymentDateUntil,
+						pagingSkip,
+						pagingLimit,
 						CancellationToken.None)
 					.GetAwaiter()
 					.GetResult();
@@ -584,7 +598,7 @@ public class TransactionBusinessTests
 	}
 
 	[TestCaseSource(nameof(GivenGetRequiredAccountAccountNotFoundCases))]
-	public async Task GivenGetRequiredAccount_WhenAccountNotFound_ThenThrowsAccountNotFoundException(
+	public void GivenGetRequiredAccount_WhenAccountNotFound_ThenThrowsAccountNotFoundException(
 		int accountId)
 	{
 		// Arrange

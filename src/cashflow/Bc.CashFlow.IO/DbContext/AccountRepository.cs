@@ -40,10 +40,96 @@ public class AccountRepository : IAccountRepository
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
+		return (await Task.Run(
+				() =>
+					GetAccountsIdAndTotal(
+						userId,
+						accountTypeId,
+						name,
+						initialBalanceFrom,
+						initialBalanceTo,
+						currentBalanceFrom,
+						currentBalanceTo,
+						balanceUpdatedAtSince,
+						balanceUpdatedAtUntil,
+						createdAtSince,
+						createdAtUntil,
+						pagingSkip,
+						pagingLimit,
+						out _),
+				cancellationToken))
+			.Select(
+				row =>
+					new Identity<int>
+					{
+						Value = row.AccountId
+					});
+	}
+
+	public async Task<int> GetAccountsTotal(
+		int? userId,
+		int? accountTypeId,
+		string? name,
+		decimal? initialBalanceFrom,
+		decimal? initialBalanceTo,
+		decimal? currentBalanceFrom,
+		decimal? currentBalanceTo,
+		DateTime? balanceUpdatedAtSince,
+		DateTime? balanceUpdatedAtUntil,
+		DateTime? createdAtSince,
+		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		return await Task.Run(
+			() =>
+			{
+				GetAccountsIdAndTotal(
+					userId,
+					accountTypeId,
+					name,
+					initialBalanceFrom,
+					initialBalanceTo,
+					currentBalanceFrom,
+					currentBalanceTo,
+					balanceUpdatedAtSince,
+					balanceUpdatedAtUntil,
+					createdAtSince,
+					createdAtUntil,
+					pagingSkip,
+					pagingLimit,
+					out int pagingTotal);
+
+				return pagingTotal;
+			},
+			cancellationToken);
+	}
+
+	private IEnumerable<AccountIdDto> GetAccountsIdAndTotal(
+		int? userId,
+		int? accountTypeId,
+		string? name,
+		decimal? initialBalanceFrom,
+		decimal? initialBalanceTo,
+		decimal? currentBalanceFrom,
+		decimal? currentBalanceTo,
+		DateTime? balanceUpdatedAtSince,
+		DateTime? balanceUpdatedAtUntil,
+		DateTime? createdAtSince,
+		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
+		out int pagingTotal)
+	{
 		DynamicParameters parameters = new();
 
 		parameters.Add("@UserId", userId, DbType.Int32);
@@ -56,19 +142,21 @@ public class AccountRepository : IAccountRepository
 		parameters.Add("@BalanceUpdatedSince", balanceUpdatedAtSince, DbType.DateTime);
 		parameters.Add("@BalanceUpdatedUntil", balanceUpdatedAtUntil, DbType.DateTime);
 		parameters.Add("@CreatedSince", createdAtSince, DbType.DateTime);
-		parameters.Add("@CreatedUntil", createdAtUntil, DbType.DateTime);
+		parameters.Add("@CreatedUntil", createdAtUntil, DbType.Int32);
+		parameters.Add("@PagingSkip", pagingSkip, DbType.Int32);
+		parameters.Add("@PagingLimit", pagingLimit, DbType.Int32);
+		parameters.Add("@PagingTotal", DbType.Int32, direction: ParameterDirection.Output);
 
-		return (await _dbConnection.QueryAsync<AccountIdDto>(
+		IEnumerable<AccountIdDto> result =
+			_dbConnection.Query<AccountIdDto>(
 				"usp_SelectAccounts",
 				parameters,
 				commandType: CommandType.StoredProcedure,
-				transaction: _dbTransaction))
-			.Select(
-				row =>
-					new Identity<int>
-					{
-						Value = row.AccountId
-					});
+				transaction: _dbTransaction);
+
+		pagingTotal = parameters.Get<int>("@PagingTotal");
+
+		return result;
 	}
 
 	public async Task<IAccount?> GetAccount(
@@ -121,12 +209,12 @@ public class AccountRepository : IAccountRepository
 	}
 }
 
-file record AccountIdDto
+internal record AccountIdDto
 {
 	public required int AccountId { get; init; }
 }
 
-file record AccountDto
+internal record AccountDto
 {
 	public required int AccountId { get; init; }
 	public required int UserId { get; init; }

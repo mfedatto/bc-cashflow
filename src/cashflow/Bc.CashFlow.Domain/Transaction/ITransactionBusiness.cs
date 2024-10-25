@@ -15,9 +15,13 @@ public interface ITransactionBusiness
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<Identity<int>> CreateTransaction(

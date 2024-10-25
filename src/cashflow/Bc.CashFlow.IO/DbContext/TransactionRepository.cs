@@ -28,7 +28,7 @@ public class TransactionRepository : ITransactionRepository
 		_factory = factory;
 	}
 
-	public async Task<IEnumerable<ITransaction>> GetTransactions(
+	public async Task<IEnumerable<Identity<int>>> GetTransactionsId(
 		int? userId,
 		int? accountId,
 		TransactionType? transactionType,
@@ -38,10 +38,88 @@ public class TransactionRepository : ITransactionRepository
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
+		return (await Task.Run(
+				() =>
+					GetTransactionsIdWithTotal(
+						userId,
+						accountId,
+						transactionType,
+						amountFrom,
+						amountTo,
+						transactionDateSince,
+						transactionDateUntil,
+						projectedRepaymentDateSince,
+						projectedRepaymentDateUntil,
+						pagingSkip,
+						pagingLimit,
+						out _),
+				cancellationToken))
+			.Select(
+				row =>
+					new Identity<int>
+					{
+						Value = row.TransactionId
+					});
+	}
+
+	public async Task<int> GetTransactionsTotal(
+		int? userId,
+		int? accountId,
+		TransactionType? transactionType,
+		decimal? amountFrom,
+		decimal? amountTo,
+		DateTime? transactionDateSince,
+		DateTime? transactionDateUntil,
+		DateTime? projectedRepaymentDateSince,
+		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		return await Task.Run(
+			() =>
+			{
+				GetTransactionsIdWithTotal(
+					userId,
+					accountId,
+					transactionType,
+					amountFrom,
+					amountTo,
+					transactionDateSince,
+					transactionDateUntil,
+					projectedRepaymentDateSince,
+					projectedRepaymentDateUntil,
+					pagingSkip,
+					pagingLimit,
+					out int pagingTotal);
+
+				return pagingTotal;
+			},
+			cancellationToken);
+	}
+
+	private IEnumerable<TransactionIdDto> GetTransactionsIdWithTotal(
+		int? userId,
+		int? accountId,
+		TransactionType? transactionType,
+		decimal? amountFrom,
+		decimal? amountTo,
+		DateTime? transactionDateSince,
+		DateTime? transactionDateUntil,
+		DateTime? projectedRepaymentDateSince,
+		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
+		out int pagingTotal)
+	{
 		DynamicParameters parameters = new();
 
 		parameters.Add("@UserId", userId, DbType.Int32);
@@ -53,25 +131,20 @@ public class TransactionRepository : ITransactionRepository
 		parameters.Add("@TransactionDateUntil", transactionDateUntil, DbType.DateTime);
 		parameters.Add("@ProjectedRepaymentDateSince", projectedRepaymentDateSince, DbType.DateTime);
 		parameters.Add("@ProjectedRepaymentDateUntil", projectedRepaymentDateUntil, DbType.DateTime);
+		parameters.Add("@PagingSkip", pagingSkip, DbType.Int32);
+		parameters.Add("@PagingLimit", pagingLimit, DbType.Int32);
+		parameters.Add("@PagingTotal", DbType.Int32, direction: ParameterDirection.Output);
 
-		return (await _dbConnection.QueryAsync<TransactionDto>(
+		IEnumerable<TransactionIdDto> result =
+			_dbConnection.Query<TransactionIdDto>(
 				"usp_SelectTransactions",
 				parameters,
 				commandType: CommandType.StoredProcedure,
-				transaction: _dbTransaction))
-			.Select(
-				row =>
-					_factory.Create(
-						row.TransactionId,
-						row.UserId,
-						row.AccountId,
-						(TransactionType)row.TransactionType,
-						row.Amount,
-						row.Description,
-						row.TransactionDate,
-						row.TransactionFee,
-						row.ProjectedRepaymentDate
-					));
+				transaction: _dbTransaction);
+
+		pagingTotal = parameters.Get<int>("@PagingTotal");
+
+		return result;
 	}
 
 	public async Task<IEnumerable<ITransaction>> GetTransactionsByProjectedRepaymentDate(
@@ -104,6 +177,37 @@ public class TransactionRepository : ITransactionRepository
 						row.TransactionFee,
 						row.ProjectedRepaymentDate
 					));
+	}
+
+	public async Task<ITransaction?> GetSingleTransaction(
+		int? accountId,
+		CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		DynamicParameters parameters = new();
+
+		parameters.Add("@AccountId", accountId, DbType.Int32);
+
+		return (await _dbConnection.QueryAsync<TransactionDto>(
+				"usp_SelectTransaction",
+				parameters,
+				commandType: CommandType.StoredProcedure,
+				transaction: _dbTransaction))
+			.Select(
+				row =>
+					_factory.Create(
+						row.TransactionId,
+						row.UserId,
+						row.AccountId,
+						(TransactionType)row.TransactionType,
+						row.Amount,
+						row.Description,
+						row.TransactionDate,
+						row.TransactionFee,
+						row.ProjectedRepaymentDate
+					))
+			.SingleOrDefault();
 	}
 
 	public async Task<Identity<int>?> CreateTransaction(
@@ -139,7 +243,7 @@ public class TransactionRepository : ITransactionRepository
 				row =>
 					new Identity<int>
 					{
-						Value = row.Id
+						Value = row.TransactionId
 					})
 			.SingleOrDefault();
 	}
@@ -176,12 +280,12 @@ public class TransactionRepository : ITransactionRepository
 	}
 }
 
-file record TransactionIdDto
+internal record TransactionIdDto
 {
-	public int Id { get; init; }
+	public int TransactionId { get; init; }
 }
 
-file record TransactionDto
+internal record TransactionDto
 {
 	public int TransactionId { get; init; }
 	public int UserId { get; init; }

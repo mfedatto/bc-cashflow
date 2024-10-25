@@ -19,9 +19,13 @@ public class AccountBusiness : IAccountBusiness
 	}
 
 	public async Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		return await _accountService.GetAccounts(
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 
@@ -37,6 +41,8 @@ public class AccountBusiness : IAccountBusiness
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		return await _accountService.GetAccounts(
@@ -51,6 +57,8 @@ public class AccountBusiness : IAccountBusiness
 			balanceUpdatedAtUntil,
 			createdAtSince,
 			createdAtUntil,
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 

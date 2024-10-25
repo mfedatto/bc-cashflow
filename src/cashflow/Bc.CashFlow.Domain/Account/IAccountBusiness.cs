@@ -6,6 +6,8 @@ namespace Bc.CashFlow.Domain.Account;
 public interface IAccountBusiness
 {
 	Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<IAccount>> GetAccounts(
@@ -20,6 +22,8 @@ public interface IAccountBusiness
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IAccount?> GetAccount(

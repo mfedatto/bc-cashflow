@@ -22,15 +22,21 @@ public class TransactionsController : Controller
 
 	[HttpGet]
 	public async Task<IActionResult> Index(
-		int? userId,
-		int? accountId,
-		TransactionType? transactionType,
-		decimal? amountFrom,
-		decimal? amountTo,
+		[FromQuery(Name = "user-id")] int? userId,
+		[FromQuery(Name = "account-id")] int? accountId,
+		[FromQuery(Name = "transaction-type")] TransactionType? transactionType,
+		[FromQuery(Name = "amount-from")] decimal? amountFrom,
+		[FromQuery(Name = "amount-to")] decimal? amountTo,
+		[FromQuery(Name = "transaction-date-since")]
 		DateTime? transactionDateSince,
+		[FromQuery(Name = "transaction-date-until")]
 		DateTime? transactionDateUntil,
+		[FromQuery(Name = "projected-repayment-date-since")]
 		DateTime? projectedRepaymentDateSince,
+		[FromQuery(Name = "projected-repayment-date-until")]
 		DateTime? projectedRepaymentDateUntil,
+		[FromQuery(Name = "paging-skip")] int? pagingSkip,
+		[FromQuery(Name = "paging-limit")] int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<ITransaction> transactionsList = await _business.GetTransactions(
@@ -43,6 +49,8 @@ public class TransactionsController : Controller
 			transactionDateUntil,
 			projectedRepaymentDateSince,
 			projectedRepaymentDateUntil,
+			pagingSkip ?? 0,
+			pagingLimit ?? 20,
 			cancellationToken);
 		TransactionIndexViewModel viewModel = new(transactionsList.Take(100));
 
@@ -51,11 +59,16 @@ public class TransactionsController : Controller
 
 	[HttpGet]
 	public async Task<IActionResult> Create(
+		[FromQuery(Name = "paging-skip")] int? pagingSkip,
+		[FromQuery(Name = "paging-limit")] int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		TransactionCreateViewModel viewModel = new()
 		{
-			AccountsList = await GetAccountsSelectList(cancellationToken)
+			AccountsList = await GetAccountsSelectList(
+				pagingSkip,
+				pagingLimit,
+				cancellationToken)
 		};
 
 		return View(viewModel);
@@ -67,10 +80,12 @@ public class TransactionsController : Controller
 		[FromForm(Name = "transaction-type")] int transactionType,
 		[FromForm(Name = "amount")] decimal amount,
 		[FromForm(Name = "description")] string? description,
+		[FromQuery(Name = "paging-skip")] int? pagingSkip,
+		[FromQuery(Name = "paging-limit")] int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		if (!Enum.IsDefined(typeof(TransactionType), transactionType)) throw new TransactionTypeOutOfRangeException();
-		
+
 		if (ModelState.IsValid)
 		{
 			_ = await _business.CreateTransaction(
@@ -87,16 +102,24 @@ public class TransactionsController : Controller
 
 		TransactionCreateViewModel viewModel = new()
 		{
-			AccountsList = await GetAccountsSelectList(cancellationToken)
+			AccountsList = await GetAccountsSelectList(
+				pagingSkip,
+				pagingLimit,
+				cancellationToken)
 		};
-		
+
 		return View(viewModel);
 	}
 
 	private async Task<IEnumerable<SelectListItem>> GetAccountsSelectList(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
-		return (await _business.GetAccounts(cancellationToken))
+		return (await _business.GetAccounts(
+				pagingSkip,
+				pagingLimit,
+				cancellationToken))
 			.Select(
 				account => new SelectListItem(
 					account.Name,

@@ -14,6 +14,8 @@ public interface ITransactionService
 		DateTime? transactionDateUntil,
 		DateTime? projectedRepaymentDateSince,
 		DateTime? projectedRepaymentDateUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken);
 
 	Task<IEnumerable<ITransaction>> GetTransactionsOnProjectedRepaymentDate(

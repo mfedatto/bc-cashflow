@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace Bc.CashFlow.CrossCutting.CompositionRoot.Extensions;
 
@@ -17,6 +18,13 @@ public static class ContextBuilderInstallerExtensions
 			.BuildContext<ServiceContextBuilder>(configuration)
 			.BuildContext<BusinessContextBuilder>(configuration)
 			.BuildContext<TStartupContextBuilder>(configuration);
+
+		builder.Host.UseDefaultServiceProvider(
+			(context, options) =>
+			{
+				options.ValidateOnBuild = context.HostingEnvironment.IsDevelopment();
+				options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+			});
 
 		return builder;
 	}

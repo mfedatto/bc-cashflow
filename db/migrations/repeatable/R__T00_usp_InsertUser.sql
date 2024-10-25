@@ -24,6 +24,6 @@ VALUES (@Username,
         @PasswordHash,
         @CreatedAt);
 
-SELECT SCOPE_IDENTITY() AS Id;
+SELECT SCOPE_IDENTITY() AS UserId;
 
 END

@@ -25,9 +25,13 @@ public class AccountService : IAccountService
 	}
 
 	public async Task<IEnumerable<IAccount>> GetAccounts(
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		return await GetAccounts(
+			null,
+			null,
 			null,
 			null,
 			null,
@@ -54,6 +58,8 @@ public class AccountService : IAccountService
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		IEnumerable<Identity<int>> accountsIdsList =
@@ -69,6 +75,8 @@ public class AccountService : IAccountService
 				balanceUpdatedAtUntil,
 				createdAtSince,
 				createdAtUntil,
+				pagingSkip,
+				pagingLimit,
 				cancellationToken);
 		IEnumerable<IAccount> result =
 			await GetAccounts(
@@ -95,6 +103,8 @@ public class AccountService : IAccountService
 			null,
 			null,
 			null,
+			null,
+			null,
 			cancellationToken);
 	}
 
@@ -110,6 +120,8 @@ public class AccountService : IAccountService
 		DateTime? balanceUpdatedAtUntil,
 		DateTime? createdAtSince,
 		DateTime? createdAtUntil,
+		int? pagingSkip,
+		int? pagingLimit,
 		CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
@@ -126,6 +138,8 @@ public class AccountService : IAccountService
 			balanceUpdatedAtUntil,
 			createdAtSince,
 			createdAtUntil,
+			pagingSkip,
+			pagingLimit,
 			cancellationToken);
 	}
 

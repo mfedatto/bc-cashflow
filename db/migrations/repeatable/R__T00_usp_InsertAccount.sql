@@ -34,6 +34,6 @@ VALUES (@UserId,
         @BalanceUpdatedAt,
         @CreatedAt);
 
-SELECT SCOPE_IDENTITY() AS Id;
+SELECT SCOPE_IDENTITY() AS AccountId;
 
 END
