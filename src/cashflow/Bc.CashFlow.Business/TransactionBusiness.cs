@@ -193,7 +193,7 @@ public class TransactionBusiness : ITransactionBusiness
 
 		if (result is null)
 		{
-			throw new UserNotFoundException();
+			throw new UserNotFoundException(id);
 		}
 
 		return result;

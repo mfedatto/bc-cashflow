@@ -1,4 +1,5 @@
 using Bc.CashFlow.Domain.Transaction;
+using Bc.CashFlow.Domain.User;
 using Bc.CashFlow.Web.Models.Transaction;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -65,9 +66,19 @@ public class TransactionsController : Controller
 		ITransaction transaction = await _business.GetRequiredTransaction(
 			id,
 			cancellationToken);
+		IUser? user = null;
 
-		TransactionDetailsViewModel viewModel = new(transaction);
-		
+		if (transaction.UserId is not null)
+		{
+			user = await _business.GetRequiredUser(
+				transaction.UserId.Value,
+				cancellationToken);
+		}
+
+		TransactionDetailsViewModel viewModel = new(
+			transaction,
+			user);
+
 		return View(viewModel);
 	}
 

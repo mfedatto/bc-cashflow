@@ -43,7 +43,7 @@ public class UsersController : Controller
 		CancellationToken cancellationToken)
 	{
 		IUser user =
-			await _business.GetSingleUser(
+			await _business.GetRequiredUser(
 				userId,
 				cancellationToken);
 		UserDetailsViewModel viewModel = new(user);

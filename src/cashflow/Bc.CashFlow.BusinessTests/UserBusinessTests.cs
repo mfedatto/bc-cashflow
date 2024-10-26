@@ -126,7 +126,7 @@ public class UserBusinessTests
 
 		// Act
 		IUser? actual =
-			await _userBusiness.GetSingleUser(
+			await _userBusiness.GetRequiredUser(
 				userId,
 				CancellationToken.None);
 

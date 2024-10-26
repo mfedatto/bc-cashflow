@@ -30,7 +30,7 @@ public class UserBusiness : IUserBusiness
 			cancellationToken);
 	}
 
-	public async Task<IUser> GetSingleUser(
+	public async Task<IUser> GetRequiredUser(
 		int id,
 		CancellationToken cancellationToken)
 	{
@@ -38,7 +38,7 @@ public class UserBusiness : IUserBusiness
 			id,
 			cancellationToken);
 
-		if (result is null) throw new UserNotFoundException();
+		if (result is null) throw new UserNotFoundException(id);
 		
 		return result;
 	}

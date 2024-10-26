@@ -287,7 +287,7 @@ internal record TransactionIdDto
 internal record TransactionDto
 {
 	public int TransactionId { get; init; }
-	public int UserId { get; init; }
+	public int? UserId { get; init; }
 	public int AccountId { get; init; }
 	public int TransactionType { get; init; }
 	public decimal Amount { get; init; }
