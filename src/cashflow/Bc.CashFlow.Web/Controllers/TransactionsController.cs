@@ -58,6 +58,20 @@ public class TransactionsController : Controller
 	}
 
 	[HttpGet]
+	public async Task<IActionResult> Details(
+		[FromRoute] int id,
+		CancellationToken cancellationToken)
+	{
+		ITransaction transaction = await _business.GetRequiredTransaction(
+			id,
+			cancellationToken);
+
+		TransactionDetailsViewModel viewModel = new(transaction);
+		
+		return View(viewModel);
+	}
+
+	[HttpGet]
 	public async Task<IActionResult> Create(
 		[FromQuery(Name = "paging-skip")] int? pagingSkip,
 		[FromQuery(Name = "paging-limit")] int? pagingLimit,

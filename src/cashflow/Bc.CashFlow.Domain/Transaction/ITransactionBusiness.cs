@@ -36,4 +36,8 @@ public interface ITransactionBusiness
 	Task UpdateAccountBalance(
 		int transactionId,
 		CancellationToken cancellationToken);
+
+	Task<ITransaction> GetRequiredTransaction(
+		int id,
+		CancellationToken cancellationToken);
 }

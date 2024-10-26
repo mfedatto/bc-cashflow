@@ -5,7 +5,7 @@ public class TransactionFactory
 	// ReSharper disable once MemberCanBeMadeStatic.Global
 	public ITransaction Create(
 		int id,
-		int userId,
+		int? userId,
 		int accountId,
 		TransactionType transactionType,
 		decimal amount,
@@ -34,7 +34,7 @@ public class TransactionFactory
 
 file record TransactionVo(
 	int Id,
-	int UserId,
+	int? UserId,
 	int AccountId,
 	TransactionType TransactionType,
 	decimal Amount,

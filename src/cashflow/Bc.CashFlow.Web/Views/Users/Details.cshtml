@@ -16,7 +16,7 @@
             <dd class="col-sm-9">@Model.User.Username</dd>
 
             <dt class="col-sm-3">Created at</dt>
-            <dd class="col-sm-9">@Model.User.CreatedAt.ToString("dd/MM/yyyy HH:mm")</dd>
+            <dd class="col-sm-9">@($"{Model.User.CreatedAt:yyyy-MM-dd HH:mm:ss}")</dd>
         </dl>
 
         <a asp-controller="Users" asp-action="Index" class="btn btn-secondary mt-4">Lista de usuários</a>

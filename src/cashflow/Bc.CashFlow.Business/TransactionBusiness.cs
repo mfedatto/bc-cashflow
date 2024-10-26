@@ -66,6 +66,20 @@ public class TransactionBusiness : ITransactionBusiness
 			cancellationToken);
 	}
 
+	public async Task<ITransaction> GetRequiredTransaction(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		ITransaction? result =
+			await _transactionService.GetTransaction(
+				id,
+				cancellationToken);
+
+		if (result is null) throw new TransactionNotFoundException(id);
+
+		return result;
+	}
+
 	public async Task<IEnumerable<IAccount>> GetAccounts(
 		int? pagingSkip,
 		int? pagingLimit,

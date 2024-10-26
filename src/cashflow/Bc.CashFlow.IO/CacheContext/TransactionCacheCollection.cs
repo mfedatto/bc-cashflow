@@ -17,7 +17,7 @@ public class TransactionCacheCollection : BaseCacheCollection<ITransaction, Tran
 	public record TransactionDto : ITransaction
 	{
 		public required int Id { get; init; }
-		public required int UserId { get; init; }
+		public required int? UserId { get; init; }
 		public required int AccountId { get; init; }
 		public required TransactionType TransactionType { get; init; }
 		public required decimal Amount { get; init; }

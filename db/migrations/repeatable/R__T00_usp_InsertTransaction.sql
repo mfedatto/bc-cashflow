@@ -1,7 +1,7 @@
 CREATE
 OR
 ALTER PROCEDURE usp_InsertTransaction
-    @UserId INT,
+    @UserId INT = NULL,
     @AccountId INT,
     @TransactionType BIT,
     @Amount DECIMAL (18, 2),
