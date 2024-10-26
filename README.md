@@ -8,10 +8,6 @@
 - [Requisitos para Execução](#requisitos-para-execução)
 - [Como Rodar o Projeto Localmente](#como-rodar-o-projeto-localmente)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Teste de carga](#teste-de-carga)
-  - [Relatórios de execução de teste de carga](#relatórios-de-execução-de-teste-de-carga)
-    - [Run 001](#run-001)
-    - [Run 002](#run-002)
 - [Diagrama de Implantação](#diagrama-de-implantação)
 - [Modelo Entidade-Relacional](#modelo-entidade-relacional)
 - [Fluxo de Construção do Ambiente](#fluxo-de-construção-do-ambiente)
@@ -29,6 +25,10 @@
   - [ADR011 - Startup context builder](docs/adr/adr011-startup-context-builder.md)
   - [ADR012 - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
   - [ADR013 - Setup](docs/adr/adr013-setup.md)
+- [Teste de carga](#teste-de-carga)
+  - [Relatórios de execução de teste de carga](#relatórios-de-execução-de-teste-de-carga)
+    - [Run 001](#run-001)
+    - [Run 002](#run-002)
 - [Licença](#licença)
 
 ## Descrição
@@ -86,6 +86,35 @@ docker compose up -d
 - `/iac/`: Infra como código.
 - `/db/`: Database migration.
 - `/tests/`: Planos de teste.
+
+## Diagrama de implantação
+
+![Deploymetn Diagram](docs/dd.png)
+
+## Modelo Entidade-Relacional
+
+![Entity-Relationship Model](docs/erm.png)
+
+## Fluxo de construção do ambiente
+
+![Environmetn Build - Workflow Diagram](docs/ebwd.png)
+
+## Registros de decisão arquitetural
+
+- [`ADR001` - Interface](docs/adr/adr001-interface.md)
+- [`ADR002` - Arquitetura](docs/adr/adr002-arquitetura.md)
+- [`ADR003` - Banco de dados](docs/adr/adr003-banco-de-dados.md)
+- [`ADR004` - Banco de dados](docs/adr/adr004-banco-de-dados.md)
+- [`ADR005` - Evolve DB Docker](docs/adr/adr005-evolve-db-docker.md)
+- [`ADR006` - Database Setup](docs/adr/adr006-database-setup.md)
+- [`ADR007` - Migration tiers](docs/adr/adr007-migration-tiers.md)
+- [`ADR008` - Cross Cutting](docs/adr/adr008-cross-cutting.md)
+- [`ADR009` - Localization](docs/adr/adr009-localization.md)
+- [`ADR010` - Business](docs/adr/adr010-business.md)
+- [`ADR011` - Startup context builder](docs/adr/adr011-startup-context-builder.md)
+- [`ADR012` - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
+- [`ADR013` - Setup](docs/adr/adr013-setup.md)
+- [`ADR014` - Dockerfile](docs/adr/adr014-dockerfile.md)
 
 ## Teste de carga
 
@@ -206,35 +235,6 @@ Ambiente novo, construído totalmente pelo `docker compose up -d`.
 | `GET /Transactions`         |    `9067` |    `43` |  `3` |  `246` |   `21.67` | `0.000%` |  `75.53693` |       `1241.84` |      `9.66` |  `16834.7` |
 | `POST /Transactions/Create` |    `9064` |    `63` | `14` | `2820` |   `97.48` | `0.000%` |  `75.52138` |       `1251.44` |     `30.45` |  `16968.4` |
 | TOTAL                       |   `54403` |    `19` |  `0` | `2820` |   `47.56` | `0.000%` | `453.07516` |       `3533.47` |     `77.27` |   `7986.0` |
-
-## Diagrama de implantação
-
-![Deploymetn Diagram](docs/dd.png)
-
-## Modelo Entidade-Relacional
-
-![Entity-Relationship Model](docs/erm.png)
-
-## Fluxo de construção do ambiente
-
-![Environmetn Build - Workflow Diagram](docs/ebwd.png)
-
-## Registros de decisão arquitetural
-
-- [`ADR001` - Interface](docs/adr/adr001-interface.md)
-- [`ADR002` - Arquitetura](docs/adr/adr002-arquitetura.md)
-- [`ADR003` - Banco de dados](docs/adr/adr003-banco-de-dados.md)
-- [`ADR004` - Banco de dados](docs/adr/adr004-banco-de-dados.md)
-- [`ADR005` - Evolve DB Docker](docs/adr/adr005-evolve-db-docker.md)
-- [`ADR006` - Database Setup](docs/adr/adr006-database-setup.md)
-- [`ADR007` - Migration tiers](docs/adr/adr007-migration-tiers.md)
-- [`ADR008` - Cross Cutting](docs/adr/adr008-cross-cutting.md)
-- [`ADR009` - Localization](docs/adr/adr009-localization.md)
-- [`ADR010` - Business](docs/adr/adr010-business.md)
-- [`ADR011` - Startup context builder](docs/adr/adr011-startup-context-builder.md)
-- [`ADR012` - Hangfire antiforgery token](docs/adr/adr012-hangfire-antiforgery-token.md)
-- [`ADR013` - Setup](docs/adr/adr013-setup.md)
-- [`ADR014` - Dockerfile](docs/adr/adr014-dockerfile.md)
 
 ## Licença
 

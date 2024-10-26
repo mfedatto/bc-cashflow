@@ -29,4 +29,8 @@ public interface IAccountBusiness
 	Task<IAccount?> GetAccount(
 		int id,
 		CancellationToken cancellationToken);
+
+	Task<IAccount> GetRequiredAccount(
+		int id,
+		CancellationToken cancellationToken);
 }

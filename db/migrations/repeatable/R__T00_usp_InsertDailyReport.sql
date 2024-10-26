@@ -33,6 +33,6 @@ VALUES (@AccountId,
         @Balance,
         @CreatedAt);
 
-SELECT SCOPE_IDENTITY() AS DailyReportId;
+SELECT SCOPE_IDENTITY() AS ReportId;
 
 END

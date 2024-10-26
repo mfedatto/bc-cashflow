@@ -24,3 +24,7 @@ DECLARE
 @Admin_Cash_AccountId INT;
 
 EXEC usp_EnsureAccount @UserId = @Admin_UserId, @AccountTypeId = @AccountType_Cash, @AccountName = 'Cash', @InitialBalance = 0.00, @CurrentBalance = 0.00, @BalanceUpdatedAt = NULL, @Id = @Admin_Cash_AccountId OUTPUT;
+EXEC usp_EnsureAccount @UserId = @Admin_UserId, @AccountTypeId = @AccountType_BelloDebit, @AccountName = 'Bello Debit', @InitialBalance = 1.04, @CurrentBalance = 0.00, @BalanceUpdatedAt = NULL, @Id = @Admin_Cash_AccountId OUTPUT;
+EXEC usp_EnsureAccount @UserId = @Admin_UserId, @AccountTypeId = @AccountType_BelloCredit, @AccountName = 'Bello Credit', @InitialBalance = 2.03, @CurrentBalance = 0.00, @BalanceUpdatedAt = NULL, @Id = @Admin_Cash_AccountId OUTPUT;
+EXEC usp_EnsureAccount @UserId = @Admin_UserId, @AccountTypeId = @AccountType_NetCardDebit, @AccountName = 'NetCard Debit', @InitialBalance = 3.02, @CurrentBalance = 0.00, @BalanceUpdatedAt = NULL, @Id = @Admin_Cash_AccountId OUTPUT;
+EXEC usp_EnsureAccount @UserId = @Admin_UserId, @AccountTypeId = @AccountType_NetCardCredit, @AccountName = 'NetCard Credit', @InitialBalance = 4.01, @CurrentBalance = 0.00, @BalanceUpdatedAt = NULL, @Id = @Admin_Cash_AccountId OUTPUT;

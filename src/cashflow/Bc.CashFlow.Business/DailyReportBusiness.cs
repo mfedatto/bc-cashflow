@@ -64,10 +64,11 @@ public class DailyReportBusiness : IDailyReportBusiness
 
 		foreach (Identity<int> accountIdentityId in accountIdsList)
 		{
-			TransactionsBalanceReport accountTransactionsBalanceReport = await ConsolidateAccountDailyReport(
-				referenceDay,
-				accountIdentityId.Value,
-				cancellationToken);
+			TransactionsBalanceReport accountTransactionsBalanceReport =
+				await ConsolidateAccountDailyReport(
+					referenceDay,
+					accountIdentityId.Value,
+					cancellationToken);
 
 			result.AddDebit(accountTransactionsBalanceReport.TotalDebits);
 			result.AddCredit(accountTransactionsBalanceReport.TotalCredits);

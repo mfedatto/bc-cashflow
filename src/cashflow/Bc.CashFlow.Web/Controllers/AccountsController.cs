@@ -61,4 +61,16 @@ public class AccountsController : Controller
 
 		return View(viewModel);
 	}
+
+	[HttpGet]
+	public async Task<IActionResult> Details(
+		[FromRoute] int id,
+		CancellationToken cancellationToken)
+	{
+		IAccount account =
+			await _business.GetRequiredAccount(id, cancellationToken);
+		AccountDetailsViewModel viewModel = new(account);
+
+		return View(viewModel);
+	}
 }

@@ -70,4 +70,18 @@ public class AccountBusiness : IAccountBusiness
 			id,
 			cancellationToken);
 	}
+
+	public async Task<IAccount> GetRequiredAccount(
+		int id,
+		CancellationToken cancellationToken)
+	{
+		IAccount? result =
+			await GetAccount(
+			id,
+			cancellationToken);
+
+		if (result is null) throw new AccountNotFoundException(id);
+		
+		return result;
+	}
 }

@@ -57,10 +57,7 @@ public class DailyReportService : IDailyReportService
 				reportId,
 				cancellationToken);
 
-		if (result is null)
-		{
-			throw new DailyReportNotFoundException();
-		}
+		if (result is null) throw new DailyReportNotFoundException(reportId);
 
 		return result;
 	}

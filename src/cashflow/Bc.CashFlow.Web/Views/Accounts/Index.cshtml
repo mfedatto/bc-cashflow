@@ -23,12 +23,14 @@
         @foreach (IAccount account in Model.AccountsList)
         {
             <tr data-account-id="@account.Id">
-                <td>@account.Id</td>
+                <td>
+                    <a asp-controller="Accounts" asp-action="Details" asp-route-id="@account.Id">@account.Id</a>
+                </td>
                 <td>@account.Name</td>
-                <td class="text-end font-monospace">$ @($"{account.CurrentBalance:F2}")</td>
-                <td class="text-end font-monospace">$ @($"{account.InitialBalance:F2}")</td>
-                <td class="text-end font-monospace">$ @($"{account.BalanceUpdatedAt:yyyy-MM-dd HH:mm:ss}")</td>
-                <td class="text-end font-monospace">$ @($"{account.CreatedAt:yyyy-MM-dd HH:mm:ss}")</td>
+                <td class="text-end font-monospace">@($"{account.CurrentBalance:C2}")</td>
+                <td class="text-end font-monospace">@($"{account.InitialBalance:C2}")</td>
+                <td class="text-end font-monospace">@($"{account.BalanceUpdatedAt:yyyy-MM-dd HH:mm:ss}")</td>
+                <td class="text-end font-monospace">@($"{account.CreatedAt:yyyy-MM-dd HH:mm:ss}")</td>
             </tr>
         }
         </tbody>

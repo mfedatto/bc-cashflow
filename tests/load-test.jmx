@@ -25,6 +25,11 @@
             <stringProp name="Argument.value">10000</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="ForEach_Limit" elementType="Argument">
+            <stringProp name="Argument.name">ForEach_Limit</stringProp>
+            <stringProp name="Argument.value">5</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
     </TestPlan>
@@ -276,10 +281,11 @@
           </RegexExtractor>
           <hashTree/>
         </hashTree>
-        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach User" enabled="true">
+        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach User">
           <stringProp name="ForeachController.inputVal">ExtractUserIDs</stringProp>
           <stringProp name="ForeachController.returnVal">userID</stringProp>
           <boolProp name="ForeachController.useSeparator">true</boolProp>
+          <stringProp name="ForeachController.endIndex">${ForEach_Limit}</stringProp>
         </ForeachController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Users/Details/{id}">
@@ -299,7 +305,7 @@
           </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Accounts" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Accounts">
           <stringProp name="HTTPSampler.connect_timeout">${Timeout_Connection}</stringProp>
           <stringProp name="HTTPSampler.response_timeout">${Timeout_Response}</stringProp>
           <stringProp name="HTTPSampler.domain">${BaseAddress_Hostname}</stringProp>
@@ -324,6 +330,31 @@
             <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
             <stringProp name="RegexExtractor.match_number">-1</stringProp>
           </RegexExtractor>
+          <hashTree/>
+        </hashTree>
+        <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Account">
+          <stringProp name="ForeachController.inputVal">ExtractAccountIDs</stringProp>
+          <stringProp name="ForeachController.returnVal">accountID</stringProp>
+          <boolProp name="ForeachController.useSeparator">true</boolProp>
+          <stringProp name="ForeachController.endIndex">${ForEach_Limit}</stringProp>
+          <stringProp name="ForeachController.startIndex">0</stringProp>
+        </ForeachController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Accounts/Details/{id}">
+            <stringProp name="HTTPSampler.connect_timeout">${Timeout_Connection}</stringProp>
+            <stringProp name="HTTPSampler.response_timeout">${Timeout_Response}</stringProp>
+            <stringProp name="HTTPSampler.domain">${BaseAddress_Hostname}</stringProp>
+            <stringProp name="HTTPSampler.port">${BaseAddress_Port}</stringProp>
+            <stringProp name="HTTPSampler.protocol">http</stringProp>
+            <stringProp name="HTTPSampler.path">Accounts/Details/${accountID}</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+          </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Transactions">
@@ -357,7 +388,8 @@
           <stringProp name="ForeachController.inputVal">ExtractAccountIDs</stringProp>
           <stringProp name="ForeachController.returnVal">accountID</stringProp>
           <boolProp name="ForeachController.useSeparator">true</boolProp>
-          <stringProp name="ForeachController.endIndex">5</stringProp>
+          <stringProp name="ForeachController.endIndex">${ForEach_Limit}</stringProp>
+          <stringProp name="ForeachController.startIndex">0</stringProp>
         </ForeachController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /Transactions/Create">
@@ -411,7 +443,7 @@
           <stringProp name="ForeachController.returnVal">transactionID</stringProp>
           <boolProp name="ForeachController.useSeparator">true</boolProp>
           <stringProp name="ForeachController.startIndex">0</stringProp>
-          <stringProp name="ForeachController.endIndex">5</stringProp>
+          <stringProp name="ForeachController.endIndex">${ForEach_Limit}</stringProp>
         </ForeachController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET /Transactions/Details/{id}">

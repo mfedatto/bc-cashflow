@@ -28,10 +28,10 @@
                 <td>@transaction.Id</td>
                 <td>@transaction.AccountId</td>
                 <td>@transaction.TransactionType</td>
-                <td class="text-end font-monospace">$ @($"{transaction.Amount:F2}")</td>
-                <td class="text-end font-monospace">$ @($"{transaction.TransactionFee:F2}")</td>
-                <td class="text-end font-monospace">$ @($"{transaction.TransactionDate:yyyy-MM-dd HH:mm:ss}")</td>
-                <td class="text-end font-monospace">$ @($"{transaction.ProjectedRepaymentDate:yyyy-MM-dd HH:mm:ss}")</td>
+                <td class="text-end font-monospace">@($"{transaction.Amount:C2}")</td>
+                <td class="text-end font-monospace">@($"{transaction.TransactionFee:C2}")</td>
+                <td class="text-end font-monospace">@($"{transaction.TransactionDate:yyyy-MM-dd HH:mm:ss}")</td>
+                <td class="text-end font-monospace">@($"{transaction.ProjectedRepaymentDate:yyyy-MM-dd HH:mm:ss}")</td>
                 <td class="text-end">
                     <a asp-controller="Transactions" asp-action="Details" asp-route-id="@transaction.Id" class="btn btn-info">
                         Ver Detalhes

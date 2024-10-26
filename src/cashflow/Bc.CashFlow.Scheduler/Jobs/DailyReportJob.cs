@@ -21,10 +21,11 @@ public class DailyReportJob : IJob
 		// ReSharper disable once ConvertToUsingDeclaration
 		using (IServiceScope scope = _serviceProvider.CreateScope())
 		{
-			IDailyReportBusiness dailyReportBusiness = scope.ServiceProvider.GetRequiredService<IDailyReportBusiness>();
+			IDailyReportBusiness dailyReportBusiness = scope.ServiceProvider
+				.GetRequiredService<IDailyReportBusiness>();
 
 			dailyReportBusiness.ConsolidateDailyReport(
-					DateTime.Today.Date,
+					DateTime.Today.AddDays(-1).Date,
 					CancellationToken.None)
 				.GetAwaiter()
 				.GetResult();
